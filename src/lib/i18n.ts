@@ -67,6 +67,9 @@ const resources = {
       "settings.imperial": "Imperial",
       "settings.saveChanges": "Bika Impinduka",
       "settings.saved": "Igenamiterere ryabitswe!",
+      "settings.smsAlerts": "Imenyesha kuri Telefoni",
+      "settings.phoneNumber": "Numero ya Telefoni",
+      "settings.phoneNumberPlaceholder": "+250 7XX XXX XXX",
       
       // Social Feed
       "social.title": "Urusobe",
@@ -220,6 +223,9 @@ const resources = {
       "settings.imperial": "Imperial",
       "settings.saveChanges": "Save Changes",
       "settings.saved": "Settings saved successfully!",
+      "settings.smsAlerts": "SMS Alerts",
+      "settings.phoneNumber": "Phone Number",
+      "settings.phoneNumberPlaceholder": "+250 7XX XXX XXX",
       
       // Social Feed
       "social.title": "Social Feed",
@@ -348,6 +354,9 @@ const resources = {
       "settings.darkMode": "Mode Sombre",
       "settings.language": "Langue",
       "settings.saveChanges": "Enregistrer",
+      "settings.smsAlerts": "Alertes SMS",
+      "settings.phoneNumber": "Numéro de Téléphone",
+      "settings.phoneNumberPlaceholder": "+250 7XX XXX XXX",
       
       "social.title": "Réseau Social",
       "social.createPost": "Créer une Publication",

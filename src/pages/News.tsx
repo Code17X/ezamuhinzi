@@ -1,15 +1,54 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface NewsArticle {
+  id: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  date: string;
+  image: string;
+  source?: string;
+  fullContent?: string;
+}
 
 const News = () => {
   const { t, i18n } = useTranslation();
-  
-  const newsArticles = {
+  const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchRABNews();
+  }, [i18n.language]);
+
+  const fetchRABNews = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('fetch-rab-news', {
+        body: { language: i18n.language }
+      });
+
+      if (error) throw error;
+      if (data?.articles) {
+        setArticles(data.articles);
+      }
+    } catch (error) {
+      console.error('Error fetching RAB news:', error);
+      // Fallback to static news if fetching fails
+      setArticles(fallbackNewsArticles[i18n.language as 'rw' | 'en' | 'fr'] || fallbackNewsArticles.en);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fallbackNewsArticles = {
     rw: [
       {
         id: "1",
@@ -122,9 +161,6 @@ const News = () => {
     ]
   };
 
-  const currentLang = i18n.language as 'rw' | 'en' | 'fr';
-  const articles = newsArticles[currentLang] || newsArticles.en;
-
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {
       'Technology': 'bg-blue-500/10 text-blue-600 border-blue-500/20',
@@ -150,10 +186,20 @@ const News = () => {
               {t('news.latestNews')}
             </h1>
             <p className="text-muted-foreground">
-              {t('news.agricultureUpdates')}
+              {t('news.agricultureUpdates')} - Rwanda Agriculture Board (RAB)
             </p>
           </div>
 
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : articles.length === 0 ? (
+            <Card className="p-8 text-center">
+              <p className="text-muted-foreground">No news articles available</p>
+            </Card>
+          ) : (
+            <>
           {/* Featured Article */}
           <Link to={`/news/${articles[0].id}`}>
             <Card className="mb-8 hover:shadow-lg transition-shadow cursor-pointer border-2">
@@ -224,6 +270,8 @@ const News = () => {
               ))}
             </div>
           </div>
+            </>
+          )}
         </div>
       </main>
     </div>

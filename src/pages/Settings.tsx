@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -15,6 +16,8 @@ import { useAuth } from "@/contexts/AuthContext";
 interface UserSettings {
   notifications_enabled: boolean;
   email_notifications: boolean;
+  sms_alerts_enabled: boolean;
+  phone_number: string;
   profile_visibility: boolean;
   show_location: boolean;
   ai_detail_level: 'simple' | 'detailed';
@@ -30,6 +33,8 @@ const Settings = () => {
   const [settings, setSettings] = useState<UserSettings>({
     notifications_enabled: true,
     email_notifications: true,
+    sms_alerts_enabled: false,
+    phone_number: '',
     profile_visibility: true,
     show_location: true,
     ai_detail_level: 'simple',
@@ -47,12 +52,45 @@ const Settings = () => {
     if (stored) {
       setSettings(JSON.parse(stored));
     }
+
+    // Load phone number and SMS alerts from profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('phone_number, sms_alerts_enabled')
+      .eq('id', user.id)
+      .single();
+
+    if (profile) {
+      setSettings(prev => ({
+        ...prev,
+        phone_number: profile.phone_number || '',
+        sms_alerts_enabled: profile.sms_alerts_enabled || false
+      }));
+    }
   };
 
   const handleSaveSettings = async () => {
     if (!user) return;
     
     localStorage.setItem(`user_settings_${user.id}`, JSON.stringify(settings));
+    
+    // Save phone number and SMS alerts to profile
+    const { error } = await supabase
+      .from('profiles')
+      .update({
+        phone_number: settings.phone_number,
+        sms_alerts_enabled: settings.sms_alerts_enabled
+      })
+      .eq('id', user.id);
+
+    if (error) {
+      toast({
+        title: t('common.error'),
+        description: error.message,
+        variant: 'destructive',
+      });
+      return;
+    }
     
     toast({
       title: t('settings.saved'),
@@ -130,6 +168,32 @@ const Settings = () => {
                   }
                 />
               </div>
+
+              <div className="flex items-center justify-between">
+                <Label htmlFor="sms-alerts">{t('settings.smsAlerts')}</Label>
+                <Switch
+                  id="sms-alerts"
+                  checked={settings.sms_alerts_enabled}
+                  onCheckedChange={(checked) => 
+                    setSettings({ ...settings, sms_alerts_enabled: checked })
+                  }
+                />
+              </div>
+
+              {settings.sms_alerts_enabled && (
+                <div className="space-y-2">
+                  <Label htmlFor="phone-number">{t('settings.phoneNumber')}</Label>
+                  <Input
+                    id="phone-number"
+                    type="tel"
+                    placeholder={t('settings.phoneNumberPlaceholder')}
+                    value={settings.phone_number}
+                    onChange={(e) => 
+                      setSettings({ ...settings, phone_number: e.target.value })
+                    }
+                  />
+                </div>
+              )}
             </CardContent>
           </Card>
 
