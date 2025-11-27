@@ -1,1 +1,10 @@
 project_id = "kaeawfuaeaabtitvmlew"
+
+[functions.analyze-crop]
+verify_jwt = false
+
+[functions.vet-chat]
+verify_jwt = false
+
+[functions.fetch-rab-news]
+verify_jwt = false
