@@ -8,3 +8,12 @@ verify_jwt = false
 
 [functions.fetch-rab-news]
 verify_jwt = false
+
+[functions.weather-service]
+verify_jwt = false
+
+[functions.send-sms]
+verify_jwt = true
+
+[functions.market-prediction]
+verify_jwt = false

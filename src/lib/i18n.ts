@@ -22,6 +22,7 @@ const resources = {
       "landing.getStarted": "Tangira",
       "landing.login": "Kwinjira",
       "landing.features": "Ibikorwa",
+      "landing.explore": "Reba",
       "landing.cropDetection": "Kumenya Indwara z'Ibihingwa",
       "landing.cropDetectionDesc": "Kureba ifoto y'igihingwa gicuza kugira ngo umenye indwara n'ubuvuzi",
       "landing.aiAssistant": "Umufasha wa AI",
@@ -30,6 +31,7 @@ const resources = {
       "landing.weatherPricesDesc": "Kugenzura ikirere n'ibiciro by'ibihingwa",
       "landing.agriNews": "Amakuru y'Ubuhinzi",
       "landing.agriNewsDesc": "Kubona amakuru agezweho ku buhinzi",
+      "landing.or": "Cyangwa",
       
       // Auth Page
       "auth.login": "Kwinjira",
@@ -70,6 +72,8 @@ const resources = {
       "settings.smsAlerts": "Imenyesha kuri Telefoni",
       "settings.phoneNumber": "Numero ya Telefoni",
       "settings.phoneNumberPlaceholder": "+250 7XX XXX XXX",
+      "settings.weatherAlerts": "Imenyesha y'Ikirere",
+      "settings.enableWeatherAlerts": "Emera imenyesha y'ikirere kuri telefoni",
       
       // Social Feed
       "social.title": "Urusobe",
@@ -110,8 +114,15 @@ const resources = {
       "weather.wind": "Umuyaga",
       "weather.visibility": "Kureba",
       "weather.rain": "Imvura",
+      "weather.pressure": "Umuvuduko",
+      "weather.feelsLike": "Bisa nka",
       "weather.farmingRecommendations": "Inama zo Guhinga",
       "weather.basedOnConditions": "Hashingiwe ku kirere",
+      "weather.enableLocation": "Emera Ahantu",
+      "weather.locationError": "Ntibishobotse kubona ahantu uri",
+      "weather.fetchingWeather": "Twiga amakuru y'ikirere...",
+      "weather.smsAlerts": "Imenyesha kuri Telefoni",
+      "weather.enableWeatherAlerts": "Emera imenyesha y'ikirere",
       
       // Prices
       "prices.title": "Ibiciro by'Ibihingwa",
@@ -130,6 +141,12 @@ const resources = {
       "prices.up": "Cyiyongera",
       "prices.down": "Kiragabanuka",
       "prices.stable": "Kihamye",
+      "prices.prediction": "Ibiteganijwe",
+      "prices.marketPrediction": "Ibiciro Biteganywa",
+      "prices.viewPrediction": "Reba Ibiteganijwe",
+      "prices.analyzing": "Twiga isoko...",
+      "prices.aiAnalysis": "Isesengura rya AI",
+      "prices.close": "Funga",
       
       // News
       "news.title": "Amakuru",

@@ -1,27 +1,86 @@
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Cloud, CloudRain, Sun, Wind, Droplets, Eye } from "lucide-react";
+import { Cloud, CloudRain, Sun, Wind, Droplets, Eye, CloudDrizzle, CloudSnow, CloudFog } from "lucide-react";
+import { useWeather } from "@/hooks/useWeather";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Weather = () => {
   const { t } = useTranslation();
-  
-  const currentWeather = {
-    temperature: 24,
-    condition: "Partly Cloudy",
-    humidity: 65,
-    windSpeed: 12,
-    visibility: 10,
-    precipitation: 20
+  const { weather, loading, error } = useWeather();
+
+  const getWeatherIcon = (condition: string) => {
+    const conditionLower = condition.toLowerCase();
+    if (conditionLower.includes('rain')) return CloudRain;
+    if (conditionLower.includes('cloud')) return Cloud;
+    if (conditionLower.includes('clear') || conditionLower.includes('sun')) return Sun;
+    if (conditionLower.includes('drizzle')) return CloudDrizzle;
+    if (conditionLower.includes('snow')) return CloudSnow;
+    if (conditionLower.includes('fog') || conditionLower.includes('mist')) return CloudFog;
+    return Cloud;
   };
 
-  const forecast = [
-    { day: "Mon", high: 26, low: 18, condition: "Sunny", icon: Sun },
-    { day: "Tue", high: 25, low: 19, condition: "Cloudy", icon: Cloud },
-    { day: "Wed", high: 23, low: 17, condition: "Rainy", icon: CloudRain },
-    { day: "Thu", high: 24, low: 18, condition: "Sunny", icon: Sun },
-    { day: "Fri", high: 27, low: 20, condition: "Sunny", icon: Sun },
-  ];
+  const getFarmingRecommendations = () => {
+    if (!weather) return [];
+    
+    const recommendations = [];
+    const temp = weather.current.temperature;
+    const humidity = weather.current.humidity;
+    const rain = weather.current.precipitation;
+
+    if (temp >= 20 && temp <= 28 && humidity > 50) {
+      recommendations.push("Ibirere byiza byo gutera imboga zitoshye");
+    }
+    
+    if (rain < 30 && humidity < 60) {
+      recommendations.push("Tekereza gusarura kubera ko imvura itegerejwe kuba nke");
+    }
+    
+    if (temp > 18 && humidity < 80) {
+      recommendations.push("Ikirere cyiza cyo gukora ibikorwa byo hanze by'ubworozi");
+    }
+
+    if (weather.alerts) {
+      recommendations.push("IBURIRA: Ikirere gikomeye giteganywa. Witondere.");
+    }
+
+    return recommendations;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24">
+          <div className="max-w-5xl mx-auto">
+            <Skeleton className="h-64 w-full mb-6" />
+            <Skeleton className="h-96 w-full" />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24">
+          <div className="max-w-5xl mx-auto">
+            <Card className="border-destructive">
+              <CardContent className="pt-6">
+                <p className="text-destructive">{error}</p>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (!weather) return null;
+
+  const WeatherIcon = getWeatherIcon(weather.current.condition);
 
   return (
     <div className="min-h-screen bg-background">
@@ -34,7 +93,7 @@ const Weather = () => {
               {t('weather.title')}
             </h1>
             <p className="text-muted-foreground">
-              {t('landing.weatherPricesDesc')}
+              {weather.location.name}, {weather.location.country}
             </p>
           </div>
 
@@ -48,13 +107,16 @@ const Weather = () => {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <div className="text-6xl font-bold text-foreground">
-                    {currentWeather.temperature}°C
+                    {weather.current.temperature}°C
                   </div>
                   <div className="text-xl text-muted-foreground mt-2">
-                    {currentWeather.condition}
+                    {weather.current.description}
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    {t('weather.feelsLike')}: {weather.current.feelsLike}°C
                   </div>
                 </div>
-                <Cloud className="w-24 h-24 text-primary" />
+                <WeatherIcon className="w-24 h-24 text-primary" />
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -62,28 +124,28 @@ const Weather = () => {
                   <Droplets className="w-5 h-5 text-blue-500" />
                   <div>
                     <div className="text-sm text-muted-foreground">{t('weather.humidity')}</div>
-                    <div className="font-semibold">{currentWeather.humidity}%</div>
+                    <div className="font-semibold">{weather.current.humidity}%</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Wind className="w-5 h-5 text-primary" />
                   <div>
                     <div className="text-sm text-muted-foreground">{t('weather.wind')}</div>
-                    <div className="font-semibold">{currentWeather.windSpeed} km/h</div>
+                    <div className="font-semibold">{weather.current.windSpeed} km/h</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Eye className="w-5 h-5 text-primary" />
                   <div>
                     <div className="text-sm text-muted-foreground">{t('weather.visibility')}</div>
-                    <div className="font-semibold">{currentWeather.visibility} km</div>
+                    <div className="font-semibold">{weather.current.visibility} km</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <CloudRain className="w-5 h-5 text-blue-500" />
                   <div>
                     <div className="text-sm text-muted-foreground">{t('weather.rain')}</div>
-                    <div className="font-semibold">{currentWeather.precipitation}%</div>
+                    <div className="font-semibold">{weather.current.precipitation}%</div>
                   </div>
                 </div>
               </div>
@@ -98,8 +160,8 @@ const Weather = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                {forecast.map((day) => {
-                  const Icon = day.icon;
+                {weather.forecast.map((day) => {
+                  const Icon = getWeatherIcon(day.condition);
                   return (
                     <div
                       key={day.day}
@@ -108,7 +170,7 @@ const Weather = () => {
                       <div className="font-semibold mb-2">{day.day}</div>
                       <Icon className="w-8 h-8 mx-auto mb-2 text-primary" />
                       <div className="text-sm text-muted-foreground mb-2">
-                        {day.condition}
+                        {day.description}
                       </div>
                       <div className="flex justify-center gap-2 text-sm">
                         <span className="font-semibold">{day.high}°</span>
@@ -129,18 +191,12 @@ const Weather = () => {
             </CardHeader>
             <CardContent>
               <ul className="space-y-2 text-sm">
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  <span>Good conditions for planting leafy vegetables</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  <span>Consider irrigation as rainfall expected to be low</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  <span>Ideal weather for outdoor livestock activities</span>
-                </li>
+                {getFarmingRecommendations().map((rec, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className="text-primary font-bold">•</span>
+                    <span>{rec}</span>
+                  </li>
+                ))}
               </ul>
             </CardContent>
           </Card>
