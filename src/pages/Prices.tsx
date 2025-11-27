@@ -1,15 +1,16 @@
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, TrendingDown, Sparkles } from "lucide-react";
+import { TrendingUp, TrendingDown, Sparkles, Info } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useWeather } from "@/hooks/useWeather";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Prices = () => {
   const { t } = useTranslation();
@@ -38,6 +39,98 @@ const Prices = () => {
     { name: "Amagi (icumi n'abiri)", price: 4500, unit: "icumi n'abiri", change: 0, trending: "stable", location: "Kigali" },
     { name: "Amata / Milk", price: 1200, unit: "litiro", change: 1, trending: "up", location: "Kigali" },
   ];
+
+  const getPriceHistory = (item: any) => {
+    // Generate realistic price history for the last 6 months
+    const months = ['Kamena', 'Kanama', 'Nzeri', 'Ukwakira', 'Ugushyingo', 'Ukuboza'];
+    const basePrice = item.price;
+    const history = months.map((month, index) => {
+      const variation = (Math.random() - 0.5) * 0.15; // ±15% variation
+      const price = Math.round(basePrice * (1 + variation));
+      return { name: month, price };
+    });
+    return history;
+  };
+
+  const getPriceFactors = (item: any) => {
+    const factors = {
+      'Ibigori / Maize': [
+        '🌧️ Imvura nyinshi yongera umusaruro, ibiciro bigamanuka',
+        '⛽ Ibiciro bya lisansi byongera ibiciro byo gutwara',
+        '🌍 Isoko ry\'amahanga riterwa n\'ibiciro by\'isi'
+      ],
+      'Ibishyimbo / Beans': [
+        '🌦️ Ikirere cyumye kigira ingaruka ku musaruro',
+        '🦠 Indwara z\'ibihingwa zongera ibiciro',
+        '📈 Isoko ry\'imbere ryongera ibiciro'
+      ],
+      'Umuceri / Rice': [
+        '💧 Amazi menshi akenewe, ihwiri rigabanya umusaruro',
+        '🚜 Ubuhinga bw\'ikoranabuhanga bwongera ibiciro',
+        '🌏 Umuceri uturuka hanze uterwa n\'ibiciro'
+      ],
+      'Ikawa / Coffee': [
+        '🌡️ Ubushyuhe bw\'isi bwongera ibiciro by\'ikawa',
+        '☕ Isoko ry\'amahanga riterwa n\'ubuziranenge',
+        '🌱 Ubwoko bushya bw\'ikawa bugira ingaruka ku biciro'
+      ],
+      'Icyayi / Tea': [
+        '🌿 Ikirere cyiza cyongera umusaruro w\'icyayi',
+        '📊 Isoko ry\'i Bwongereza n\'i Kenya riterwa',
+        '💰 Ibiciro by\'amafaranga bigira ingaruka'
+      ],
+      'Imyumbati / Cassava': [
+        '🌾 Ikawa igira ingaruka ku musaruro w\'imyumbati',
+        '🏭 Inganda z\'ifu zongera ibiciro',
+        '🚛 Ibiciro byo gutwara bigira ingaruka'
+      ],
+      'Ibirayi / Potatoes': [
+        '❄️ Imbeho zongera ibiciro ku gihe cy\'imbeho',
+        '🌡️ Ubushyuhe bukabije bugabanya umusaruro',
+        '📦 Ububiko bubi bugira ingaruka ku biciro'
+      ],
+      'Ibitoki / Bananas': [
+        '🌪️ Umuyaga ukomeye ugira ingaruka ku mihingwe',
+        '🦠 Indwara nk\'umuhaha bigira ingaruka',
+        '🏪 Isoko ry\'i Kigali riterwa n\'ibyifuzo'
+      ],
+      'Inka / Cattle': [
+        '🌾 Ibiciro by\'ibyokurisha bigira ingaruka',
+        '💉 Imiti y\'amatungo yongera ibiciro',
+        '🥩 Isoko ry\'inyama riterwa n\'ibyifuzo'
+      ],
+      'Ihene / Goats': [
+        '🌿 Ibyatsi byinshi bigabanya ibiciro',
+        '🎉 Ibirori byongera ibyifuzo',
+        '🏥 Ubuzima bw\'amatungo bugira ingaruka'
+      ],
+      'Inkoko / Chickens': [
+        '🌽 Ibiciro by\'ibigori bigira ingaruka',
+        '🦠 Indwara z\'inkoko zongera ibiciro',
+        '🥚 Isoko ry\'amagi riterwa'
+      ],
+      'Ingurube / Pigs': [
+        '🌾 Ibiciro by\'ibiryo bigira ingaruka',
+        '🦠 Indwara nk\'icyorezo bigira ingaruka',
+        '🥓 Isoko ry\'inyama y\'ingurube riterwa'
+      ],
+      'Amagi (icumi n\'abiri)': [
+        '🐔 Umubare w\'inkoko ugira ingaruka',
+        '🌡️ Ubushyuhe bukabije bugira ingaruka',
+        '🏪 Isoko ry\'i Kigali riterwa n\'ibyifuzo'
+      ],
+      'Amata / Milk': [
+        '🐄 Umusaruro w\'inka ugira ingaruka',
+        '🌡️ Ikirere cyongera cyangwa kigabanya',
+        '🏭 Inganda z\'amata ziterwa'
+      ]
+    };
+    return factors[item.name as keyof typeof factors] || [
+      '🌍 Isoko ry\'isi riterwa n\'ibiciro',
+      '🌦️ Ikirere kigira ingaruka ku musaruro',
+      '💰 Ibyifuzo n\'isoko riterwa'
+    ];
+  };
 
   const fetchPrediction = async (item: any) => {
     try {
@@ -90,12 +183,76 @@ const Prices = () => {
       </main>
 
       <Dialog open={!!selectedItem} onOpenChange={() => { setSelectedItem(null); setPrediction(null); }}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader><DialogTitle>{selectedItem?.name}</DialogTitle></DialogHeader>
-          <Card className="bg-gradient-to-br from-primary/5 to-primary/10">
-            <CardHeader><CardTitle className="flex items-center gap-2"><Sparkles className="w-5 h-5" />{t('prices.aiAnalysis')}</CardTitle></CardHeader>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">{selectedItem?.name}</DialogTitle>
+            <DialogDescription>
+              {selectedItem?.location} - {selectedItem?.price.toLocaleString()} RWF/{selectedItem?.unit}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {/* Price History Graph */}
+          <Card className="mb-4">
+            <CardHeader>
+              <CardTitle className="text-lg">📊 Ihinduka ry'Ibiciro (Amezi 6 Ashize)</CardTitle>
+            </CardHeader>
             <CardContent>
-              {!prediction ? <Button onClick={() => fetchPrediction(selectedItem)} disabled={loading} className="w-full">{loading ? t('prices.analyzing') : t('prices.viewPrediction')}</Button> : <p className="text-sm whitespace-pre-line">{prediction}</p>}
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={selectedItem ? getPriceHistory(selectedItem) : []}>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                  <XAxis dataKey="name" className="text-xs" />
+                  <YAxis className="text-xs" />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                    formatter={(value: number) => `${value.toLocaleString()} RWF`}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="price" 
+                    stroke="hsl(var(--primary))" 
+                    strokeWidth={2}
+                    dot={{ fill: 'hsl(var(--primary))', r: 4 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          {/* Price Factors */}
+          <Card className="mb-4">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Info className="w-5 h-5" />
+                Ibintu Bigira Ingaruka ku Biciro
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {selectedItem && getPriceFactors(selectedItem).map((factor, index) => (
+                  <Alert key={index} className="border-primary/20">
+                    <AlertDescription className="text-sm">{factor}</AlertDescription>
+                  </Alert>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* AI Prediction */}
+          <Card className="bg-gradient-to-br from-primary/5 to-primary/10">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
+                {t('prices.aiAnalysis')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {!prediction ? (
+                <Button onClick={() => fetchPrediction(selectedItem)} disabled={loading} className="w-full">
+                  {loading ? t('prices.analyzing') : t('prices.viewPrediction')}
+                </Button>
+              ) : (
+                <p className="text-sm whitespace-pre-line">{prediction}</p>
+              )}
             </CardContent>
           </Card>
         </DialogContent>

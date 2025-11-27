@@ -28,20 +28,43 @@ const Weather = () => {
     const humidity = weather.current.humidity;
     const rain = weather.current.precipitation;
 
+    // Check if whole week has good temperature
+    const allDaysGoodTemp = weather.forecast.every(day => day.high >= 20 && day.high <= 28);
+    
+    if (allDaysGoodTemp) {
+      recommendations.push("🌟 IGIHE CYIZA CYO GUHINGA! Ubushyuhe bw'icyumweru cyose buri hagati ya 20-28°C - ikirere cyiza cyo gutera ibihingwa byinshi.");
+    }
+
     if (temp >= 20 && temp <= 28 && humidity > 50) {
-      recommendations.push("Ibirere byiza byo gutera imboga zitoshye");
+      recommendations.push("🌱 Ibirere byiza byo gutera imboga zitoshye nk'ishu, inyanya, n'ibitunguru. Ubushyuhe n'ubushuhe birakwiye.");
     }
     
     if (rain < 30 && humidity < 60) {
-      recommendations.push("Tekereza gusarura kubera ko imvura itegerejwe kuba nke");
+      recommendations.push("💧 Tekereza gusarura cyangwa gushyira sistem yo kuvomera kubera ko imvura itegerejwe kuba nke. Ibihingwa bisaba amazi menshi.");
     }
     
     if (temp > 18 && humidity < 80) {
-      recommendations.push("Ikirere cyiza cyo gukora ibikorwa byo hanze by'ubworozi");
+      recommendations.push("🐄 Ikirere cyiza cyo gukora ibikorwa byo hanze by'ubworozi - gukingira amatungo, gusana urugo, n'ibindi.");
+    }
+
+    if (temp > 25 && rain < 20) {
+      recommendations.push("🌾 Igihe cyiza cyo gusarura ibihingwa bishaje - ubushyuhe n'ikirere cyumye bifasha ibihingwa gukama neza.");
+    }
+
+    if (humidity > 70 && temp < 22) {
+      recommendations.push("🛡️ Witondere indwara z'ibihingwa nk'urubura kubera ubushuhe bwinshi. Koresha imiti yo kurinda.");
     }
 
     if (weather.alerts) {
-      recommendations.push("IBURIRA: Ikirere gikomeye giteganywa. Witondere.");
+      recommendations.push("⚠️ IBURIRA: Ikirere gikomeye giteganywa. Witondere kandi urinde ibihingwa byawe.");
+    }
+
+    // Ensure at least 3 recommendations
+    if (recommendations.length < 3) {
+      recommendations.push("🌤️ Kureba ikirere buri munsi bigufasha gufata ibyemezo byiza byo guhinga.");
+      if (recommendations.length < 3) {
+        recommendations.push("📱 Koresha ubu buryo bwo kubona amakuru y'ikirere maze wishyire imbere mu bikorwa byawe by'ubuhinzi.");
+      }
     }
 
     return recommendations;
