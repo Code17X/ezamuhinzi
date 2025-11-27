@@ -17,6 +17,8 @@ import NewsArticle from "./pages/NewsArticle";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Social from "./pages/Social";
+import Marketplace from "./pages/Marketplace";
+import Maps from "./pages/Maps";
 import NotFound from "./pages/NotFound";
 import "./lib/i18n";
 
@@ -39,6 +41,8 @@ const App = () => (
               <Route path="/prices" element={<ProtectedRoute><Prices /></ProtectedRoute>} />
               <Route path="/news" element={<ProtectedRoute><News /></ProtectedRoute>} />
               <Route path="/news/:id" element={<ProtectedRoute><NewsArticle /></ProtectedRoute>} />
+              <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
+              <Route path="/maps" element={<ProtectedRoute><Maps /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
               <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />

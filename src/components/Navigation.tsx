@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Cloud, DollarSign, Newspaper, Bot, User, LogOut, Settings, Users } from "lucide-react";
+import { Home, Cloud, DollarSign, Newspaper, Bot, User, LogOut, Settings, Users, ShoppingBag, Map } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,8 @@ const Navigation = () => {
     { to: "/social", icon: Users, label: t('social') },
     { to: "/weather", icon: Cloud, label: t('weather') },
     { to: "/prices", icon: DollarSign, label: t('prices') },
+    { to: "/marketplace", icon: ShoppingBag, label: t('marketplace') },
+    { to: "/maps", icon: Map, label: t('maps') },
     { to: "/news", icon: Newspaper, label: t('news') },
     { to: "/profile", icon: User, label: t('profile') },
     { to: "/settings", icon: Settings, label: t('settings') },
