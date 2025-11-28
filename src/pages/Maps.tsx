@@ -182,7 +182,7 @@ const Maps = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24">
+      <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24 animate-fade-in">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl font-bold mb-2">Ikarita y'Ubuhinzi</h1>
@@ -247,7 +247,7 @@ const Maps = () => {
             {filteredLocations.map((location) => {
               const badge = getTypeBadge(location.type);
               return (
-                <Card key={location.id} className="hover:shadow-lg transition-shadow">
+                <Card key={location.id} className="hover:shadow-lg transition-shadow hover-scale animate-fade-in">
                   <CardHeader>
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
