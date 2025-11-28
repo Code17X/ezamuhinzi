@@ -17,6 +17,7 @@ export type Database = {
       agricultural_locations: {
         Row: {
           address: string
+          average_rating: number | null
           created_at: string
           description: string | null
           id: string
@@ -25,10 +26,14 @@ export type Database = {
           name: string
           phone: string | null
           services: string[] | null
+          total_ratings: number | null
           type: string
+          user_id: string | null
+          verified: boolean | null
         }
         Insert: {
           address: string
+          average_rating?: number | null
           created_at?: string
           description?: string | null
           id?: string
@@ -37,10 +42,14 @@ export type Database = {
           name: string
           phone?: string | null
           services?: string[] | null
+          total_ratings?: number | null
           type: string
+          user_id?: string | null
+          verified?: boolean | null
         }
         Update: {
           address?: string
+          average_rating?: number | null
           created_at?: string
           description?: string | null
           id?: string
@@ -49,7 +58,10 @@ export type Database = {
           name?: string
           phone?: string | null
           services?: string[] | null
+          total_ratings?: number | null
           type?: string
+          user_id?: string | null
+          verified?: boolean | null
         }
         Relationships: []
       }
@@ -107,6 +119,89 @@ export type Database = {
           recommendations?: string | null
           severity?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      location_ratings: {
+        Row: {
+          created_at: string | null
+          id: string
+          location_id: string
+          rating: number
+          review: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          location_id: string
+          rating: number
+          review?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          location_id?: string
+          rating?: number
+          review?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "location_ratings_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "agricultural_locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_prices: {
+        Row: {
+          category: string
+          current_price: number
+          id: string
+          location: string
+          price_factors: string[] | null
+          product_name: string
+          product_name_kinyarwanda: string
+          trend: string
+          trend_percentage: number | null
+          unit: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          category: string
+          current_price: number
+          id?: string
+          location: string
+          price_factors?: string[] | null
+          product_name: string
+          product_name_kinyarwanda: string
+          trend: string
+          trend_percentage?: number | null
+          unit: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          category?: string
+          current_price?: number
+          id?: string
+          location?: string
+          price_factors?: string[] | null
+          product_name?: string
+          product_name_kinyarwanda?: string
+          trend?: string
+          trend_percentage?: number | null
+          unit?: string
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: []
       }
@@ -264,6 +359,35 @@ export type Database = {
         }
         Relationships: []
       }
+      price_history: {
+        Row: {
+          id: string
+          market_price_id: string | null
+          price: number
+          recorded_at: string | null
+        }
+        Insert: {
+          id?: string
+          market_price_id?: string | null
+          price: number
+          recorded_at?: string | null
+        }
+        Update: {
+          id?: string
+          market_price_id?: string | null
+          price?: number
+          recorded_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_history_market_price_id_fkey"
+            columns: ["market_price_id"]
+            isOneToOne: false
+            referencedRelation: "market_prices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -306,15 +430,99 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      veterinary_applications: {
+        Row: {
+          address: string
+          business_name: string
+          created_at: string | null
+          description: string | null
+          id: string
+          latitude: number
+          license_number: string | null
+          longitude: number
+          phone: string
+          rejection_reason: string | null
+          services: string[]
+          updated_at: string | null
+          user_id: string
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          address: string
+          business_name: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          latitude: number
+          license_number?: string | null
+          longitude: number
+          phone: string
+          rejection_reason?: string | null
+          services: string[]
+          updated_at?: string | null
+          user_id: string
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          address?: string
+          business_name?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          latitude?: number
+          license_number?: string | null
+          longitude?: number
+          phone?: string
+          rejection_reason?: string | null
+          services?: string[]
+          updated_at?: string | null
+          user_id?: string
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "veterinary" | "farmer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -441,6 +649,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "veterinary", "farmer"],
+    },
   },
 } as const
