@@ -20,6 +20,7 @@ import Social from "./pages/Social";
 import Marketplace from "./pages/Marketplace";
 import Maps from "./pages/Maps";
 import VeterinaryApply from "./pages/VeterinaryApply";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import "./lib/i18n";
 
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
             <Route path="/maps" element={<ProtectedRoute><Maps /></ProtectedRoute>} />
             <Route path="/veterinary-apply" element={<ProtectedRoute><VeterinaryApply /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
               <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />
