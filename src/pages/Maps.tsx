@@ -4,8 +4,14 @@ import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Phone, MapPin, Activity } from "lucide-react";
+import { Phone, MapPin, Activity, Star, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -19,14 +25,21 @@ interface Location {
   longitude: number;
   phone: string | null;
   services: string[];
+  verified: boolean;
+  average_rating: number;
+  total_ratings: number;
 }
 
 const Maps = () => {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [userRating, setUserRating] = useState<number>(0);
+  const [review, setReview] = useState<string>("");
 
   useEffect(() => {
     fetchLocations();
@@ -45,8 +58,11 @@ const Maps = () => {
       zoom: 8
     });
 
-    // Add navigation controls
+      // Add navigation controls
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    
+    // Enable scroll zoom for better map interaction
+    map.current.scrollZoom.enable();
 
     // Add markers for all locations
     locations.forEach(location => {
@@ -68,12 +84,17 @@ const Maps = () => {
       el.style.cursor = 'pointer';
       el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
 
+      const ratingStars = location.average_rating > 0 
+        ? '⭐'.repeat(Math.round(location.average_rating))
+        : 'Nta gipimo';
+      
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
         <div style="padding: 8px;">
-          <h3 style="font-weight: bold; margin-bottom: 4px;">${location.name}</h3>
+          <h3 style="font-weight: bold; margin-bottom: 4px;">${location.name}${location.verified ? ' ✓' : ''}</h3>
           <p style="font-size: 12px; color: #666; margin-bottom: 4px;">${location.description}</p>
           <p style="font-size: 11px; color: #888;">${location.address}</p>
           ${location.phone ? `<p style="font-size: 11px; margin-top: 4px;"><strong>📞</strong> ${location.phone}</p>` : ''}
+          ${location.total_ratings > 0 ? `<p style="font-size: 11px; margin-top: 4px;"><strong>${ratingStars}</strong> (${location.total_ratings})</p>` : ''}
         </div>
       `);
 
@@ -93,12 +114,42 @@ const Maps = () => {
       const { data, error } = await supabase
         .from('agricultural_locations')
         .select('*')
-        .order('name');
+        .eq('verified', true)
+        .order('average_rating', { ascending: false });
 
       if (error) throw error;
       setLocations(data || []);
     } catch (error) {
       console.error('Error fetching locations:', error);
+    }
+  };
+
+  const submitRating = async () => {
+    if (!user || !selectedLocation || userRating === 0) {
+      toast.error("Hitamo amanota");
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('location_ratings')
+        .upsert({
+          location_id: selectedLocation.id,
+          user_id: user.id,
+          rating: userRating,
+          review: review || null
+        });
+
+      if (error) throw error;
+
+      toast.success("Amanota yatanzwe neza!");
+      setSelectedLocation(null);
+      setUserRating(0);
+      setReview("");
+      fetchLocations();
+    } catch (error: any) {
+      console.error('Error submitting rating:', error);
+      toast.error("Habaye ikosa mu gutanga amanota");
     }
   };
 
@@ -162,9 +213,9 @@ const Maps = () => {
           </div>
 
           {/* Map */}
-          <Card className="mb-6">
+          <Card className="mb-6 overflow-hidden">
             <CardContent className="p-0">
-              <div ref={mapContainer} className="w-full h-[500px] rounded-lg" />
+              <div ref={mapContainer} className="w-full h-[500px] rounded-lg touch-pan-y" />
             </CardContent>
           </Card>
 
@@ -176,7 +227,10 @@ const Maps = () => {
                 <Card key={location.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex justify-between items-start mb-2">
-                      <CardTitle className="text-lg">{location.name}</CardTitle>
+                      <div className="flex items-center gap-2">
+                        <CardTitle className="text-lg">{location.name}</CardTitle>
+                        {location.verified && <Badge variant="outline" className="text-xs">✓ Byemejwe</Badge>}
+                      </div>
                       <Badge className={badge.color}>{badge.label}</Badge>
                     </div>
                     <p className="text-sm text-muted-foreground">{location.description}</p>
@@ -209,6 +263,25 @@ const Maps = () => {
                           </div>
                         </div>
                       )}
+
+                      {location.total_ratings > 0 && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                          <span>{location.average_rating.toFixed(1)} ({location.total_ratings} abantu)</span>
+                        </div>
+                      )}
+
+                      {user && (
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="w-full mt-2"
+                          onClick={() => setSelectedLocation(location)}
+                        >
+                          <Star className="w-4 h-4 mr-2" />
+                          Tanga Amanota
+                        </Button>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -217,6 +290,56 @@ const Maps = () => {
           </div>
         </div>
       </main>
+
+      {/* Rating Dialog */}
+      <Dialog open={!!selectedLocation} onOpenChange={() => setSelectedLocation(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Tanga Amanota - {selectedLocation?.name}</DialogTitle>
+            <DialogDescription>
+              Dufashe abandi abahinzi kumenya uko iyi serivisi ihagije
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div>
+              <Label>Amanota</Label>
+              <div className="flex gap-2 mt-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() => setUserRating(star)}
+                    className="focus:outline-none"
+                  >
+                    <Star
+                      className={`w-8 h-8 ${
+                        star <= userRating
+                          ? 'text-yellow-500 fill-yellow-500'
+                          : 'text-gray-300'
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="review">Icyo Wabivugaho (optional)</Label>
+              <Textarea
+                id="review"
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                placeholder="Andika icyo ubona kuri iyi serivisi..."
+                rows={3}
+              />
+            </div>
+
+            <Button onClick={submitRating} className="w-full">
+              Ohereza Amanota
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
