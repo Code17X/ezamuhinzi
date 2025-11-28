@@ -1,19 +1,32 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Phone, MapPin, Activity, Star, Plus } from "lucide-react";
+import { Phone, MapPin, Activity, Star } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+// Fix for default marker icons in Leaflet
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41]
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 interface Location {
   id: string;
@@ -33,8 +46,6 @@ interface Location {
 const Maps = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
@@ -44,79 +55,6 @@ const Maps = () => {
   useEffect(() => {
     fetchLocations();
   }, []);
-
-  useEffect(() => {
-    if (!mapContainer.current || locations.length === 0) return;
-
-    // Initialize map centered on Rwanda
-    const accessToken = import.meta.env.VITE_MAPBOX_PUBLIC_TOKEN;
-    if (!accessToken) {
-      console.error("VITE_MAPBOX_PUBLIC_TOKEN ntiyashyizwe. Shyiramo Mapbox public token mu mabwiriza ya porogaramu.");
-      toast.error("Ikarita ikeneye Mapbox token. Vugurura amabwiriza ya porogaramu.");
-      return;
-    }
-
-    mapboxgl.accessToken = accessToken;
-    
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: [30.0588, -1.9403], // Rwanda center
-      zoom: 8
-    });
-
-      // Add navigation controls
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-    
-    // Enable scroll zoom for better map interaction
-    map.current.scrollZoom.enable();
-
-    // Add markers for all locations
-    locations.forEach(location => {
-      if (!map.current) return;
-
-      const markerColor = 
-        location.type === 'veterinary' ? '#ef4444' :
-        location.type === 'market' ? '#22c55e' :
-        location.type === 'rab_office' ? '#3b82f6' :
-        location.type === 'factory' ? '#f97316' :
-        location.type === 'industry' ? '#eab308' :
-        '#a855f7';
-
-      const el = document.createElement('div');
-      el.className = 'custom-marker';
-      el.style.backgroundColor = markerColor;
-      el.style.width = '30px';
-      el.style.height = '30px';
-      el.style.borderRadius = '50%';
-      el.style.border = '3px solid white';
-      el.style.cursor = 'pointer';
-      el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
-
-      const ratingStars = location.average_rating > 0 
-        ? '⭐'.repeat(Math.round(location.average_rating))
-        : 'Nta gipimo';
-      
-      const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
-        <div style="padding: 8px;">
-          <h3 style="font-weight: bold; margin-bottom: 4px;">${location.name}${location.verified ? ' ✓' : ''}</h3>
-          <p style="font-size: 12px; color: #666; margin-bottom: 4px;">${location.description}</p>
-          <p style="font-size: 11px; color: #888;">${location.address}</p>
-          ${location.phone ? `<p style="font-size: 11px; margin-top: 4px;"><strong>📞</strong> ${location.phone}</p>` : ''}
-          ${location.total_ratings > 0 ? `<p style="font-size: 11px; margin-top: 4px;"><strong>${ratingStars}</strong> (${location.total_ratings})</p>` : ''}
-        </div>
-      `);
-
-      new mapboxgl.Marker(el)
-        .setLngLat([location.longitude, location.latitude])
-        .setPopup(popup)
-        .addTo(map.current);
-    });
-
-    return () => {
-      map.current?.remove();
-    };
-  }, [locations]);
 
   const fetchLocations = async () => {
     try {
@@ -174,6 +112,28 @@ const Maps = () => {
     return styles[type] || { label: type, color: "bg-gray-500/10 text-gray-600 border-gray-500/20" };
   };
 
+  const getMarkerColor = (type: string) => {
+    const colors: Record<string, string> = {
+      veterinary: '#ef4444',
+      market: '#22c55e',
+      rab_office: '#3b82f6',
+      factory: '#f97316',
+      industry: '#eab308',
+      cooperative: '#a855f7'
+    };
+    return colors[type] || '#6b7280';
+  };
+
+  const createCustomIcon = (type: string) => {
+    const color = getMarkerColor(type);
+    return L.divIcon({
+      className: 'custom-marker',
+      html: `<div style="background-color: ${color}; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
+      iconSize: [30, 30],
+      iconAnchor: [15, 15]
+    });
+  };
+
   const filteredLocations = selectedType 
     ? locations.filter(loc => loc.type === selectedType)
     : locations;
@@ -184,61 +144,108 @@ const Maps = () => {
       
       <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24 animate-fade-in">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
+          <div className="mb-8 animate-fade-in">
             <h1 className="text-3xl md:text-4xl font-bold mb-2">Ikarita y'Ubuhinzi</h1>
             <p className="text-muted-foreground">Ibigo by'Ubuhinzi, Ivuriro, n'Amasoko</p>
           </div>
 
           {/* Filter Buttons */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-6 animate-fade-in">
             <Button
               variant={selectedType === null ? "default" : "outline"}
               onClick={() => setSelectedType(null)}
+              className="hover-scale"
             >
               Byose
             </Button>
             <Button
               variant={selectedType === 'veterinary' ? "default" : "outline"}
               onClick={() => setSelectedType('veterinary')}
+              className="hover-scale"
             >
               🩺 Ivuriro
             </Button>
             <Button
               variant={selectedType === 'market' ? "default" : "outline"}
               onClick={() => setSelectedType('market')}
+              className="hover-scale"
             >
               🏪 Amasoko
             </Button>
             <Button
               variant={selectedType === 'rab_office' ? "default" : "outline"}
               onClick={() => setSelectedType('rab_office')}
+              className="hover-scale"
             >
               🏛️ RAB
             </Button>
             <Button
               variant={selectedType === 'cooperative' ? "default" : "outline"}
               onClick={() => setSelectedType('cooperative')}
+              className="hover-scale"
             >
               🤝 Koperative
             </Button>
             <Button
               variant={selectedType === 'factory' ? "default" : "outline"}
               onClick={() => setSelectedType('factory')}
+              className="hover-scale"
             >
               🏭 Uruganda
             </Button>
             <Button
               variant={selectedType === 'industry' ? "default" : "outline"}
               onClick={() => setSelectedType('industry')}
+              className="hover-scale"
             >
               🏗️ Inganda
             </Button>
           </div>
 
           {/* Map */}
-          <Card className="mb-6 overflow-hidden">
+          <Card className="mb-6 overflow-hidden animate-fade-in">
             <CardContent className="p-0">
-              <div ref={mapContainer} className="w-full h-[500px] rounded-lg touch-pan-y" />
+              <div className="w-full h-[500px] rounded-lg">
+                <MapContainer
+                  center={[-1.9403, 30.0588]}
+                  zoom={8}
+                  style={{ height: '100%', width: '100%' }}
+                  className="rounded-lg"
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  {filteredLocations.map((location) => (
+                    <Marker
+                      key={location.id}
+                      position={[location.latitude, location.longitude]}
+                      icon={createCustomIcon(location.type)}
+                    >
+                      <Popup>
+                        <div className="p-2">
+                          <h3 className="font-bold mb-1">
+                            {location.name}
+                            {location.verified && ' ✓'}
+                          </h3>
+                          <p className="text-sm text-gray-600 mb-1">{location.description}</p>
+                          <p className="text-xs text-gray-500">{location.address}</p>
+                          {location.phone && (
+                            <p className="text-xs mt-1">
+                              <strong>📞</strong> {location.phone}
+                            </p>
+                          )}
+                          {location.total_ratings > 0 && (
+                            <p className="text-xs mt-1">
+                              <strong>{'⭐'.repeat(Math.round(location.average_rating))}</strong> ({location.total_ratings})
+                            </p>
+                          )}
+                        </div>
+                      </Popup>
+                    </Marker>
+                  ))}
+                </MapContainer>
+              </div>
             </CardContent>
           </Card>
 
@@ -298,7 +305,7 @@ const Maps = () => {
                         <Button 
                           size="sm" 
                           variant="outline" 
-                          className="w-full mt-2"
+                          className="w-full mt-2 hover-scale"
                           onClick={() => setSelectedLocation(location)}
                         >
                           <Star className="w-4 h-4 mr-2" />
@@ -316,7 +323,7 @@ const Maps = () => {
 
       {/* Rating Dialog */}
       <Dialog open={!!selectedLocation} onOpenChange={() => setSelectedLocation(null)}>
-        <DialogContent>
+        <DialogContent className="animate-scale-in">
           <DialogHeader>
             <DialogTitle>Tanga Amanota - {selectedLocation?.name}</DialogTitle>
             <DialogDescription>
@@ -332,7 +339,7 @@ const Maps = () => {
                   <button
                     key={star}
                     onClick={() => setUserRating(star)}
-                    className="focus:outline-none"
+                    className="focus:outline-none transition-transform hover:scale-110"
                   >
                     <Star
                       className={`w-8 h-8 ${
@@ -357,7 +364,7 @@ const Maps = () => {
               />
             </div>
 
-            <Button onClick={submitRating} className="w-full">
+            <Button onClick={submitRating} className="w-full hover-scale">
               Ohereza Amanota
             </Button>
           </div>
