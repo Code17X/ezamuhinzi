@@ -131,33 +131,33 @@ const Prices = () => {
 
   const renderPriceCard = (item: MarketPrice, index: number) => {
     return (
-      <Card key={item.id} className="hover:shadow-lg transition-shadow">
-      <CardHeader className="cursor-pointer" onClick={() => setSelectedItem(item)}>
-        <div className="flex justify-between items-start">
-          <div>
-            <CardTitle className="text-lg">{item.product_name_kinyarwanda}</CardTitle>
-            <CardDescription>{item.location}</CardDescription>
+      <Card key={item.id} className="hover:shadow-lg hover-scale animate-fade-in">
+        <CardHeader className="cursor-pointer" onClick={() => setSelectedItem(item)}>
+          <div className="flex justify-between items-start">
+            <div>
+              <CardTitle className="text-lg">{item.product_name_kinyarwanda}</CardTitle>
+              <CardDescription>{item.location}</CardDescription>
+            </div>
+            <Badge 
+              variant={
+                item.trend === 'up' ? 'default' : 
+                item.trend === 'down' ? 'destructive' : 
+                'secondary'
+              }
+              className="flex items-center gap-1"
+            >
+              {item.trend === 'up' ? <TrendingUp className="w-3 h-3" /> : 
+               item.trend === 'down' ? <TrendingDown className="w-3 h-3" /> : 
+               <Minus className="w-3 h-3" />}
+              {item.trend_percentage ? `${item.trend_percentage > 0 ? '+' : ''}${item.trend_percentage}%` : '0%'}
+            </Badge>
           </div>
-          <Badge 
-            variant={
-              item.trend === 'up' ? 'default' : 
-              item.trend === 'down' ? 'destructive' : 
-              'secondary'
-            }
-            className="flex items-center gap-1"
-          >
-            {item.trend === 'up' ? <TrendingUp className="w-3 h-3" /> : 
-             item.trend === 'down' ? <TrendingDown className="w-3 h-3" /> : 
-             <Minus className="w-3 h-3" />}
-            {item.trend_percentage ? `${item.trend_percentage > 0 ? '+' : ''}${item.trend_percentage}%` : '0%'}
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="cursor-pointer" onClick={() => setSelectedItem(item)}>
-        <div className="text-2xl font-bold">{item.current_price.toLocaleString()} RWF</div>
-        <p className="text-sm text-muted-foreground">ku {item.unit}</p>
-      </CardContent>
-    </Card>
+        </CardHeader>
+        <CardContent className="cursor-pointer" onClick={() => setSelectedItem(item)}>
+          <div className="text-2xl font-bold">{item.current_price.toLocaleString()} RWF</div>
+          <p className="text-sm text-muted-foreground">ku {item.unit}</p>
+        </CardContent>
+      </Card>
     );
   };
 
@@ -234,11 +234,11 @@ const Prices = () => {
             </div>
 
             {/* AI Prediction */}
-            <Card className="bg-gradient-to-br from-primary/5 to-primary/10">
+            <Card className="bg-gradient-to-br from-primary/5 to-primary/10 animate-fade-in">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="w-5 h-5" />
-                  Isuzuma rya AI
+                  Isesengura rya AI
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -251,7 +251,7 @@ const Prices = () => {
                     {loading ? "Turasuzuma..." : "Reba Ihinduka"}
                   </Button>
                 ) : (
-                  <p className="text-sm whitespace-pre-line">{prediction}</p>
+                  <p className="text-sm whitespace-pre-line animate-fade-in">{prediction}</p>
                 )}
               </CardContent>
             </Card>

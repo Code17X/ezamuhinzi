@@ -49,7 +49,14 @@ const Maps = () => {
     if (!mapContainer.current || locations.length === 0) return;
 
     // Initialize map centered on Rwanda
-    mapboxgl.accessToken = 'pk.eyJ1IjoibG92YWJsZSIsImEiOiJjbTRxeTVjdTQwOGFvMnFzaTNxZnFsOHg0In0.PqCZM6AXs32aZELBjBqE1g';
+    const accessToken = import.meta.env.VITE_MAPBOX_PUBLIC_TOKEN;
+    if (!accessToken) {
+      console.error("VITE_MAPBOX_PUBLIC_TOKEN ntiyashyizwe. Shyiramo Mapbox public token mu mabwiriza ya porogaramu.");
+      toast.error("Ikarita ikeneye Mapbox token. Vugurura amabwiriza ya porogaramu.");
+      return;
+    }
+
+    mapboxgl.accessToken = accessToken;
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
