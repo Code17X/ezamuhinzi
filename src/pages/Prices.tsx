@@ -79,7 +79,7 @@ const Prices = () => {
 
       if (data && data.length > 0) {
         return data.map(record => ({
-          month: new Date(record.recorded_at).toLocaleDateString('rw', { month: 'short' }),
+          month: new Date(record.recorded_at).toLocaleDateString('rw-RW', { month: 'long', year: 'numeric' }),
           price: Number(record.price)
         }));
       }
