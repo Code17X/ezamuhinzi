@@ -194,11 +194,11 @@ const Social = () => {
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 md:pt-20">
       <Navigation />
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="container mx-auto px-4 py-8 max-w-2xl animate-fade-in">
         <h1 className="text-3xl font-bold mb-6 text-foreground">{t('social.title')}</h1>
 
         {/* Create Post Card */}
-        <Card className="mb-6">
+        <Card className="mb-6 animate-fade-in">
           <CardHeader>
             <Button 
               onClick={() => setIsCreating(!isCreating)} 
@@ -301,7 +301,7 @@ const Social = () => {
             </Card>
           ) : (
             posts.map((post) => (
-              <Card key={post.id}>
+              <Card key={post.id} className="hover-scale animate-fade-in">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-3 mb-4">
                     <Avatar>

@@ -24,7 +24,7 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border md:top-0 md:bottom-auto z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border md:top-0 md:bottom-auto z-50 transition-all duration-300">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between md:justify-start md:gap-8 h-16">
           <div className="hidden md:flex items-center gap-2">

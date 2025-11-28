@@ -40,7 +40,7 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[600px] flex items-center justify-center overflow-hidden animate-fade-in">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImage})` }}
@@ -48,7 +48,7 @@ const Landing = () => {
           <div className="absolute inset-0 bg-black/50" />
         </div>
         
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
             Smart Farming for Everyone
           </h1>
@@ -57,12 +57,12 @@ const Landing = () => {
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link to="/auth?mode=signup">
-              <Button size="lg" className="text-lg px-8">
+              <Button size="lg" className="text-lg px-8 hover-scale">
                 Get Started Free
               </Button>
             </Link>
             <Link to="/auth?mode=login">
-              <Button size="lg" variant="outline" className="text-lg px-8 bg-white/10 text-white border-white hover:bg-white/20">
+              <Button size="lg" variant="outline" className="text-lg px-8 bg-white/10 text-white border-white hover:bg-white/20 hover-scale">
                 Sign In
               </Button>
             </Link>
@@ -71,14 +71,14 @@ const Landing = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 animate-fade-in">
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Everything You Need in One App
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
+              <Card key={index} className="hover:shadow-lg transition-shadow hover-scale animate-fade-in">
                 <CardHeader>
                   <div className="mb-4">{feature.icon}</div>
                   <CardTitle className="text-2xl">{feature.title}</CardTitle>
@@ -93,7 +93,7 @@ const Landing = () => {
       </section>
 
       {/* Innovation Section */}
-      <section className="py-20 px-4 bg-muted/30">
+      <section className="py-20 px-4 bg-muted/30 animate-fade-in">
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             What Makes Us Different
@@ -110,7 +110,7 @@ const Landing = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 animate-fade-in">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Join Thousands of Farmers Already Using Our Platform
@@ -119,7 +119,7 @@ const Landing = () => {
             Whether you're just starting or have years of experience, our AI tools will help you succeed
           </p>
           <Link to="/auth?mode=signup">
-            <Button size="lg" className="text-lg px-8">
+            <Button size="lg" className="text-lg px-8 hover-scale">
               Start Your Free Account
             </Button>
           </Link>
