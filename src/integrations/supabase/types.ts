@@ -256,6 +256,48 @@ export type Database = {
         }
         Relationships: []
       }
+      news_articles: {
+        Row: {
+          author_id: string | null
+          category: string
+          content: string
+          content_kinyarwanda: string
+          created_at: string | null
+          id: string
+          image_url: string | null
+          published: boolean | null
+          title: string
+          title_kinyarwanda: string
+          updated_at: string | null
+        }
+        Insert: {
+          author_id?: string | null
+          category: string
+          content: string
+          content_kinyarwanda: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          published?: boolean | null
+          title: string
+          title_kinyarwanda: string
+          updated_at?: string | null
+        }
+        Update: {
+          author_id?: string | null
+          category?: string
+          content?: string
+          content_kinyarwanda?: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          published?: boolean | null
+          title?: string
+          title_kinyarwanda?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       post_comments: {
         Row: {
           content: string
@@ -427,6 +469,48 @@ export type Database = {
           phone_number?: string | null
           sms_alerts_enabled?: boolean | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          amount: number
+          auto_renew: boolean | null
+          created_at: string | null
+          end_date: string | null
+          id: string
+          payment_method: string | null
+          start_date: string | null
+          status: string
+          transaction_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          auto_renew?: boolean | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          payment_method?: string | null
+          start_date?: string | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          auto_renew?: boolean | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          payment_method?: string | null
+          start_date?: string | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
