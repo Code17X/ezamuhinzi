@@ -106,10 +106,10 @@ const Weather = () => {
   const WeatherIcon = getWeatherIcon(weather.current.condition);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      
-      <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24">
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        
+        <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24 animate-fade-in">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">

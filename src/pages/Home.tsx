@@ -70,13 +70,13 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background pb-20 md:pb-0 md:pt-20">
+    <div className="min-h-screen bg-background pb-20 md:pb-0 md:pt-20 animate-fade-in">
       <Navigation />
       
-      <main className="container mx-auto px-4 py-8 animate-fade-in">
+      <main className="container mx-auto px-4 py-8">
         {/* Hero Carousel */}
-        <section className="mb-12 relative">
-          <div className="relative h-[400px] rounded-2xl overflow-hidden">
+        <section className="mb-12 relative animate-fade-in-up">
+          <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl hover-lift">
             <img 
               src={heroImages[currentImageIndex]} 
               alt="Hero" 
@@ -112,9 +112,9 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="mb-12 animate-fade-in">
+        <section className="mb-12 animate-fade-in-up">
           <h2 className="text-3xl font-bold mb-6 text-foreground">{t('home.latestNews')}</h2>
-          <Card className="max-w-5xl mx-auto bg-gradient-to-br from-accent/10 to-primary/10 border-2 hover-scale">
+          <Card className="max-w-5xl mx-auto bg-gradient-to-br from-accent/10 to-primary/10 border-2 card-hover">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-2xl">{t('news')}</CardTitle>
@@ -148,11 +148,11 @@ const Home = () => {
         <section>
           <h2 className="text-3xl font-bold mb-6 text-foreground">{t('home.features')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {features.map((feature) => {
+            {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <Link key={feature.title} to={feature.link}>
-                  <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-primary/50 hover-scale animate-fade-in">
+                <Link key={feature.title} to={feature.link} style={{ '--stagger': index } as React.CSSProperties}>
+                  <Card className="h-full card-hover border-2 hover:border-primary/50 button-press animate-scale-in stagger-item">
                     <CardHeader>
                       <div className={`w-12 h-12 rounded-lg ${feature.color} flex items-center justify-center mb-4`}>
                         <Icon className="w-6 h-6" />
@@ -163,9 +163,9 @@ const Home = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Button variant="ghost" className="w-full justify-between group">
+                      <Button variant="ghost" className="w-full justify-between group transition-smooth">
                         Explore
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-300" />
                       </Button>
                     </CardContent>
                   </Card>
