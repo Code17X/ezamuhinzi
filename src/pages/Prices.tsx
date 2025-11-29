@@ -131,7 +131,7 @@ const Prices = () => {
 
   const renderPriceCard = (item: MarketPrice, index: number) => {
     return (
-      <Card key={item.id} className="hover:shadow-lg hover-scale animate-fade-in">
+      <Card key={item.id} className="card-hover button-press animate-fade-in-up stagger-item" style={{ '--stagger': index } as React.CSSProperties}>
         <CardHeader className="cursor-pointer" onClick={() => setSelectedItem(item)}>
           <div className="flex justify-between items-start">
             <div>
@@ -162,10 +162,10 @@ const Prices = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      
-      <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24">
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        
+        <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24 animate-fade-in">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl font-bold mb-2">Ibiciro ku Isoko</h1>
@@ -191,7 +191,7 @@ const Prices = () => {
       </main>
 
       <Dialog open={!!selectedItem} onOpenChange={() => { setSelectedItem(null); setPrediction(""); }}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto animate-scale-in">
           <DialogHeader>
             <DialogTitle>{selectedItem?.product_name_kinyarwanda}</DialogTitle>
             <DialogDescription>
@@ -246,7 +246,7 @@ const Prices = () => {
                   <Button 
                     onClick={() => selectedItem && fetchPrediction(selectedItem)} 
                     disabled={loading}
-                    className="w-full"
+                    className="w-full button-press hover-glow"
                   >
                     {loading ? "Turasuzuma..." : "Reba Ihinduka"}
                   </Button>

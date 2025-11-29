@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Cloud, DollarSign, Newspaper, Bot, User, LogOut, Settings, Users, ShoppingBag, Map } from "lucide-react";
+import { Home, Cloud, DollarSign, Newspaper, Bot, User, LogOut, Settings, Users, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -17,14 +17,13 @@ const Navigation = () => {
     { to: "/weather", icon: Cloud, label: t('weather') },
     { to: "/prices", icon: DollarSign, label: t('prices') },
     { to: "/marketplace", icon: ShoppingBag, label: t('marketplace') },
-    { to: "/maps", icon: Map, label: t('maps') },
     { to: "/news", icon: Newspaper, label: t('news') },
     { to: "/profile", icon: User, label: t('profile') },
     { to: "/settings", icon: Settings, label: t('settings') },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border md:top-0 md:bottom-auto z-50 transition-all duration-300">
+    <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border md:top-0 md:bottom-auto z-50 transition-all duration-500 ease-out shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between md:justify-start md:gap-8 h-16">
           <div className="hidden md:flex items-center gap-2">
@@ -44,10 +43,10 @@ const Navigation = () => {
                   key={link.to}
                   to={link.to}
                   className={cn(
-                    "flex flex-col md:flex-row items-center gap-1 md:gap-2 px-3 py-2 rounded-lg transition-colors",
+                    "flex flex-col md:flex-row items-center gap-1 md:gap-2 px-3 py-2 rounded-lg transition-all duration-300 ease-out transform hover:scale-105",
                     isActive
-                      ? "text-primary bg-primary/10"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      ? "text-primary bg-primary/10 shadow-sm"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   )}
                 >
                   <Icon className="w-5 h-5" />
