@@ -18,24 +18,17 @@ serve(async (req) => {
       throw new Error('Lovable API key not configured');
     }
 
-    const prompt = `Analyze the market for ${cropName} in ${location}, Rwanda. 
-    Current price: ${currentPrice} RWF
-    Current weather: ${JSON.stringify(weather)}
+    const prompt = `Tanga isesengura rigufi mu Kinyarwanda ku biciro bya ${cropName} i ${location}, mu Rwanda.
+    Igiciro kiriho: ${currentPrice} RWF
+    Ikirere kiriho: ${JSON.stringify(weather)}
     
-    Based on:
-    - Current weather conditions and forecast
-    - Seasonal patterns in Rwanda
-    - Typical supply and demand factors
-    - Agricultural cycles
-    - Regional factors
+    Tanga raporo ngufi y'amagambo 50-80 gusa arimo:
+    1. Icyerekezo cy'igiciro mu byumweru 2 biri imbere (kiziyongera/kizamanuka/kizahora)
+    2. Ijanisha ry'impinduka (%)
+    3. Impamvu 2-3 z'ingenzi ziterwa n'igiciro
+    4. Inama imwe ku bahinzi
     
-    Predict:
-    1. Price trend for the next 2 weeks (increasing, decreasing, stable)
-    2. Percentage change estimate
-    3. Key factors affecting the price
-    4. Recommendations for farmers
-    
-    Provide practical insights for Rwandan farmers in a clear, concise way.`;
+    NTUGIRE UBUREBURE - amagambo 50-80 gusa mu Kinyarwanda!`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -48,7 +41,7 @@ serve(async (req) => {
         messages: [
           { 
             role: 'system', 
-            content: 'You are an agricultural market analyst specializing in Rwanda. Provide practical, data-driven predictions for farmers.' 
+            content: 'Uri umushakashatsi w\'isoko ry\'ubuhinzi mu Rwanda. Tanga raporo ngufi cyane (amagambo 50-80 gusa) mu Kinyarwanda y\'isesengura ry\'ibiciro. Ntugire uburebure - kora raporo ngufi kandi ifite akamaro.' 
           },
           { role: 'user', content: prompt }
         ],
