@@ -139,61 +139,55 @@ const Profile = () => {
 
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle>Farm Information</CardTitle>
-              <CardDescription>Details about your farming operations</CardDescription>
+              <CardTitle>Subscription / Kwishyura</CardTitle>
+              <CardDescription>Hitamo uburyo bwo kwishyura</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="experienceLevel">Farming Experience</Label>
-                <Select
-                  value={profileData.experience_level}
-                  onValueChange={(value: "beginner" | "intermediate" | "experienced") => 
-                    setProfileData({ ...profileData, experience_level: value })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your experience level" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="beginner">Beginner (Starting out)</SelectItem>
-                    <SelectItem value="intermediate">Intermediate (Few years experience)</SelectItem>
-                    <SelectItem value="experienced">Experienced (Professional farmer)</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card className="border-2 hover:border-primary transition-colors cursor-pointer">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold">
+                        M
+                      </div>
+                      MTN Mobile Money
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Kanda hano kugira ngo wishyure ukoresheje MTN MoMo
+                    </p>
+                    <Button className="w-full" variant="outline">
+                      Hitamo MTN MoMo
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 hover:border-primary transition-colors cursor-pointer">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white font-bold">
+                        A
+                      </div>
+                      Airtel Money
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Kanda hano kugira ngo wishyure ukoresheje Airtel Money
+                    </p>
+                    <Button className="w-full" variant="outline">
+                      Hitamo Airtel Money
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="farmSize">Farm Size</Label>
-                <Input
-                  id="farmSize"
-                  value={profileData.farm_size}
-                  onChange={(e) => setProfileData({ ...profileData, farm_size: e.target.value })}
-                  placeholder="e.g., 5 hectares, 2 acres"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="cropTypes">Main Crops</Label>
-                <Input
-                  id="cropTypes"
-                  value={profileData.crop_types.join(", ")}
-                  onChange={(e) => setProfileData({ 
-                    ...profileData, 
-                    crop_types: e.target.value.split(",").map(s => s.trim()) 
-                  })}
-                  placeholder="e.g., Maize, Beans, Potatoes (comma-separated)"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="farmingMethods">Farming Methods</Label>
-                <Textarea
-                  id="farmingMethods"
-                  value={profileData.farming_methods}
-                  onChange={(e) => setProfileData({ ...profileData, farming_methods: e.target.value })}
-                  placeholder="Describe your farming methods (organic, conventional, etc.)"
-                  rows={3}
-                />
+              <div className="mt-4 p-4 bg-muted rounded-lg">
+                <p className="text-sm text-muted-foreground">
+                  <strong>Igiciro:</strong> 1,000 RWF / Ukwezi<br/>
+                  <strong>Inyungu:</strong> Kubona amakuru yose, Gukoresha AI Assistant, Kubona amasoko n'ibindi
+                </p>
               </div>
             </CardContent>
           </Card>
