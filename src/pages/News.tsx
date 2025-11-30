@@ -181,30 +181,55 @@ const News = () => {
       
       <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8 space-y-4">
+          <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
               {t('news.latestNews')}
             </h1>
             <p className="text-muted-foreground">
               {t('news.agricultureUpdates')} - Rwanda Agriculture Board (RAB)
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
-              <Button asChild variant="outline" size="sm">
-                <a href="https://www.rab.gov.rw/" target="_blank" rel="noopener noreferrer">
-                  RAB Urubuga Rukuru
-                </a>
-              </Button>
-              <Button asChild variant="outline" size="sm">
-                <a href="https://www.rab.gov.rw/online-services" target="_blank" rel="noopener noreferrer">
-                  Serivisi za RAB (Online)
-                </a>
-              </Button>
-              <Button asChild variant="outline" size="sm">
-                <a href="https://www.rab.gov.rw/publications" target="_blank" rel="noopener noreferrer">
-                  Amatangazo &amp; Publications
-                </a>
-              </Button>
-            </div>
+          </div>
+
+          {/* RAB Resource Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-lg">RAB Urubuga Rukuru</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button asChild className="w-full">
+                  <a href="https://www.rab.gov.rw/" target="_blank" rel="noopener noreferrer">
+                    Sura Urubuga
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+            
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-lg">Serivisi za RAB</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button asChild className="w-full">
+                  <a href="https://www.rab.gov.rw/online-services" target="_blank" rel="noopener noreferrer">
+                    Serivisi kuri Enterineti
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+            
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-lg">Amatangazo & Publications</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button asChild className="w-full">
+                  <a href="https://www.rab.gov.rw/publications" target="_blank" rel="noopener noreferrer">
+                    Reba Amatangazo
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
           </div>
 
           {isLoading ? (
