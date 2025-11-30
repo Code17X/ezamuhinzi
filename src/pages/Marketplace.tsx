@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Phone, MapPin, Trash2, Building2 } from "lucide-react";
+import { Plus, Phone, MapPin, Trash2, Building2, ShoppingBag } from "lucide-react";
 
 interface Listing {
   id: string;
@@ -33,6 +34,21 @@ interface Industry {
   created_at: string;
 }
 
+interface Product {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string | null;
+  price: number;
+  unit: string;
+  quantity: string | null;
+  category: string;
+  location: string;
+  contact_phone: string | null;
+  status: string;
+  created_at: string;
+}
+
 const Marketplace = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
@@ -40,7 +56,9 @@ const Marketplace = () => {
   
   const [listings, setListings] = useState<Listing[]>([]);
   const [industries, setIndustries] = useState<Industry[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [isCreatingListing, setIsCreatingListing] = useState(false);
+  const [isCreatingProduct, setIsCreatingProduct] = useState(false);
   const [newListing, setNewListing] = useState({
     service_name: '',
     provider_name: '',
@@ -48,6 +66,16 @@ const Marketplace = () => {
     service_cost: '',
     location: '',
     description: ''
+  });
+  const [newProduct, setNewProduct] = useState({
+    title: '',
+    description: '',
+    price: '',
+    unit: 'kg',
+    quantity: '',
+    category: 'crop',
+    location: '',
+    contact_phone: ''
   });
 
   useEffect(() => {
@@ -70,6 +98,15 @@ const Marketplace = () => {
       .order('name');
 
     if (industriesData) setIndustries(industriesData);
+
+    // Load products
+    const { data: productsData } = await supabase
+      .from('marketplace_listings')
+      .select('*')
+      .eq('status', 'active')
+      .order('created_at', { ascending: false });
+
+    if (productsData) setProducts(productsData);
   };
 
   const handleCreateListing = async () => {
@@ -133,17 +170,275 @@ const Marketplace = () => {
     }
   };
 
+  const handleCreateProduct = async () => {
+    if (!user || !newProduct.title || !newProduct.price || !newProduct.location || !newProduct.contact_phone) {
+      toast({
+        title: "Uzuza byose",
+        description: "Uzuza amakuru yose akenewe",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase.from('marketplace_listings').insert({
+        user_id: user.id,
+        title: newProduct.title,
+        description: newProduct.description || null,
+        price: parseFloat(newProduct.price),
+        unit: newProduct.unit,
+        quantity: newProduct.quantity || null,
+        category: newProduct.category,
+        location: newProduct.location,
+        contact_phone: newProduct.contact_phone,
+        status: 'active'
+      });
+
+      if (error) throw error;
+
+      // Send SMS notification to subscribed users
+      try {
+        await supabase.functions.invoke('send-marketplace-alert', {
+          body: {
+            productTitle: newProduct.title,
+            price: newProduct.price,
+            location: newProduct.location,
+            category: newProduct.category
+          }
+        });
+      } catch (smsError) {
+        console.error('Error sending SMS alert:', smsError);
+        // Don't block product creation if SMS fails
+      }
+
+      toast({ title: "Icyicuruzwa cyashyizwe!" });
+      setNewProduct({
+        title: '',
+        description: '',
+        price: '',
+        unit: 'kg',
+        quantity: '',
+        category: 'crop',
+        location: '',
+        contact_phone: ''
+      });
+      setIsCreatingProduct(false);
+      loadData();
+    } catch (error) {
+      console.error('Error creating product:', error);
+      toast({ title: "Ikosa", variant: 'destructive' });
+    }
+  };
+
+  const handleDeleteProduct = async (id: string) => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('marketplace_listings')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      
+      toast({ title: "Byasibwe!" });
+      loadData();
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      toast({ title: "Ikosa", variant: 'destructive' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 md:pt-20">
       <Navigation />
       <main className="container mx-auto px-4 py-8 animate-fade-in">
         <h1 className="text-3xl font-bold mb-6 text-foreground">Tanga Akazi</h1>
 
-        <Tabs defaultValue="services" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
+        <Tabs defaultValue="products" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="products">Ibicuruzwa</TabsTrigger>
             <TabsTrigger value="services">Serivisi</TabsTrigger>
             <TabsTrigger value="industries">Inganda</TabsTrigger>
           </TabsList>
+
+          {/* Products Tab */}
+          <TabsContent value="products" className="space-y-4">
+            {user && (
+              <Card>
+                <CardHeader>
+                  <Button 
+                    onClick={() => setIsCreatingProduct(!isCreatingProduct)}
+                    className="w-full"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Tanga Icyicuruzwa Cyawe
+                  </Button>
+                </CardHeader>
+                
+                {isCreatingProduct && (
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label>Izina ry'Icyicuruzwa</Label>
+                      <Input
+                        value={newProduct.title}
+                        onChange={(e) => setNewProduct({ ...newProduct, title: e.target.value })}
+                        placeholder="Urugero: Ibigori byiza"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Icyiciro</Label>
+                      <Select value={newProduct.category} onValueChange={(val) => setNewProduct({ ...newProduct, category: val })}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="crop">Ibihingwa</SelectItem>
+                          <SelectItem value="livestock">Amatungo</SelectItem>
+                          <SelectItem value="equipment">Ibikoresho</SelectItem>
+                          <SelectItem value="other">Ibindi</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Igiciro</Label>
+                        <Input
+                          type="number"
+                          value={newProduct.price}
+                          onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+                          placeholder="1000"
+                        />
+                      </div>
+                      <div>
+                        <Label>Igipimo</Label>
+                        <Select value={newProduct.unit} onValueChange={(val) => setNewProduct({ ...newProduct, unit: val })}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="kg">kg</SelectItem>
+                            <SelectItem value="piece">piece</SelectItem>
+                            <SelectItem value="bag">bag</SelectItem>
+                            <SelectItem value="liter">liter</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label>Ingano (Optional)</Label>
+                      <Input
+                        value={newProduct.quantity}
+                        onChange={(e) => setNewProduct({ ...newProduct, quantity: e.target.value })}
+                        placeholder="Urugero: 100kg"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Aho Uhereye</Label>
+                      <Input
+                        value={newProduct.location}
+                        onChange={(e) => setNewProduct({ ...newProduct, location: e.target.value })}
+                        placeholder="Urugero: Kigali, Gasabo"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Numero ya Telefone</Label>
+                      <Input
+                        type="tel"
+                        value={newProduct.contact_phone}
+                        onChange={(e) => setNewProduct({ ...newProduct, contact_phone: e.target.value })}
+                        placeholder="+250 7XX XXX XXX"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Ibisobanuro (Optional)</Label>
+                      <Textarea
+                        value={newProduct.description}
+                        onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                        placeholder="Sobanura icyicuruzwa cyawe..."
+                      />
+                    </div>
+
+                    <Button onClick={handleCreateProduct} className="w-full">
+                      Ohereza
+                    </Button>
+                  </CardContent>
+                )}
+              </Card>
+            )}
+
+            {/* Products List */}
+            <div className="grid gap-4 md:grid-cols-2">
+              {products.length === 0 ? (
+                <Card className="md:col-span-2">
+                  <CardContent className="text-center py-12">
+                    <ShoppingBag className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">Nta bicuruzwa biboneka</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                products.map((product) => (
+                  <Card key={product.id} className="hover-scale">
+                    <CardHeader>
+                      <CardTitle className="flex items-start justify-between">
+                        <span>{product.title}</span>
+                        {user && product.user_id === user.id && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteProduct(product.id)}
+                            className="text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="bg-primary/10 p-3 rounded-lg">
+                        <p className="text-2xl font-bold text-primary">
+                          {product.price.toLocaleString()} RWF
+                          <span className="text-sm font-normal text-muted-foreground ml-2">/ {product.unit}</span>
+                        </p>
+                        {product.quantity && (
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Ingano: {product.quantity}
+                          </p>
+                        )}
+                      </div>
+
+                      {product.contact_phone && (
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <Phone className="w-4 h-4" />
+                          <a href={`tel:${product.contact_phone}`} className="hover:text-primary">
+                            {product.contact_phone}
+                          </a>
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="w-4 h-4" />
+                        <span>{product.location}</span>
+                      </div>
+
+                      {product.description && (
+                        <p className="text-sm text-muted-foreground pt-2 border-t">
+                          {product.description}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </TabsContent>
 
           {/* Services Tab */}
           <TabsContent value="services" className="space-y-4">
