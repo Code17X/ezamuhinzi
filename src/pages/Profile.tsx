@@ -298,6 +298,7 @@ const Profile = () => {
                 <ul className="text-sm text-muted-foreground space-y-1">
                   <li>• Amakuru y'ikirere n'imvura</li>
                   <li>• Ibiciro bishya ku isoko</li>
+                  <li>• Ibicuruzwa bishya kuri Tanga Akazi</li>
                   <li>• Iterambere ry'udukoko n'indwara</li>
                   <li>• Amakuru y'ingenzi y'ubuhinzi</li>
                 </ul>

@@ -18,6 +18,9 @@ verify_jwt = true
 [functions.send-weather-alert]
 verify_jwt = false
 
+[functions.send-marketplace-alert]
+verify_jwt = false
+
 [functions.market-prediction]
 verify_jwt = false
 
