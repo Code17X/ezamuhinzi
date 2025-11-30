@@ -57,7 +57,7 @@ const resources = {
       "admin.draft": "Igishushanyo",
       
       // Landing Page
-      "landing.title": "Murakaza neza kuri AgriConnect",
+      "landing.title": "Murakaza neza kuri Eza Muhizi",
       "landing.subtitle": "Ikoranabuhanga rigufasha mu buhinzi",
       "landing.getStarted": "Tangira",
       "landing.login": "Kwinjira",
@@ -271,7 +271,7 @@ const resources = {
       "admin.draft": "Draft",
       
       // Landing Page
-      "landing.title": "Welcome to AgriConnect",
+      "landing.title": "Welcome to Eza Muhizi",
       "landing.subtitle": "Technology that helps you farm better",
       "landing.getStarted": "Get Started",
       "landing.login": "Login",
@@ -429,7 +429,7 @@ const resources = {
       logout: "Déconnexion",
       
       // Landing Page
-      "landing.title": "Bienvenue sur AgriConnect",
+      "landing.title": "Bienvenue sur Eza Muhizi",
       "landing.subtitle": "La technologie pour mieux cultiver",
       "landing.getStarted": "Commencer",
       "landing.login": "Connexion",

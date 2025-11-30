@@ -27,9 +27,9 @@ const Navigation = () => {
         <div className="flex items-center justify-between md:justify-start md:gap-8 h-16">
           <div className="hidden md:flex items-center gap-2">
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xl">🌾</span>
+              <span className="text-primary-foreground font-bold text-xl">🇷🇼</span>
             </div>
-            <span className="font-bold text-xl text-foreground">AgriConnect</span>
+            <span className="font-bold text-xl text-foreground">Eza Muhizi</span>
           </div>
           
           <div className="flex items-center justify-around w-full md:w-auto md:gap-2">

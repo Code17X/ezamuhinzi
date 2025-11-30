@@ -1,10 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { ArrowLeft, Calendar, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const newsArticles = {
   rw: [
@@ -166,10 +168,53 @@ const NewsArticle = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const [article, setArticle] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   
-  const currentLang = i18n.language as 'rw' | 'en' | 'fr';
-  const articles = newsArticles[currentLang] || newsArticles.en;
-  const article = articles.find(a => a.id === id);
+  useEffect(() => {
+    fetchArticle();
+  }, [id, i18n.language]);
+
+  const fetchArticle = async () => {
+    setLoading(true);
+    try {
+      // Try fetching from edge function first
+      const { data, error } = await supabase.functions.invoke('fetch-rab-news', {
+        body: { language: i18n.language }
+      });
+
+      if (!error && data?.articles) {
+        const foundArticle = data.articles.find((a: any) => a.id === id);
+        if (foundArticle) {
+          setArticle(foundArticle);
+          setLoading(false);
+          return;
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching article:', error);
+    }
+
+    // Fallback to static articles
+    const currentLang = i18n.language as 'rw' | 'en' | 'fr';
+    const articles = newsArticles[currentLang] || newsArticles.en;
+    const foundArticle = articles.find(a => a.id === id);
+    setArticle(foundArticle);
+    setLoading(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24">
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   if (!article) {
     return (
@@ -224,7 +269,7 @@ const NewsArticle = () => {
               </div>
 
               <div className="prose prose-lg max-w-none">
-                {article.content.split('\n\n').map((paragraph, idx) => (
+                {(article.fullContent || article.content).split('\n\n').map((paragraph: string, idx: number) => (
                   <p key={idx} className="text-foreground mb-4 leading-relaxed whitespace-pre-line">
                     {paragraph}
                   </p>

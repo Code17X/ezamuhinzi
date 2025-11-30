@@ -165,11 +165,11 @@ const Social = () => {
   };
 
   const handleShare = (post: Post) => {
-    const text = `${post.content}\n\nVia AgriConnect`;
+    const text = `${post.content}\n\nVia Eza Muhizi`;
     const url = window.location.href;
     
     if (navigator.share) {
-      navigator.share({ title: 'AgriConnect Post', text, url });
+      navigator.share({ title: 'Eza Muhizi Post', text, url });
     } else {
       const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + '\n' + url)}`;
       window.open(whatsappUrl, '_blank');
