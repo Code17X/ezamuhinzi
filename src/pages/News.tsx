@@ -181,13 +181,30 @@ const News = () => {
       
       <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 space-y-4">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
               {t('news.latestNews')}
             </h1>
             <p className="text-muted-foreground">
               {t('news.agricultureUpdates')} - Rwanda Agriculture Board (RAB)
             </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
+              <Button asChild variant="outline" size="sm">
+                <a href="https://www.rab.gov.rw/" target="_blank" rel="noopener noreferrer">
+                  RAB Urubuga Rukuru
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <a href="https://www.rab.gov.rw/online-services" target="_blank" rel="noopener noreferrer">
+                  Serivisi za RAB (Online)
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <a href="https://www.rab.gov.rw/publications" target="_blank" rel="noopener noreferrer">
+                  Amatangazo &amp; Publications
+                </a>
+              </Button>
+            </div>
           </div>
 
           {isLoading ? (
