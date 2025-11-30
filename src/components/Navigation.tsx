@@ -25,11 +25,15 @@ const Navigation = () => {
     <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border md:top-0 md:bottom-auto z-50 transition-all duration-500 ease-out shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between md:justify-start md:gap-8 h-16">
-          <div className="hidden md:flex items-center gap-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xl">🇷🇼</span>
-            </div>
-            <span className="font-bold text-xl text-foreground">Eza Muhizi</span>
+          <div className="hidden md:flex items-center gap-3">
+            <img 
+              src="/rwanda-coat-of-arms.png" 
+              alt="Rwanda Coat of Arms" 
+              className="w-10 h-10 object-contain"
+            />
+            <span className="font-bold text-xl text-foreground" style={{ fontFamily: "'Righteous', cursive" }}>
+              Eza Muhizi
+            </span>
           </div>
           
           <div className="flex items-center justify-around w-full md:w-auto md:gap-2">
