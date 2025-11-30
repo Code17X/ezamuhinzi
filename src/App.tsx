@@ -16,7 +16,6 @@ import News from "./pages/News";
 import NewsArticle from "./pages/NewsArticle";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
-import Social from "./pages/Social";
 import Marketplace from "./pages/Marketplace";
 import Maps from "./pages/Maps";
 import VeterinaryApply from "./pages/VeterinaryApply";
@@ -49,7 +48,6 @@ const App = () => (
             <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-              <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

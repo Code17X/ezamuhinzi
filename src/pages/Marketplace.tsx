@@ -1,312 +1,330 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Phone, MapPin, Package } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
+import { Plus, Phone, MapPin, Trash2, Building2 } from "lucide-react";
 
 interface Listing {
   id: string;
-  title: string;
-  description: string;
-  category: string;
-  price: number;
-  unit: string;
-  quantity: string;
+  user_id: string;
+  service_name: string;
+  provider_name: string;
+  phone_number: string;
+  service_cost: string;
   location: string;
-  image_url: string | null;
-  contact_phone: string | null;
+  description: string | null;
+  created_at: string;
+}
+
+interface Industry {
+  id: string;
+  name: string;
+  phone_number: string;
+  location: string;
+  description: string | null;
   created_at: string;
 }
 
 const Marketplace = () => {
   const { t } = useTranslation();
-  const { toast } = useToast();
   const { user } = useAuth();
+  const { toast } = useToast();
+  
   const [listings, setListings] = useState<Listing[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    category: "crops",
-    price: "",
-    unit: "kg",
-    quantity: "",
-    location: "",
-    contact_phone: ""
+  const [industries, setIndustries] = useState<Industry[]>([]);
+  const [isCreatingListing, setIsCreatingListing] = useState(false);
+  const [newListing, setNewListing] = useState({
+    service_name: '',
+    provider_name: '',
+    phone_number: '',
+    service_cost: '',
+    location: '',
+    description: ''
   });
 
   useEffect(() => {
-    fetchListings();
+    loadData();
   }, []);
 
-  const fetchListings = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('marketplace_listings')
-        .select('*')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
+  const loadData = async () => {
+    // Load service listings
+    const { data: listingsData } = await supabase
+      .from('services')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setListings(data || []);
-    } catch (error) {
-      console.error('Error fetching listings:', error);
-      toast({ title: "Ikosa", description: "Ntibyashobotse gukuramo ibyagurishwa", variant: "destructive" });
-    } finally {
-      setLoading(false);
-    }
+    if (listingsData) setListings(listingsData);
+
+    // Load industries
+    const { data: industriesData } = await supabase
+      .from('industries')
+      .select('*')
+      .order('name');
+
+    if (industriesData) setIndustries(industriesData);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) {
-      toast({ title: "Ikosa", description: "Ugomba kwinjira kugirango ugire icyo ugurishije", variant: "destructive" });
+  const handleCreateListing = async () => {
+    if (!user || !newListing.service_name || !newListing.provider_name || 
+        !newListing.phone_number || !newListing.service_cost || !newListing.location) {
+      toast({
+        title: "Uzuza byose",
+        description: "Uzuza amakuru yose akenewe",
+        variant: "destructive"
+      });
       return;
     }
 
     try {
-      const { error } = await supabase
-        .from('marketplace_listings')
-        .insert([{
-          user_id: user.id,
-          title: formData.title,
-          description: formData.description,
-          category: formData.category,
-          price: parseFloat(formData.price),
-          unit: formData.unit,
-          quantity: formData.quantity,
-          location: formData.location,
-          contact_phone: formData.contact_phone,
-          status: 'active'
-        }]);
+      const { error } = await supabase.from('services').insert({
+        user_id: user.id,
+        service_name: newListing.service_name,
+        provider_name: newListing.provider_name,
+        phone_number: newListing.phone_number,
+        service_cost: newListing.service_cost,
+        location: newListing.location,
+        description: newListing.description || null
+      });
 
       if (error) throw error;
 
-      toast({ title: "Byakunze!", description: "Icyagurishwa cyawe cyongewe neza" });
-      setIsDialogOpen(false);
-      setFormData({
-        title: "",
-        description: "",
-        category: "crops",
-        price: "",
-        unit: "kg",
-        quantity: "",
-        location: "",
-        contact_phone: ""
+      toast({ title: "Byakozwe neza!" });
+      setNewListing({
+        service_name: '',
+        provider_name: '',
+        phone_number: '',
+        service_cost: '',
+        location: '',
+        description: ''
       });
-      fetchListings();
+      setIsCreatingListing(false);
+      loadData();
     } catch (error) {
       console.error('Error creating listing:', error);
-      toast({ title: "Ikosa", description: "Ntibyashobotse kongeramo icyagurishwa", variant: "destructive" });
+      toast({ title: "Ikosa", variant: 'destructive' });
     }
   };
 
-  const getCategoryBadge = (category: string) => {
-    const colors: Record<string, string> = {
-      crops: "bg-green-500/10 text-green-600 border-green-500/20",
-      livestock: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-      equipment: "bg-purple-500/10 text-purple-600 border-purple-500/20",
-      other: "bg-gray-500/10 text-gray-600 border-gray-500/20"
-    };
-    return colors[category] || colors.other;
+  const handleDeleteListing = async (id: string) => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('services')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      
+      toast({ title: "Byasibwe!" });
+      loadData();
+    } catch (error) {
+      console.error('Error deleting listing:', error);
+      toast({ title: "Ikosa", variant: 'destructive' });
+    }
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-0 md:pt-20">
       <Navigation />
-      
-      <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">Isoko ry'Abahinzi</h1>
-              <p className="text-muted-foreground">Gurishanya ibihingwa n'ibikoresho</p>
-            </div>
-            
+      <main className="container mx-auto px-4 py-8 animate-fade-in">
+        <h1 className="text-3xl font-bold mb-6 text-foreground">Tanga Akazi</h1>
+
+        <Tabs defaultValue="services" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="services">Serivisi</TabsTrigger>
+            <TabsTrigger value="industries">Inganda</TabsTrigger>
+          </TabsList>
+
+          {/* Services Tab */}
+          <TabsContent value="services" className="space-y-4">
             {user && (
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="flex items-center gap-2">
-                    <Plus className="w-4 h-4" />
-                    Ongeramo Icyagurishwa
+              <Card>
+                <CardHeader>
+                  <Button 
+                    onClick={() => setIsCreatingListing(!isCreatingListing)}
+                    className="w-full"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Tanga Serivisi Yawe
                   </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                  <DialogHeader>
-                    <DialogTitle>Ongeramo Icyagurishwa Gishya</DialogTitle>
-                    <DialogDescription>Uzuza amakuru y'icyagurishwa cyawe</DialogDescription>
-                  </DialogHeader>
-                  
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                </CardHeader>
+                
+                {isCreatingListing && (
+                  <CardContent className="space-y-4">
                     <div>
-                      <label className="text-sm font-medium">Izina ry'Icyagurishwa *</label>
+                      <Label>Izina rya Serivisi</Label>
                       <Input
-                        value={formData.title}
-                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                        placeholder="Urugero: Ibigori bya Quality"
-                        required
+                        value={newListing.service_name}
+                        onChange={(e) => setNewListing({ ...newListing, service_name: e.target.value })}
+                        placeholder="Urugero: Umuganga w'amatungo"
                       />
                     </div>
 
                     <div>
-                      <label className="text-sm font-medium">Ibisobanuro</label>
+                      <Label>Amazina Yawe</Label>
+                      <Input
+                        value={newListing.provider_name}
+                        onChange={(e) => setNewListing({ ...newListing, provider_name: e.target.value })}
+                        placeholder="Izina ryawe ryuzuye"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Numero ya Telefone</Label>
+                      <Input
+                        value={newListing.phone_number}
+                        onChange={(e) => setNewListing({ ...newListing, phone_number: e.target.value })}
+                        placeholder="+250 7XX XXX XXX"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Igiciro cya Serivisi</Label>
+                      <Input
+                        value={newListing.service_cost}
+                        onChange={(e) => setNewListing({ ...newListing, service_cost: e.target.value })}
+                        placeholder="Urugero: 5,000 RWF - 20,000 RWF"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Aho Ubarizwa</Label>
+                      <Input
+                        value={newListing.location}
+                        onChange={(e) => setNewListing({ ...newListing, location: e.target.value })}
+                        placeholder="Urugero: Kigali, Gasabo"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Ibisobanuro (Optional)</Label>
                       <Textarea
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        placeholder="Sobanura icyagurishwa cyawe..."
-                        rows={3}
+                        value={newListing.description}
+                        onChange={(e) => setNewListing({ ...newListing, description: e.target.value })}
+                        placeholder="Sobanura serivisi yawe..."
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium">Ubwoko *</label>
-                        <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="crops">Ibihingwa</SelectItem>
-                            <SelectItem value="livestock">Amatungo</SelectItem>
-                            <SelectItem value="equipment">Ibikoresho</SelectItem>
-                            <SelectItem value="other">Ibindi</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div>
-                        <label className="text-sm font-medium">Igipimo *</label>
-                        <Select value={formData.unit} onValueChange={(value) => setFormData({ ...formData, unit: value })}>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="kg">Kg</SelectItem>
-                            <SelectItem value="umutwe">Umutwe</SelectItem>
-                            <SelectItem value="igisenge">Igisenge</SelectItem>
-                            <SelectItem value="umubumbe">Umubumbe</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium">Igiciro (RWF) *</label>
-                        <Input
-                          type="number"
-                          value={formData.price}
-                          onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                          placeholder="45000"
-                          required
-                        />
-                      </div>
-
-                      <div>
-                        <label className="text-sm font-medium">Ingano</label>
-                        <Input
-                          value={formData.quantity}
-                          onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                          placeholder="100 kg"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium">Ahantu *</label>
-                      <Input
-                        value={formData.location}
-                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                        placeholder="Kigali, Rwanda"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium">Nimero ya Telefoni</label>
-                      <Input
-                        type="tel"
-                        value={formData.contact_phone}
-                        onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })}
-                        placeholder="+250 788 123 456"
-                      />
-                    </div>
-
-                    <Button type="submit" className="w-full">Ohereza</Button>
-                  </form>
-                </DialogContent>
-              </Dialog>
+                    <Button onClick={handleCreateListing} className="w-full">
+                      Ohereza
+                    </Button>
+                  </CardContent>
+                )}
+              </Card>
             )}
-          </div>
 
-          {loading ? (
-            <div className="text-center py-12">Gutegura...</div>
-          ) : listings.length === 0 ? (
-            <Card className="p-8 text-center">
-              <Package className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">Nta cyagurishwa kiri hano ubu</p>
-            </Card>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {listings.map((listing) => (
-                <Card key={listing.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex justify-between items-start mb-2">
-                      <CardTitle className="text-xl">{listing.title}</CardTitle>
-                      <Badge className={getCategoryBadge(listing.category)}>
-                        {listing.category === 'crops' ? 'Ibihingwa' : 
-                         listing.category === 'livestock' ? 'Amatungo' :
-                         listing.category === 'equipment' ? 'Ibikoresho' : 'Ibindi'}
-                      </Badge>
-                    </div>
-                    <CardDescription>{listing.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-2xl font-bold text-primary">
-                          {listing.price.toLocaleString()} RWF
-                        </span>
-                        <span className="text-sm text-muted-foreground">/{listing.unit}</span>
+            {/* Services List */}
+            <div className="grid gap-4 md:grid-cols-2">
+              {listings.length === 0 ? (
+                <Card className="md:col-span-2">
+                  <CardContent className="text-center py-12">
+                    <p className="text-muted-foreground">Nta serivisi ziboneka</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                listings.map((listing) => (
+                  <Card key={listing.id} className="hover-scale">
+                    <CardHeader>
+                      <CardTitle className="flex items-start justify-between">
+                        <span>{listing.service_name}</span>
+                        {user && listing.user_id === user.id && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteListing(listing.id)}
+                            className="text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="font-semibold text-lg">{listing.provider_name}</p>
+                      
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Phone className="w-4 h-4" />
+                        <a href={`tel:${listing.phone_number}`} className="hover:text-primary">
+                          {listing.phone_number}
+                        </a>
                       </div>
-                      
-                      {listing.quantity && (
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Package className="w-4 h-4" />
-                          <span>{listing.quantity}</span>
-                        </div>
-                      )}
-                      
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+
+                      <div className="flex items-center gap-2 text-muted-foreground">
                         <MapPin className="w-4 h-4" />
                         <span>{listing.location}</span>
                       </div>
-                      
-                      {listing.contact_phone && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <Phone className="w-4 h-4" />
-                          <a href={`tel:${listing.contact_phone}`} className="text-primary hover:underline">
-                            {listing.contact_phone}
-                          </a>
-                        </div>
+
+                      <div className="pt-2 border-t">
+                        <p className="text-sm font-semibold text-primary">
+                          Igiciro: {listing.service_cost}
+                        </p>
+                      </div>
+
+                      {listing.description && (
+                        <p className="text-sm text-muted-foreground pt-2">
+                          {listing.description}
+                        </p>
                       )}
-                    </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </TabsContent>
+
+          {/* Industries Tab */}
+          <TabsContent value="industries" className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              {industries.length === 0 ? (
+                <Card className="md:col-span-2">
+                  <CardContent className="text-center py-12">
+                    <p className="text-muted-foreground">Nta nganda ziboneka</p>
                   </CardContent>
                 </Card>
-              ))}
+              ) : (
+                industries.map((industry) => (
+                  <Card key={industry.id} className="hover-scale">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Building2 className="w-5 h-5 text-primary" />
+                        {industry.name}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Phone className="w-4 h-4" />
+                        <a href={`tel:${industry.phone_number}`} className="hover:text-primary">
+                          {industry.phone_number}
+                        </a>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="w-4 h-4" />
+                        <span>{industry.location}</span>
+                      </div>
+
+                      {industry.description && (
+                        <p className="text-sm text-muted-foreground pt-2 border-t">
+                          {industry.description}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))
+              )}
             </div>
-          )}
-        </div>
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );

@@ -13,10 +13,9 @@ const Navigation = () => {
   const links = [
     { to: "/", icon: Home, label: t('home') },
     { to: "/assistant", icon: Bot, label: t('assistant') },
-    { to: "/social", icon: Users, label: t('social') },
+    { to: "/marketplace", icon: Users, label: "Tanga Akazi" },
     { to: "/weather", icon: Cloud, label: t('weather') },
     { to: "/prices", icon: DollarSign, label: t('prices') },
-    { to: "/marketplace", icon: ShoppingBag, label: t('marketplace') },
     { to: "/news", icon: Newspaper, label: t('news') },
     { to: "/profile", icon: User, label: t('profile') },
     { to: "/settings", icon: Settings, label: t('settings') },

@@ -122,6 +122,39 @@ export type Database = {
         }
         Relationships: []
       }
+      industries: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          latitude: number | null
+          location: string
+          longitude: number | null
+          name: string
+          phone_number: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          latitude?: number | null
+          location: string
+          longitude?: number | null
+          name: string
+          phone_number: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          latitude?: number | null
+          location?: string
+          longitude?: number | null
+          name?: string
+          phone_number?: string
+        }
+        Relationships: []
+      }
       location_ratings: {
         Row: {
           created_at: string | null
@@ -469,6 +502,45 @@ export type Database = {
           phone_number?: string | null
           sms_alerts_enabled?: boolean | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          location: string
+          phone_number: string
+          provider_name: string
+          service_cost: string
+          service_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          location: string
+          phone_number: string
+          provider_name: string
+          service_cost: string
+          service_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string
+          phone_number?: string
+          provider_name?: string
+          service_cost?: string
+          service_name?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

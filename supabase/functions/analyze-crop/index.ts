@@ -29,15 +29,11 @@ serve(async (req) => {
         model: "google/gemini-2.5-flash",
         messages: [
           {
-            role: "system",
-            content: "You are an expert agricultural pathologist. Analyze crop images and provide: 1) Disease/pest identification, 2) Severity assessment (mild/moderate/severe), 3) Treatment recommendations, 4) Prevention tips. Be specific and actionable."
-          },
-          {
             role: "user",
             content: [
               {
                 type: "text",
-                text: "Analyze this crop image. Identify any diseases, pests, or health issues. Provide detailed recommendations."
+                text: "You are an expert agricultural specialist in Rwanda. Analyze this crop/fruit/vegetable image and identify any diseases, pests, or health issues. Provide:\n\n1. **Crop Type**: Identify the crop (coffee, tea, banana, beans, cassava, maize, potato, tomato, etc.)\n2. **Disease/Pest Identification**: What is affecting the crop?\n3. **Severity**: Rate as Low/Medium/High\n4. **Treatment**: Specific actionable steps to treat the problem\n5. **Prevention**: Tips to prevent this issue in the future\n\nKeep your response clear, practical, and in simple language that a farmer can understand."
               },
               {
                 type: "image_url",
