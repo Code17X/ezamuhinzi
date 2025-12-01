@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, TrendingDown, Minus, Sparkles, Info, Cloud, CloudRain, Sun, Calendar, MapPin, Bell, TrendingUpIcon } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Sparkles, Info, Cloud, CloudRain, Sun, Calendar, MapPin, Bell, TrendingUpIcon, DollarSign } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, BarChart, Bar } from 'recharts';
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,11 @@ const Prices = () => {
   const [sellingRecommendation, setSellingRecommendation] = useState<any>(null);
   const [priceAlert, setPriceAlert] = useState<{targetPrice: number; alertType: 'above' | 'below'} | null>(null);
   const [seasonalTrends, setSeasonalTrends] = useState<any[]>([]);
+  const [profitCalc, setProfitCalc] = useState<{quantity: number; costPerUnit: number; transportCost: number}>({
+    quantity: 0,
+    costPerUnit: 0,
+    transportCost: 0
+  });
 
   useEffect(() => {
     fetchPrices();
@@ -247,19 +252,22 @@ const Prices = () => {
       console.error('Error fetching price history:', error);
     }
 
-    // Fallback to generated history if no data
-    const months = ['Mutarama', 'Gashyantare', 'Werurwe', 'Mata', 'Gicurasi', 'Kamena'];
+    // Fallback to generated history with 12 months of data
+    const months = ['Ukuboza', 'Mutarama', 'Gashyantare', 'Werurwe', 'Mata', 'Gicurasi', 'Kamena', 'Nyakanga', 'Kanama', 'Nzeri', 'Ukwakira', 'Ugushyingo'];
     const basePrice = item.current_price;
     const trend = item.trend;
     
     return months.map((month, index) => {
       let price = basePrice;
       if (trend === 'up') {
-        price = basePrice * (0.85 + (index * 0.03));
+        // Gradual increase over time
+        price = basePrice * (0.70 + (index * 0.025));
       } else if (trend === 'down') {
-        price = basePrice * (1.15 - (index * 0.03));
+        // Gradual decrease over time
+        price = basePrice * (1.30 - (index * 0.025));
       } else {
-        price = basePrice * (0.95 + Math.random() * 0.1);
+        // Stable with minor fluctuations
+        price = basePrice * (0.92 + Math.sin(index) * 0.08);
       }
       return {
         month,
@@ -378,11 +386,11 @@ const Prices = () => {
             <TabsContent value="history" className="space-y-6">
               {/* Price History Chart */}
               <div>
-                <h3 className="text-lg font-semibold mb-3">Amateka y'Ibiciro</h3>
+                <h3 className="text-lg font-semibold mb-3">Amateka y'Ibiciro - Amezi 12 Ashize</h3>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={priceHistory}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
+                    <XAxis dataKey="month" angle={-45} textAnchor="end" height={80} />
                     <YAxis />
                     <Tooltip />
                     <Legend />
@@ -392,10 +400,90 @@ const Prices = () => {
                       stroke="#8884d8" 
                       strokeWidth={2}
                       name="Igiciro (RWF)"
+                      dot={{ r: 4 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
+
+              {/* Profit Calculator */}
+              <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <DollarSign className="w-5 h-5" />
+                    Kubara Inyungu
+                  </CardTitle>
+                  <CardDescription>Menya inyungu uzabona ukigurishije</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Ingano Uzagurisha ({selectedItem?.unit})</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded bg-white dark:bg-gray-800"
+                        placeholder="Urugero: 100"
+                        value={profitCalc.quantity || ''}
+                        onChange={(e) => setProfitCalc({...profitCalc, quantity: Number(e.target.value)})}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Igiciro Wakoze ku {selectedItem?.unit} (RWF)</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded bg-white dark:bg-gray-800"
+                        placeholder="Urugero: 400"
+                        value={profitCalc.costPerUnit || ''}
+                        onChange={(e) => setProfitCalc({...profitCalc, costPerUnit: Number(e.target.value)})}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Ibiciro byo Gutambukana (RWF)</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded bg-white dark:bg-gray-800"
+                        placeholder="Urugero: 5000"
+                        value={profitCalc.transportCost || ''}
+                        onChange={(e) => setProfitCalc({...profitCalc, transportCost: Number(e.target.value)})}
+                      />
+                    </div>
+                  </div>
+
+                  {profitCalc.quantity > 0 && profitCalc.costPerUnit > 0 && selectedItem && (
+                    <div className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium">Igiciro ku Isoko:</span>
+                        <span className="text-lg font-bold">{selectedItem.current_price.toLocaleString()} RWF</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium">Amafaranga Uzinjiza:</span>
+                        <span className="text-lg">{(selectedItem.current_price * profitCalc.quantity).toLocaleString()} RWF</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium">Ibiciro Byose:</span>
+                        <span className="text-lg">-{((profitCalc.costPerUnit * profitCalc.quantity) + profitCalc.transportCost).toLocaleString()} RWF</span>
+                      </div>
+                      <div className="border-t pt-3 mt-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-base font-bold">Inyungu Zawe:</span>
+                          <span className={`text-2xl font-bold ${
+                            ((selectedItem.current_price * profitCalc.quantity) - ((profitCalc.costPerUnit * profitCalc.quantity) + profitCalc.transportCost)) > 0 
+                            ? 'text-green-600 dark:text-green-400' 
+                            : 'text-red-600 dark:text-red-400'
+                          }`}>
+                            {((selectedItem.current_price * profitCalc.quantity) - ((profitCalc.costPerUnit * profitCalc.quantity) + profitCalc.transportCost)).toLocaleString()} RWF
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          {((selectedItem.current_price * profitCalc.quantity) - ((profitCalc.costPerUnit * profitCalc.quantity) + profitCalc.transportCost)) > 0 
+                            ? '✓ Uzabona inyungu' 
+                            : '✗ Uzacibwa, Wongera igiciro cyangwa ugabanye ibiciro'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
               {/* Price Factors */}
               <div>
