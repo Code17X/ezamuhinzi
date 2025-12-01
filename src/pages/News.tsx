@@ -177,6 +177,90 @@ const News = () => {
           date: "Icyumweru Gishize",
           image: "🥔"
         }
+      ],
+      [
+        {
+          id: "16",
+          title: "Uburyo bwo Kugabanya Igihombo cy'Ibihingwa",
+          excerpt: "Tekinolojiya nshya yerekanye ko ishobora kugabanya igihombo cy'ibihingwa kugera kuri 50% binyuze mu gusuzuma ibihingwa vuba.",
+          category: "Ikoranabuhanga",
+          date: "Uyu Munsi",
+          image: "🔬"
+        },
+        {
+          id: "17",
+          title: "Amasoko Mashya y'Ibishyimbo mu Mahanga",
+          excerpt: "U Rwanda rwabonetse amasoko mashya yo kohereza ibishyimbo mu bihugu by'Uburasirazuba.",
+          category: "Ubukungu",
+          date: "Ejo Hashize",
+          image: "🫘"
+        },
+        {
+          id: "18",
+          title: "Ubworozi bw'Impundu butangiye Gushimangirwa",
+          excerpt: "Gahunda yo guteza imbere ubworozi bw'impundu yatangiye mu ntara za Burera na Rubavu.",
+          category: "Ubworozi",
+          date: "Iki Cyumweru",
+          image: "🐟"
+        },
+        {
+          id: "19",
+          title: "Imashini Nshya zo Gusarura Ibihingwa",
+          excerpt: "Abahinzi 200 bahawe imashini zo gusarura ibihingwa byihuse, bizagabanya umurimo ukomeye.",
+          category: "Ubuhinga",
+          date: "Iki Cyumweru",
+          image: "🚜"
+        },
+        {
+          id: "20",
+          title: "Uruhare rw'Abagore mu Buhinzi",
+          excerpt: "Raporo nshya yerekana ko abagore bari 65% by'abakora mu buhinzi mu Rwanda.",
+          category: "Imibereho",
+          date: "Icyumweru Gishize",
+          image: "👩‍🌾"
+        }
+      ],
+      [
+        {
+          id: "21",
+          title: "Inganda Nshya zo Gutunganya Ibirayi",
+          excerpt: "Inganda nshya zo gutunganya ibirayi zizafungura mu Musanze, ziteganyijwe gukora mu Nzeri.",
+          category: "Ubukungu",
+          date: "Uyu Munsi",
+          image: "🏭"
+        },
+        {
+          id: "22",
+          title: "Gahunda yo Gushyira Imyaka y'Imbuto Nziza",
+          excerpt: "Guverinoma itangije gahunda yo gutanga imbuto nziza z'ibigori n'ibirayi ku bahinzi bose.",
+          category: "Ubuhinga",
+          date: "Ejo Hashize",
+          image: "🌾"
+        },
+        {
+          id: "23",
+          title: "Ubworozi bw'Intama buteza Imbere",
+          excerpt: "Abahinzi 800 babonye amahugurwa yo guteza imbere ubworozi bw'intama mu karere ka Nyagatare.",
+          category: "Ubworozi",
+          date: "Iki Cyumweru",
+          image: "🐑"
+        },
+        {
+          id: "24",
+          title: "Inguzanyo z'Abahinzi Ziyongereye",
+          excerpt: "Banki zatangaje ko inguzanyo zihabwa abahinzi ziyongereye 30% muri uyu mwaka.",
+          category: "Ubukungu",
+          date: "Iki Cyumweru",
+          image: "💰"
+        },
+        {
+          id: "25",
+          title: "Kooperative Nshya z'Abahinzi b'Ikawa",
+          excerpt: "Kooperative 15 nshya z'abahinzi b'ikawa zashizweho mu ntara y'Amajyaruguru.",
+          category: "Imibereho",
+          date: "Icyumweru Gishize",
+          image: "☕"
+        }
       ]
     ],
     en: [
