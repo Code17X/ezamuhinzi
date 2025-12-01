@@ -8,33 +8,33 @@ const Landing = () => {
   const features = [
     {
       icon: <Camera className="w-8 h-8 text-primary" />,
-      title: "Crop Disease Detection",
-      description: "Upload photos of your crops and get instant AI-powered diagnosis with treatment recommendations",
+      title: "Gusuzuma Indwara z'Ibihingwa",
+      description: "Ohereza amafoto y'ibihingwa byawe ukabona amakuru yo gukira byihuse ukoresheje AI",
     },
     {
       icon: <Stethoscope className="w-8 h-8 text-primary" />,
-      title: "AI Vet Assistant",
-      description: "24/7 livestock health advice from our AI veterinarian. Get expert guidance anytime, anywhere",
+      title: "Umujyanama w'AI ku Matungo",
+      description: "Inama ku buzima bw'amatungo igihe cyose na hose ukoresheje AI",
     },
     {
       icon: <CloudSun className="w-8 h-8 text-primary" />,
-      title: "Weather & Prices",
-      description: "Real-time weather forecasts and market prices to help you make informed farming decisions",
+      title: "Ikirere n'Ibiciro",
+      description: "Amakuru y'ikirere n'ibiciro bya soko yifashisha gufata ibyemezo byiza mu buhinzi",
     },
     {
       icon: <Newspaper className="w-8 h-8 text-primary" />,
-      title: "Agricultural News",
-      description: "Stay updated with the latest farming news, techniques, and best practices",
+      title: "Amakuru y'Ubuhinzi",
+      description: "Kora kuri gahunda y'amakuru agezweho mu buhinzi, uburyo bushya, n'ubumenyi bwiza",
     },
   ];
 
   const innovations = [
-    "AI-powered crop disease detection using computer vision",
-    "Instant veterinary advice through conversational AI",
-    "Save and track all your diagnoses and consultations",
-    "Personalized recommendations based on your farm profile",
-    "Works for both experienced and beginner farmers",
-    "Available 24/7 on any device",
+    "Gusuzuma indwara z'ibihingwa ukoresheje AI",
+    "Inama ku matungo byihuse ukoresheje AI",
+    "Bika kandi ukurikirane ibizwe n'inama zawe",
+    "Inama zihariye zishingiye ku mirima yawe",
+    "Bikoreshwa n'abahinzi bafite uburambe n'abatangiye",
+    "Bibonetse igihe cyose ku bikoresho byose",
   ];
 
   return (
@@ -50,20 +50,20 @@ const Landing = () => {
         
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            Smart Farming for Everyone
+            Ubuhinzi Bwihuse ku Bose
           </h1>
           <p className="text-xl md:text-2xl text-white/90 mb-8">
-            AI-powered tools to help farmers make better decisions, protect crops, and care for livestock
+            Ibikoresho bya AI bigufasha gufata ibyemezo byiza, kurinda ibihingwa, no kwita ku matungo
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link to="/auth?mode=signup">
               <Button size="lg" className="text-lg px-8 hover-scale">
-                Get Started Free
+                Tangira Kubuntu
               </Button>
             </Link>
             <Link to="/auth?mode=login">
               <Button size="lg" variant="outline" className="text-lg px-8 bg-white/10 text-white border-white hover:bg-white/20 hover-scale">
-                Sign In
+                Injira
               </Button>
             </Link>
           </div>
@@ -74,7 +74,7 @@ const Landing = () => {
       <section className="py-20 px-4 animate-fade-in">
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Everything You Need in One App
+            Ibyo Ukeneye Byose muri Porogaramu Imwe
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             {features.map((feature, index) => (
@@ -96,7 +96,7 @@ const Landing = () => {
       <section className="py-20 px-4 bg-muted/30 animate-fade-in">
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            What Makes Us Different
+            Icyaduhindura ku Bandi
           </h2>
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {innovations.map((innovation, index) => (
@@ -113,14 +113,14 @@ const Landing = () => {
       <section className="py-20 px-4 animate-fade-in">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Join Thousands of Farmers Already Using Our Platform
+            Injira mu Muryango w'Abahinzi Benshi Bakoresha Iyi Porogaramu
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Whether you're just starting or have years of experience, our AI tools will help you succeed
+            Niba utangiye cyangwa ufite uburambe, ibikoresho bya AI bizagufasha gutsinda
           </p>
           <Link to="/auth?mode=signup">
             <Button size="lg" className="text-lg px-8 hover-scale">
-              Start Your Free Account
+              Fungura Konti Yawe Kubuntu
             </Button>
           </Link>
         </div>

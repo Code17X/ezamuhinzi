@@ -5,9 +5,11 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 interface ImageUploadProps {
   onImageAnalyzed: (analysis: string, imageUrl: string) => void;
+  skipAnalysis?: boolean;
 }
 export const ImageUpload = ({
-  onImageAnalyzed
+  onImageAnalyzed,
+  skipAnalysis = false
 }: ImageUploadProps) => {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
@@ -50,22 +52,32 @@ export const ImageUpload = ({
         }
       } = supabase.storage.from('crop-images').getPublicUrl(uploadData.path);
 
-      // Analyze image
-      const {
-        data,
-        error
-      } = await supabase.functions.invoke('analyze-crop', {
-        body: {
-          imageUrl: publicUrl
-        }
-      });
-      if (error) throw error;
-      onImageAnalyzed(data.analysis, publicUrl);
-      setPreview(null);
-      toast({
-        title: "Analysis complete",
-        description: "Your crop has been analyzed successfully"
-      });
+      if (skipAnalysis) {
+        // Just return the image URL without analysis
+        onImageAnalyzed("", publicUrl);
+        setPreview(null);
+        toast({
+          title: "Byashyizwe!",
+          description: "Ifoto yawe yashyizwe neza"
+        });
+      } else {
+        // Analyze image
+        const {
+          data,
+          error
+        } = await supabase.functions.invoke('analyze-crop', {
+          body: {
+            imageUrl: publicUrl
+          }
+        });
+        if (error) throw error;
+        onImageAnalyzed(data.analysis, publicUrl);
+        setPreview(null);
+        toast({
+          title: "Analysis complete",
+          description: "Your crop has been analyzed successfully"
+        });
+      }
     } catch (error) {
       console.error('Error:', error);
       toast({
