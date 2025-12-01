@@ -27,8 +27,16 @@ const Navigation = () => {
         <div className="flex items-center justify-between md:justify-start md:gap-8 h-16">
           <div className="hidden md:flex items-center gap-3">
             <div className="relative">
-              <Wheat className="w-10 h-10 text-primary drop-shadow-lg" strokeWidth={2.5} />
-              <div className="absolute inset-0 blur-sm bg-primary/20 rounded-full scale-110 -z-10" />
+              <Wheat 
+                className="w-10 h-10 drop-shadow-lg" 
+                strokeWidth={2.5}
+                style={{ 
+                  color: '#D4AF37',
+                  filter: 'drop-shadow(0 2px 4px rgba(212, 175, 55, 0.3))'
+                }}
+              />
+              <div className="absolute inset-0 blur-sm rounded-full scale-110 -z-10" 
+                   style={{ background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent)' }} />
             </div>
             <span className="font-bold text-xl text-foreground" style={{ fontFamily: "'Righteous', cursive" }}>
               Eza Muhizi
