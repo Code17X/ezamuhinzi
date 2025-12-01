@@ -83,25 +83,25 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-primary/5 to-secondary/5">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Welcome to AgriAssist</CardTitle>
+          <CardTitle className="text-2xl">Murakaza neza kuri Eza Muhinzi</CardTitle>
           <CardDescription>
             {mode === "login" 
-              ? "Sign in to access your farming dashboard"
-              : "Create an account to get started"
+              ? "Injira kugira ngo ubone serivisi zawe"
+              : "Kora konti kugira ngo utangire"
             }
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs value={mode} onValueChange={(v) => setMode(v as "login" | "signup")}>
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="login">Injira</TabsTrigger>
+              <TabsTrigger value="signup">Iyandikishe</TabsTrigger>
             </TabsList>
             
             <TabsContent value="login">
               <form onSubmit={handleSubmit} className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">Imeri</Label>
                   <Input
                     id="email"
                     type="email"
@@ -113,7 +113,7 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">Ijambo ry'ibanga</Label>
                   <Input
                     id="password"
                     type="password"
@@ -125,7 +125,7 @@ const Auth = () => {
                 </div>
                 
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Signing in..." : "Sign In"}
+                  {loading ? "Urainjira..." : "Injira"}
                 </Button>
               </form>
             </TabsContent>
@@ -133,7 +133,7 @@ const Auth = () => {
             <TabsContent value="signup">
               <form onSubmit={handleSubmit} className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="fullName">Full Name</Label>
+                  <Label htmlFor="fullName">Amazina Yawe Yose</Label>
                   <Input
                     id="fullName"
                     type="text"
@@ -145,7 +145,7 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="signup-email">Imeri</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -157,7 +157,7 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
+                  <Label htmlFor="signup-password">Ijambo ry'ibanga</Label>
                   <Input
                     id="signup-password"
                     type="password"
@@ -169,7 +169,7 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Label htmlFor="confirmPassword">Emeza Ijambo ry'ibanga</Label>
                   <Input
                     id="confirmPassword"
                     type="password"
@@ -181,7 +181,7 @@ const Auth = () => {
                 </div>
                 
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Creating account..." : "Create Account"}
+                  {loading ? "Urakora konti..." : "Kora Konti"}
                 </Button>
               </form>
             </TabsContent>
