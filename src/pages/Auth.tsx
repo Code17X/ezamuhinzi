@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Eye, EyeOff } from "lucide-react";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const loginSchema = z.object({
   emailOrPhone: z.string().min(1, "Email or phone number required"),
@@ -38,6 +39,8 @@ const Auth = () => {
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showSignupPassword, setShowSignupPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
   const [formData, setFormData] = useState({
     emailOrPhone: "",
     email: "",
@@ -93,26 +96,89 @@ const Auth = () => {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resetEmail) {
+      toast({
+        title: "Ikosa",
+        description: "Shyiramo imeri yawe",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+      redirectTo: `${window.location.origin}/auth?mode=reset`,
+    });
+
+    if (error) {
+      toast({
+        title: "Ikosa",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Byagenze neza",
+        description: "Reba imeri yawe kugira ngo usubize ijambo ry'ibanga",
+      });
+      setShowForgotPassword(false);
+      setResetEmail("");
+    }
+    setLoading(false);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-primary/5 to-secondary/5">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Murakaza neza kuri Eza Muhinzi</CardTitle>
-          <CardDescription>
-            {mode === "login" 
+    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader className="text-center space-y-2 px-4">
+          <CardTitle className="text-xl sm:text-2xl">Murakaza neza kuri Eza Muhinzi</CardTitle>
+          <CardDescription className="text-sm">
+            {showForgotPassword 
+              ? "Subiza ijambo ry'ibanga"
+              : mode === "login" 
               ? "Injira kugira ngo ubone serivisi zawe"
               : "Kora konti kugira ngo utangire"
             }
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <Tabs value={mode} onValueChange={(v) => setMode(v as "login" | "signup")}>
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Injira</TabsTrigger>
-              <TabsTrigger value="signup">Iyandikishe</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="login">
+        <CardContent className="px-4 sm:px-6">
+          {showForgotPassword ? (
+            <form onSubmit={handleForgotPassword} className="space-y-4 mt-4">
+              <div className="space-y-2">
+                <Label htmlFor="resetEmail">Imeri</Label>
+                <Input
+                  id="resetEmail"
+                  type="email"
+                  placeholder="imeri@example.com"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "Urohereza..." : "Ohereza Link"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full"
+                  onClick={() => setShowForgotPassword(false)}
+                >
+                  Subira Inyuma
+                </Button>
+              </div>
+            </form>
+          ) : (
+            <Tabs value={mode} onValueChange={(v) => setMode(v as "login" | "signup")}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="login">Injira</TabsTrigger>
+                <TabsTrigger value="signup">Iyandikishe</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="login">
               <form onSubmit={handleSubmit} className="space-y-4 mt-4">
                 <div className="space-y-2">
                   <Label htmlFor="emailOrPhone">Imeri cyangwa Telefoni</Label>
@@ -136,27 +202,37 @@ const Auth = () => {
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                       required
-                      className="pr-10"
+                      className="pr-12"
                     />
                     <button
                       type="button"
                       onClick={() => setShowLoginPassword(!showLoginPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      tabIndex={-1}
                     >
-                      {showLoginPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      {showLoginPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
                   {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
                 </div>
                 
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Urainjira..." : "Injira"}
-                </Button>
+                <div className="space-y-3">
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "Urainjira..." : "Injira"}
+                  </Button>
+                  <button
+                    type="button"
+                    onClick={() => setShowForgotPassword(true)}
+                    className="text-sm text-primary hover:underline w-full text-center"
+                  >
+                    Wibagiwe ijambo ry'ibanga?
+                  </button>
+                </div>
               </form>
             </TabsContent>
             
-            <TabsContent value="signup">
-              <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+              <TabsContent value="signup">
+                <form onSubmit={handleSubmit} className="space-y-3 mt-4">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Amazina Yawe Yose</Label>
                   <Input
@@ -195,56 +271,59 @@ const Auth = () => {
                   {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Ijambo ry'ibanga</Label>
-                  <div className="relative">
-                    <Input
-                      id="signup-password"
-                      type={showSignupPassword ? "text" : "password"}
-                      value={formData.password}
-                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      required
-                      className="pr-10"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowSignupPassword(!showSignupPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                    >
-                      {showSignupPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-password">Ijambo ry'ibanga</Label>
+                    <div className="relative">
+                      <Input
+                        id="signup-password"
+                        type={showSignupPassword ? "text" : "password"}
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        required
+                        className="pr-12"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowSignupPassword(!showSignupPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                        tabIndex={-1}
+                      >
+                        {showSignupPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                    {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
                   </div>
-                  {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Emeza Ijambo ry'ibanga</Label>
-                  <div className="relative">
-                    <Input
-                      id="confirmPassword"
-                      type={showConfirmPassword ? "text" : "password"}
-                      value={formData.confirmPassword}
-                      onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                      required
-                      className="pr-10"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                    >
-                      {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword">Emeza Ijambo ry'ibanga</Label>
+                    <div className="relative">
+                      <Input
+                        id="confirmPassword"
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={formData.confirmPassword}
+                        onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                        required
+                        className="pr-12"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                        tabIndex={-1}
+                      >
+                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                    {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword}</p>}
                   </div>
-                  {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword}</p>}
-                </div>
                 
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Urakora konti..." : "Kora Konti"}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "Urakora konti..." : "Kora Konti"}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
+          )}
         </CardContent>
       </Card>
     </div>
