@@ -10,12 +10,15 @@ import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 
 const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  emailOrPhone: z.string().min(1, "Email or phone number required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-const signupSchema = loginSchema.extend({
+const signupSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
+  phoneNumber: z.string().regex(/^(\+?250|0)?7[238]\d{7}$/, "Invalid Rwanda phone number"),
+  email: z.string().email("Invalid email address").optional().or(z.literal("")),
+  password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
@@ -32,7 +35,9 @@ const Auth = () => {
   const [mode, setMode] = useState<"login" | "signup">(initialMode as "login" | "signup");
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
+    emailOrPhone: "",
     email: "",
+    phoneNumber: "",
     password: "",
     fullName: "",
     confirmPassword: "",
@@ -53,13 +58,18 @@ const Auth = () => {
     try {
       if (mode === "login") {
         const validated = loginSchema.parse(formData);
-        const { error } = await signIn(validated.email, validated.password);
+        const { error } = await signIn(validated.emailOrPhone, validated.password);
         if (!error) {
           navigate("/");
         }
       } else {
         const validated = signupSchema.parse(formData);
-        const { error } = await signUp(validated.email, validated.password, validated.fullName);
+        const { error } = await signUp(
+          validated.email || "", 
+          validated.password, 
+          validated.fullName,
+          validated.phoneNumber
+        );
         if (!error) {
           navigate("/profile?setup=true");
         }
@@ -101,15 +111,16 @@ const Auth = () => {
             <TabsContent value="login">
               <form onSubmit={handleSubmit} className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Imeri</Label>
+                  <Label htmlFor="emailOrPhone">Imeri cyangwa Telefoni</Label>
                   <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    id="emailOrPhone"
+                    type="text"
+                    placeholder="imeri@example.com cyangwa 0781234567"
+                    value={formData.emailOrPhone}
+                    onChange={(e) => setFormData({ ...formData, emailOrPhone: e.target.value })}
                     required
                   />
-                  {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                  {errors.emailOrPhone && <p className="text-sm text-destructive">{errors.emailOrPhone}</p>}
                 </div>
                 
                 <div className="space-y-2">
@@ -143,15 +154,28 @@ const Auth = () => {
                   />
                   {errors.fullName && <p className="text-sm text-destructive">{errors.fullName}</p>}
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phoneNumber">Telefoni *</Label>
+                  <Input
+                    id="phoneNumber"
+                    type="tel"
+                    placeholder="0781234567"
+                    value={formData.phoneNumber}
+                    onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                    required
+                  />
+                  {errors.phoneNumber && <p className="text-sm text-destructive">{errors.phoneNumber}</p>}
+                </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Imeri</Label>
+                  <Label htmlFor="signup-email">Imeri (ntibikenerwa)</Label>
                   <Input
                     id="signup-email"
                     type="email"
+                    placeholder="imeri@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
                   />
                   {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
                 </div>

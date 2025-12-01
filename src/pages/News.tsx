@@ -41,23 +41,26 @@ const News = () => {
       }
     } catch (error) {
       console.error('Error fetching RAB news:', error);
-      // Fallback to static news if fetching fails
-      setArticles(fallbackNewsArticles[i18n.language as 'rw' | 'en' | 'fr'] || fallbackNewsArticles.en);
+      // Randomly select a feed from available feeds on refresh
+      const feeds = allNewsFeeds[i18n.language as 'rw' | 'en' | 'fr'] || allNewsFeeds.en;
+      const randomFeed = feeds[Math.floor(Math.random() * feeds.length)];
+      setArticles(randomFeed);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const fallbackNewsArticles = {
+  const allNewsFeeds = {
     rw: [
-      {
-        id: "1",
-        title: "Ubwoko Bushya bw'Ibigori bihanganira Ihwiri",
-        excerpt: "Abashakashatsi b'ubuhinzi batanze ubwoko bushya bw'ibigori bushobora guhanganira igihe kinini cy'ihwiri, byerekana ko hazagira umusaruro mwiza ku bahinzi bo mu turere dufite imvura nke.",
-        category: "Ikoranabuhanga",
-        date: "Uyu Munsi",
-        image: "🌽"
-      },
+      [
+        {
+          id: "1",
+          title: "Ubwoko Bushya bw'Ibigori bihanganira Ihwiri",
+          excerpt: "Abashakashatsi b'ubuhinzi batanze ubwoko bushya bw'ibigori bushobora guhanganira igihe kinini cy'ihwiri, byerekana ko hazagira umusaruro mwiza ku bahinzi bo mu turere dufite imvura nke.",
+          category: "Ikoranabuhanga",
+          date: "Uyu Munsi",
+          image: "🌽"
+        },
       {
         id: "2",
         title: "Uburyo Bushya bwo Guhinga buteza Imbere",
@@ -90,16 +93,102 @@ const News = () => {
         date: "Icyumweru Gishize",
         image: "🛡️"
       }
+      ],
+      [
+        {
+          id: "6",
+          title: "Tekinolojiya Nshya yo Kuvomerera mu Buhinzi",
+          excerpt: "Sistema ya AI ifasha abahinzi gutunganya amazi neza maze kongera umusaruro ugera kuri 35% mu bihe by'ihwiri.",
+          category: "Ikoranabuhanga",
+          date: "Uyu Munsi",
+          image: "💧"
+        },
+        {
+          id: "7",
+          title: "Ubworozi bw'Inka buteza Imbere mu Rwanda",
+          excerpt: "Gahunda nshya yo guteza imbere ubworozi bw'inka zatanze inka z'ubwoko bwiza ku bahinzi 500.",
+          category: "Ubworozi",
+          date: "Ejo Hashize",
+          image: "🐄"
+        },
+        {
+          id: "8",
+          title: "Amata y'i Rwanda Yatsindiye Ibihembo",
+          excerpt: "Amata y'i Rwanda yatsindiye ibihembo ku rwego rw'Afurika kubera ubuziranenge n'ubwiza bwayo.",
+          category: "Ikoranabuhanga",
+          date: "Iki Cyumweru",
+          image: "🥛"
+        },
+        {
+          id: "9",
+          title: "Uburyo Bushya bwo Gutunganya Ifumbire",
+          excerpt: "Ifumbire nziza ituma ibihingwa bikura neza kandi ikamaraho igihe kinini, ifasha abahinzi kuzigama amafaranga.",
+          category: "Ubuhinga",
+          date: "Iki Cyumweru",
+          image: "🌾"
+        },
+        {
+          id: "10",
+          title: "Isoko ry'Imboga Ryagutse mu Rwanda",
+          excerpt: "Ibiciro by'imboga nka shu, karoti, n'amashu byiyongereye bitewe n'isoko ryinshi.",
+          category: "Ubukungu",
+          date: "Icyumweru Gishize",
+          image: "🥕"
+        }
+      ],
+      [
+        {
+          id: "11",
+          title: "Gahunda yo Kurwanya Udukoko dutandukanya Ibihingwa",
+          excerpt: "Uburyo bushya bwo kurwanya udukoko dutera ibihingwa bukoresheje imiti yuzuye n'ibidukikije.",
+          category: "Ubuzima",
+          date: "Uyu Munsi",
+          image: "🦗"
+        },
+        {
+          id: "12",
+          title: "Ubworozi bw'Inkoko buteza Imbere",
+          excerpt: "Abahinzi 1,000 bongeye kwinjira mu bworozi bw'inkoko bitewe n'isoko ryinshi ry'amagi.",
+          category: "Ubworozi",
+          date: "Ejo Hashize",
+          image: "🐔"
+        },
+        {
+          id: "13",
+          title: "Imyaka Nshya y'Ubuhinzi Itangiye",
+          excerpt: "Abahinzi baratangiye guhinga ibihingwa nka soya n'ibishyimbo ku mpera z'imvura.",
+          category: "Ubuhinga",
+          date: "Iki Cyumweru",
+          image: "🌱"
+        },
+        {
+          id: "14",
+          title: "Isuku y'Amasaka y'Amazi mu Buhinzi",
+          excerpt: "Gahunda yo gushyira amasaka y'amazi yazamura umusaruro w'ibihingwa mu turere dufite imvura nke.",
+          category: "Ikoranabuhanga",
+          date: "Iki Cyumweru",
+          image: "⛲"
+        },
+        {
+          id: "15",
+          title: "Ibirayi by'i Rwanda Byoherejwe Hanze",
+          excerpt: "Abahinzi b'ibirayi bohereje toni 50 z'ibirayi mu bihugu by'i Burayi.",
+          category: "Ubukungu",
+          date: "Icyumweru Gishize",
+          image: "🥔"
+        }
+      ]
     ],
     en: [
-      {
-        id: "1",
-        title: "New Drought-Resistant Maize Variety Released",
-        excerpt: "Agricultural researchers have developed a new maize variety that can withstand extended dry periods, promising better yields for farmers in arid regions.",
-        category: "Technology",
-        date: "Today",
-        image: "🌽"
-      },
+      [
+        {
+          id: "1",
+          title: "New Drought-Resistant Maize Variety Released",
+          excerpt: "Agricultural researchers have developed a new maize variety that can withstand extended dry periods, promising better yields for farmers in arid regions.",
+          category: "Technology",
+          date: "Today",
+          image: "🌽"
+        },
       {
         id: "2",
         title: "Smart Farming Technology Shows 40% Yield Increase",
@@ -132,16 +221,18 @@ const News = () => {
         date: "Last Week",
         image: "🛡️"
       }
+      ]
     ],
     fr: [
-      {
-        id: "1",
-        title: "Nouvelle Variété de Maïs Résistante à la Sécheresse",
-        excerpt: "Les chercheurs agricoles ont développé une nouvelle variété de maïs capable de résister aux périodes sèches prolongées.",
-        category: "Technologie",
-        date: "Aujourd'hui",
-        image: "🌽"
-      },
+      [
+        {
+          id: "1",
+          title: "Nouvelle Variété de Maïs Résistante à la Sécheresse",
+          excerpt: "Les chercheurs agricoles ont développé une nouvelle variété de maïs capable de résister aux périodes sèches prolongées.",
+          category: "Technologie",
+          date: "Aujourd'hui",
+          image: "🌽"
+        },
       {
         id: "2",
         title: "La Technologie Agricole Intelligente Augmente le Rendement de 40%",
@@ -158,6 +249,7 @@ const News = () => {
         date: "Cette Semaine",
         image: "📈"
       }
+      ]
     ]
   };
 
