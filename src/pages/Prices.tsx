@@ -3,13 +3,14 @@ import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, TrendingDown, Minus, Sparkles, Info } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Sparkles, Info, Cloud, CloudRain, Sun, Calendar, MapPin } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, BarChart, Bar } from 'recharts';
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface MarketPrice {
   id: string;
@@ -32,6 +33,9 @@ const Prices = () => {
   const [crops, setCrops] = useState<MarketPrice[]>([]);
   const [livestock, setLivestock] = useState<MarketPrice[]>([]);
   const [priceHistory, setPriceHistory] = useState<{month: string; price: number}[]>([]);
+  const [weatherImpact, setWeatherImpact] = useState<any>(null);
+  const [locationComparison, setLocationComparison] = useState<MarketPrice[]>([]);
+  const [cropCalendar, setCropCalendar] = useState<any>(null);
 
   useEffect(() => {
     fetchPrices();
@@ -40,6 +44,9 @@ const Prices = () => {
   useEffect(() => {
     if (selectedItem) {
       loadPriceHistory(selectedItem);
+      fetchWeatherImpact(selectedItem);
+      fetchLocationComparison(selectedItem);
+      generateCropCalendar(selectedItem);
     }
   }, [selectedItem]);
 
@@ -53,6 +60,7 @@ const Prices = () => {
       const { data, error } = await supabase
         .from('market_prices')
         .select('*')
+        .eq('location', 'Kigali')
         .order('product_name_kinyarwanda');
 
       if (error) throw error;
@@ -65,6 +73,81 @@ const Prices = () => {
       console.error('Error fetching prices:', error);
       toast.error("Habaye ikosa mu gushaka ibiciro");
     }
+  };
+
+  const fetchWeatherImpact = async (item: MarketPrice) => {
+    try {
+      const { data: weatherData } = await supabase.functions.invoke('weather-service', {
+        body: { latitude: -1.9536, longitude: 30.0606 } // Kigali coordinates
+      });
+
+      if (weatherData) {
+        const impact = {
+          temperature: weatherData.current.temperature,
+          precipitation: weatherData.current.precipitation,
+          condition: weatherData.current.condition,
+          impact_level: calculateWeatherImpact(weatherData.current, item)
+        };
+        setWeatherImpact(impact);
+      }
+    } catch (error) {
+      console.error('Error fetching weather impact:', error);
+    }
+  };
+
+  const calculateWeatherImpact = (weather: any, item: MarketPrice) => {
+    // Simple impact calculation based on weather conditions
+    if (weather.temperature > 30 && item.category === 'crop') {
+      return { level: 'high', message: 'Ubushyuhe buringaniye bushobora kwongera ibiciro' };
+    } else if (weather.precipitation > 50) {
+      return { level: 'medium', message: 'Imvura nyinshi ishobora guhindura ibiciro' };
+    }
+    return { level: 'low', message: 'Ikirere gifite ingaruka nkeya ku biciro' };
+  };
+
+  const fetchLocationComparison = async (item: MarketPrice) => {
+    try {
+      const { data, error } = await supabase
+        .from('market_prices')
+        .select('*')
+        .eq('product_name_kinyarwanda', item.product_name_kinyarwanda);
+
+      if (error) throw error;
+      if (data) setLocationComparison(data);
+    } catch (error) {
+      console.error('Error fetching location comparison:', error);
+    }
+  };
+
+  const generateCropCalendar = (item: MarketPrice) => {
+    const calendars: Record<string, any> = {
+      'Ibigori': {
+        plant: 'Werurwe - Mata',
+        harvest: 'Kamena - Nyakanga',
+        notes: 'Hinga mugihe cy\'imvura, sezera nyuma y\'amezi 3-4'
+      },
+      'Ibirayi': {
+        plant: 'Gashyantare - Werurwe',
+        harvest: 'Kamena - Nyakanga',
+        notes: 'Hinga mu butaka bworoshye, sezera nyuma y\'amezi 3-4'
+      },
+      'Ibishyimbo': {
+        plant: 'Mutarama - Ukwakira',
+        harvest: 'Mata - Ugushyingo',
+        notes: 'Hinga kabiri mu mwaka, sezera nyuma y\'amezi 2-3'
+      },
+      'Umuceri': {
+        plant: 'Ukwakira - Ugushyingo',
+        harvest: 'Gashyantare - Werurwe',
+        notes: 'Sezera nyuma y\'amezi 4-5, ikirere cy\'ubushyuhe'
+      }
+    };
+
+    setCropCalendar(calendars[item.product_name_kinyarwanda] || {
+      plant: 'Bigenwa n\'akarere',
+      harvest: 'Bigenwa n\'akarere',
+      notes: 'Reba n\'umuhanga w\'ubuhinzi mu karere kawe'
+    });
   };
 
   const getPriceHistory = async (item: MarketPrice) => {
@@ -190,8 +273,14 @@ const Prices = () => {
         </div>
       </main>
 
-      <Dialog open={!!selectedItem} onOpenChange={() => { setSelectedItem(null); setPrediction(""); }}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto animate-scale-in">
+      <Dialog open={!!selectedItem} onOpenChange={() => { 
+        setSelectedItem(null); 
+        setPrediction(""); 
+        setWeatherImpact(null);
+        setLocationComparison([]);
+        setCropCalendar(null);
+      }}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto animate-scale-in">
           <DialogHeader>
             <DialogTitle>{selectedItem?.product_name_kinyarwanda}</DialogTitle>
             <DialogDescription>
@@ -199,63 +288,197 @@ const Prices = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-6">
-            {/* Price History Chart */}
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Amateka y'Ibiciro</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={priceHistory}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line 
-                    type="monotone" 
-                    dataKey="price" 
-                    stroke="#8884d8" 
-                    strokeWidth={2}
-                    name="Igiciro (RWF)"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+          <Tabs defaultValue="history" className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="history">Amateka</TabsTrigger>
+              <TabsTrigger value="weather">Ikirere</TabsTrigger>
+              <TabsTrigger value="calendar">Kalindari</TabsTrigger>
+              <TabsTrigger value="locations">Ahantu</TabsTrigger>
+            </TabsList>
 
-            {/* Price Factors */}
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Impamvu Ziterwa n'Igiciro</h3>
-              <div className="space-y-2">
-                {selectedItem?.price_factors.map((factor, idx) => (
-                  <Alert key={idx}>
-                    <AlertDescription>{factor}</AlertDescription>
-                  </Alert>
-                ))}
+            <TabsContent value="history" className="space-y-6">
+              {/* Price History Chart */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Amateka y'Ibiciro</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={priceHistory}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line 
+                      type="monotone" 
+                      dataKey="price" 
+                      stroke="#8884d8" 
+                      strokeWidth={2}
+                      name="Igiciro (RWF)"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </div>
-            </div>
 
-            {/* AI Prediction */}
-            <Card className="bg-gradient-to-br from-primary/5 to-primary/10 animate-fade-in">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5" />
-                  Isesengura rya AI
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {!prediction ? (
-                  <Button 
-                    onClick={() => selectedItem && fetchPrediction(selectedItem)} 
-                    disabled={loading}
-                    className="w-full button-press hover-glow"
-                  >
-                    {loading ? "Turasuzuma..." : "Reba Ihinduka"}
-                  </Button>
+              {/* Price Factors */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Impamvu Ziterwa n'Igiciro</h3>
+                <div className="space-y-2">
+                  {selectedItem?.price_factors.map((factor, idx) => (
+                    <Alert key={idx}>
+                      <AlertDescription>{factor}</AlertDescription>
+                    </Alert>
+                  ))}
+                </div>
+              </div>
+
+              {/* AI Prediction */}
+              <Card className="bg-gradient-to-br from-primary/5 to-primary/10 animate-fade-in">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    Isesengura rya AI
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {!prediction ? (
+                    <Button 
+                      onClick={() => selectedItem && fetchPrediction(selectedItem)} 
+                      disabled={loading}
+                      className="w-full button-press hover-glow"
+                    >
+                      {loading ? "Turasuzuma..." : "Reba Ihinduka"}
+                    </Button>
+                  ) : (
+                    <p className="text-sm whitespace-pre-line animate-fade-in">{prediction}</p>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="weather" className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <Cloud className="w-5 h-5" />
+                  Ingaruka z'Ikirere ku Biciro
+                </h3>
+                {weatherImpact ? (
+                  <div className="space-y-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Ikirere kiri iki gihe</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <Sun className="w-5 h-5 text-orange-500" />
+                          <div>
+                            <p className="font-medium">Ubushyuhe</p>
+                            <p className="text-sm text-muted-foreground">{weatherImpact.temperature}°C</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <CloudRain className="w-5 h-5 text-blue-500" />
+                          <div>
+                            <p className="font-medium">Imvura</p>
+                            <p className="text-sm text-muted-foreground">{weatherImpact.precipitation}mm</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    <Alert>
+                      <Info className="w-4 h-4" />
+                      <AlertDescription>{weatherImpact.impact_level.message}</AlertDescription>
+                    </Alert>
+                  </div>
                 ) : (
-                  <p className="text-sm whitespace-pre-line animate-fade-in">{prediction}</p>
+                  <p className="text-muted-foreground">Turareba ikirere...</p>
                 )}
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="calendar" className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <Calendar className="w-5 h-5" />
+                  Kalindari y'Ubuhinzi
+                </h3>
+                {cropCalendar && selectedItem?.category === 'crop' ? (
+                  <div className="space-y-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Igihe cyo Guhinga</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-lg font-semibold text-green-600">{cropCalendar.plant}</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Igihe cyo Gusarura</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-lg font-semibold text-blue-600">{cropCalendar.harvest}</p>
+                      </CardContent>
+                    </Card>
+                    <Alert>
+                      <Info className="w-4 h-4" />
+                      <AlertDescription>{cropCalendar.notes}</AlertDescription>
+                    </Alert>
+                  </div>
+                ) : (
+                  <Alert>
+                    <Info className="w-4 h-4" />
+                    <AlertDescription>
+                      Kalindari y'ubuhinzi iraboneka gusa ku bihingwa
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="locations" className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  Ibiciro mu Turere Dutandukanye
+                </h3>
+                {locationComparison.length > 0 ? (
+                  <div className="space-y-4">
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={locationComparison}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="location" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="current_price" fill="#8884d8" name="Igiciro (RWF)" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                    <div className="grid gap-3">
+                      {locationComparison.map((item) => (
+                        <Card key={item.id}>
+                          <CardContent className="pt-4">
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <p className="font-medium">{item.location}</p>
+                                <p className="text-sm text-muted-foreground">ku {item.unit}</p>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-lg font-bold">{item.current_price.toLocaleString()} RWF</p>
+                                <Badge variant={item.trend === 'up' ? 'default' : item.trend === 'down' ? 'destructive' : 'secondary'}>
+                                  {item.trend === 'up' ? '↑' : item.trend === 'down' ? '↓' : '→'} {item.trend_percentage}%
+                                </Badge>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">Turareba ahantu...</p>
+                )}
+              </div>
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
     </div>
