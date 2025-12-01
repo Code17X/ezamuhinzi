@@ -455,6 +455,26 @@ const Marketplace = () => {
     }
   };
 
+  const handleMarkAsSold = async (id: string) => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('marketplace_listings')
+        .update({ status: 'sold' })
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      
+      toast({ title: "Byashizwe nk'igurwe!" });
+      loadData();
+    } catch (error) {
+      console.error('Error marking as sold:', error);
+      toast({ title: "Ikosa", variant: 'destructive' });
+    }
+  };
+
   // Post handlers
   const handlePostImageUploaded = (imageUrl: string) => {
     setPostImages(prev => [...prev, imageUrl]);
@@ -912,28 +932,51 @@ const Marketplace = () => {
                 </Card>
               ) : (
                 products.map((product) => (
-                  <Card key={product.id} className="hover-scale">
+                  <Card key={product.id} className={`hover-scale ${product.status === 'sold' ? 'opacity-60' : ''}`}>
                     {product.image_url && (
-                      <div className="w-full h-48 overflow-hidden rounded-t-lg">
+                      <div className="w-full h-48 overflow-hidden rounded-t-lg relative">
                         <img 
                           src={product.image_url} 
                           alt={product.title}
                           className="w-full h-full object-cover"
                         />
+                        {product.status === 'sold' && (
+                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                            <span className="text-white text-2xl font-bold">BYAGURISHIJWE</span>
+                          </div>
+                        )}
                       </div>
                     )}
                     <CardHeader>
                       <CardTitle className="flex items-start justify-between">
-                        <span>{product.title}</span>
+                        <div className="flex items-center gap-2">
+                          <span>{product.title}</span>
+                          {product.status === 'sold' && (
+                            <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">Byagurishijwe</span>
+                          )}
+                        </div>
                         {user && product.user_id === user.id && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteProduct(product.id)}
-                            className="text-destructive"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+                          <div className="flex gap-1">
+                            {product.status === 'active' && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleMarkAsSold(product.id)}
+                                className="text-green-600"
+                                title="Emeza ko byagurishijwe"
+                              >
+                                ✓
+                              </Button>
+                            )}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteProduct(product.id)}
+                              className="text-destructive"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
                         )}
                       </CardTitle>
                     </CardHeader>
