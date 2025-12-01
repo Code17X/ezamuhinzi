@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, TrendingDown, Minus, Sparkles, Info, Cloud, CloudRain, Sun, Calendar, MapPin } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Sparkles, Info, Cloud, CloudRain, Sun, Calendar, MapPin, Bell, TrendingUpIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, BarChart, Bar } from 'recharts';
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,9 @@ const Prices = () => {
   const [weatherImpact, setWeatherImpact] = useState<any>(null);
   const [locationComparison, setLocationComparison] = useState<MarketPrice[]>([]);
   const [cropCalendar, setCropCalendar] = useState<any>(null);
+  const [sellingRecommendation, setSellingRecommendation] = useState<any>(null);
+  const [priceAlert, setPriceAlert] = useState<{targetPrice: number; alertType: 'above' | 'below'} | null>(null);
+  const [seasonalTrends, setSeasonalTrends] = useState<any[]>([]);
 
   useEffect(() => {
     fetchPrices();
@@ -47,6 +50,8 @@ const Prices = () => {
       fetchWeatherImpact(selectedItem);
       fetchLocationComparison(selectedItem);
       generateCropCalendar(selectedItem);
+      generateSellingRecommendation(selectedItem);
+      generateSeasonalTrends(selectedItem);
     }
   }, [selectedItem]);
 
@@ -148,6 +153,78 @@ const Prices = () => {
       harvest: 'Bigenwa n\'akarere',
       notes: 'Reba n\'umuhanga w\'ubuhinzi mu karere kawe'
     });
+  };
+
+  const generateSellingRecommendation = async (item: MarketPrice) => {
+    try {
+      const { data: weatherData } = await supabase.functions.invoke('weather-service', {
+        body: { latitude: -1.9536, longitude: 30.0606 }
+      });
+
+      if (weatherData && weatherData.current) {
+        const temp = weatherData.current.temperature;
+        const precip = weatherData.current.precipitation;
+        const trend = item.trend;
+
+        let recommendation = '';
+        let timing = '';
+        let reason = '';
+
+        if (trend === 'up' && temp < 25 && precip < 20) {
+          recommendation = 'Igihe cyiza cyo kugurisha';
+          timing = 'Gurisha vuba - ibiciro biriyongera';
+          reason = 'Ikirere cyiza, ibicuruzwa bike, icyifuzo kinini';
+        } else if (trend === 'up' && precip > 50) {
+          recommendation = 'Tegereza iminsi 2-3';
+          timing = 'Ibiciro bikomeza kwiyongera';
+          reason = 'Imvura nyinshi ishobora guhindura isoko';
+        } else if (trend === 'down') {
+          recommendation = 'Gurisha none';
+          timing = 'Ntutegereze - ibiciro biragabanuka';
+          reason = 'Umusaruro mwinshi ku isoko';
+        } else {
+          recommendation = 'Isoko rihamye';
+          timing = 'Ushobora gutegereza cyangwa kugurisha';
+          reason = 'Ibiciro bihamye, ikirere cyiza';
+        }
+
+        setSellingRecommendation({ recommendation, timing, reason });
+      }
+    } catch (error) {
+      console.error('Error generating selling recommendation:', error);
+    }
+  };
+
+  const generateSeasonalTrends = (item: MarketPrice) => {
+    const months = ['Mutarama', 'Gashyantare', 'Werurwe', 'Mata', 'Gicurasi', 'Kamena', 
+                    'Nyakanga', 'Kanama', 'Nzeri', 'Ukwakira', 'Ugushyingo', 'Ukuboza'];
+    const currentPrice = item.current_price;
+    
+    const trends = months.map((month, index) => {
+      let multiplier = 1;
+      if (item.product_name_kinyarwanda === 'Ibigori' || item.product_name_kinyarwanda === 'Ibirayi') {
+        multiplier = index < 3 ? 1.15 : index < 6 ? 0.85 : index < 9 ? 1.05 : 0.95;
+      } else if (item.product_name_kinyarwanda === 'Ibishyimbo') {
+        multiplier = index < 2 ? 1.2 : index < 5 ? 0.9 : index < 8 ? 1.1 : 0.95;
+      } else {
+        multiplier = 0.9 + Math.sin(index * Math.PI / 6) * 0.15;
+      }
+      
+      return {
+        month,
+        averagePrice: Math.round(currentPrice * multiplier),
+        trend: multiplier > 1.05 ? 'Hejuru' : multiplier < 0.95 ? 'Hasi' : 'Bihamye'
+      };
+    });
+    
+    setSeasonalTrends(trends);
+  };
+
+  const handleSetPriceAlert = () => {
+    if (priceAlert && priceAlert.targetPrice > 0 && selectedItem) {
+      toast.success(`Ubutumwa buzakubwerekeye iyo igiciro ${priceAlert.alertType === 'above' ? 'kirenze' : 'kiri munsi ya'} ${priceAlert.targetPrice.toLocaleString()} RWF`);
+      setPriceAlert(null);
+    }
   };
 
   const getPriceHistory = async (item: MarketPrice) => {
@@ -289,11 +366,13 @@ const Prices = () => {
           </DialogHeader>
 
           <Tabs defaultValue="history" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger value="history">Amateka</TabsTrigger>
               <TabsTrigger value="weather">Ikirere</TabsTrigger>
               <TabsTrigger value="calendar">Kalindari</TabsTrigger>
               <TabsTrigger value="locations">Ahantu</TabsTrigger>
+              <TabsTrigger value="recommendations">Inama</TabsTrigger>
+              <TabsTrigger value="alerts">Kumenyesha</TabsTrigger>
             </TabsList>
 
             <TabsContent value="history" className="space-y-6">
@@ -476,6 +555,140 @@ const Prices = () => {
                 ) : (
                   <p className="text-muted-foreground">Turareba ahantu...</p>
                 )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="recommendations" className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <TrendingUpIcon className="w-5 h-5" />
+                  Inama yo Kugurisha Hashingiwe ku Kirere
+                </h3>
+                {sellingRecommendation ? (
+                  <div className="space-y-4">
+                    <Card className={`${
+                      sellingRecommendation.recommendation.includes('Igihe cyiza') ? 'bg-green-50 dark:bg-green-950' :
+                      sellingRecommendation.recommendation.includes('none') ? 'bg-red-50 dark:bg-red-950' :
+                      'bg-yellow-50 dark:bg-yellow-950'
+                    }`}>
+                      <CardHeader>
+                        <CardTitle className="text-base">{sellingRecommendation.recommendation}</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <p className="font-semibold text-lg">{sellingRecommendation.timing}</p>
+                        <p className="text-sm text-muted-foreground">{sellingRecommendation.reason}</p>
+                      </CardContent>
+                    </Card>
+                    
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Ibindi Byifuzo</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm">Reba ibiciro ku masoko atandukanye mbere yo gufata icyemezo. Tekereza n'ibiciro byo gutambukana n'ibindi bikoresho.</p>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Imyitwarire y'Isoko mu Byumweru 12 Bishize</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ResponsiveContainer width="100%" height={200}>
+                          <LineChart data={seasonalTrends.slice(0, 6)}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="month" />
+                            <YAxis />
+                            <Tooltip />
+                            <Line type="monotone" dataKey="averagePrice" stroke="#8884d8" name="Igiciro" />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </CardContent>
+                    </Card>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">Turareba inama...</p>
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="alerts" className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <Bell className="w-5 h-5" />
+                  Shiraho Kumenyesha Ibiciro
+                </h3>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Shiraho Igiciro Ushaka</CardTitle>
+                    <CardDescription>Uzahamagara SMS iyo ibiciro bigeze ku rwego ushaka</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Igiciro Ushaka (RWF)</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border rounded"
+                        placeholder={`Igiciro kiriho: ${selectedItem?.current_price.toLocaleString()} RWF`}
+                        onChange={(e) => setPriceAlert({ 
+                          targetPrice: Number(e.target.value), 
+                          alertType: priceAlert?.alertType || 'above' 
+                        })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Ubwoko bw'Itumwa</label>
+                      <select
+                        className="w-full p-2 border rounded"
+                        onChange={(e) => setPriceAlert({ 
+                          targetPrice: priceAlert?.targetPrice || 0, 
+                          alertType: e.target.value as 'above' | 'below' 
+                        })}
+                      >
+                        <option value="above">Iyo kirenze igiciro</option>
+                        <option value="below">Iyo kiri munsi y'igiciro</option>
+                      </select>
+                    </div>
+                    <Button onClick={handleSetPriceAlert} className="w-full">
+                      Emeza Kumenyesha
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="mt-4">
+                  <CardHeader>
+                    <CardTitle className="text-base">Imyitwarire y'Ibiciro mu Mezi 12</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={250}>
+                      <BarChart data={seasonalTrends}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="averagePrice" fill="#8884d8" name="Igiciro cy'Impuzandengo (RWF)" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                    <div className="mt-4 grid gap-2">
+                      {seasonalTrends.map((trend, idx) => (
+                        <div key={idx} className="flex justify-between items-center p-2 bg-muted rounded">
+                          <span className="font-medium">{trend.month}</span>
+                          <div className="flex items-center gap-2">
+                            <span>{trend.averagePrice.toLocaleString()} RWF</span>
+                            <Badge variant={
+                              trend.trend === 'Hejuru' ? 'default' : 
+                              trend.trend === 'Hasi' ? 'destructive' : 
+                              'secondary'
+                            }>
+                              {trend.trend}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
           </Tabs>

@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Cloud, DollarSign, Newspaper, Bot, User, LogOut, Settings, Users, ShoppingBag, Wheat } from "lucide-react";
+import { Home, Cloud, DollarSign, Newspaper, Bot, User, LogOut, Settings, Users, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import wheatLogo from "@/assets/wheat-logo.png";
 
 const Navigation = () => {
   const location = useLocation();
@@ -27,13 +28,10 @@ const Navigation = () => {
         <div className="flex items-center justify-between md:justify-start md:gap-8 h-16">
           <div className="hidden md:flex items-center gap-3">
             <div className="relative">
-              <Wheat 
-                className="w-10 h-10 drop-shadow-lg" 
-                strokeWidth={2.5}
-                style={{ 
-                  color: '#D4AF37',
-                  filter: 'drop-shadow(0 2px 4px rgba(212, 175, 55, 0.3))'
-                }}
+              <img 
+                src={wheatLogo} 
+                alt="Eza Muhizi" 
+                className="w-10 h-10 drop-shadow-lg object-contain"
               />
               <div className="absolute inset-0 blur-sm rounded-full scale-110 -z-10" 
                    style={{ background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent)' }} />
