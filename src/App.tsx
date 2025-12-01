@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import Footer from "@/components/Footer";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
@@ -33,24 +34,29 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Routes>
-              <Route path="/landing" element={<Landing />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-              <Route path="/assistant" element={<ProtectedRoute><Assistant /></ProtectedRoute>} />
-              <Route path="/weather" element={<ProtectedRoute><Weather /></ProtectedRoute>} />
-              <Route path="/prices" element={<ProtectedRoute><Prices /></ProtectedRoute>} />
-              <Route path="/news" element={<ProtectedRoute><News /></ProtectedRoute>} />
-              <Route path="/news/:id" element={<ProtectedRoute><NewsArticle /></ProtectedRoute>} />
-            <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
-            <Route path="/maps" element={<ProtectedRoute><Maps /></ProtectedRoute>} />
-            <Route path="/veterinary-apply" element={<ProtectedRoute><VeterinaryApply /></ProtectedRoute>} />
-            <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-              <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <div className="flex flex-col min-h-screen">
+              <div className="flex-1">
+                <Routes>
+                  <Route path="/landing" element={<Landing />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                  <Route path="/assistant" element={<ProtectedRoute><Assistant /></ProtectedRoute>} />
+                  <Route path="/weather" element={<ProtectedRoute><Weather /></ProtectedRoute>} />
+                  <Route path="/prices" element={<ProtectedRoute><Prices /></ProtectedRoute>} />
+                  <Route path="/news" element={<ProtectedRoute><News /></ProtectedRoute>} />
+                  <Route path="/news/:id" element={<ProtectedRoute><NewsArticle /></ProtectedRoute>} />
+                  <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
+                  <Route path="/maps" element={<ProtectedRoute><Maps /></ProtectedRoute>} />
+                  <Route path="/veterinary-apply" element={<ProtectedRoute><VeterinaryApply /></ProtectedRoute>} />
+                  <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
+              <Footer />
+            </div>
           </BrowserRouter>
         </AuthProvider>
       </TooltipProvider>
