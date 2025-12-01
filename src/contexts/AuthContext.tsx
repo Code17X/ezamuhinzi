@@ -6,8 +6,8 @@ import { useToast } from '@/hooks/use-toast';
 interface AuthContextType {
   user: User | null;
   session: Session | null;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, fullName: string, phoneNumber: string) => Promise<{ error: any }>;
+  signIn: (emailOrPhone: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   loading: boolean;
 }
@@ -38,45 +38,57 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string) => {
+  const signUp = async (email: string, password: string, fullName: string, phoneNumber: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
+    // Use phone as email if no email provided
+    const authEmail = email || `${phoneNumber}@ezamuhinzi.app`;
+    
     const { error } = await supabase.auth.signUp({
-      email,
+      email: authEmail,
       password,
       options: {
         emailRedirectTo: redirectUrl,
         data: {
           full_name: fullName,
+          phone_number: phoneNumber,
         },
       },
     });
 
     if (error) {
       toast({
-        title: "Error",
+        title: "Ikosa",
         description: error.message,
         variant: "destructive",
       });
     } else {
       toast({
-        title: "Success",
-        description: "Account created successfully!",
+        title: "Byagenze neza",
+        description: "Konti yawe yarakozwe neza!",
       });
     }
 
     return { error };
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (emailOrPhone: string, password: string) => {
+    // Check if input is phone number (starts with 0 or +250 or just digits)
+    const isPhone = /^(\+?250|0)?7[238]\d{7}$/.test(emailOrPhone);
+    const authEmail = isPhone 
+      ? emailOrPhone.startsWith('0') 
+        ? `${emailOrPhone}@ezamuhinzi.app`
+        : `0${emailOrPhone.replace('+250', '')}@ezamuhinzi.app`
+      : emailOrPhone;
+
     const { error } = await supabase.auth.signInWithPassword({
-      email,
+      email: authEmail,
       password,
     });
 
     if (error) {
       toast({
-        title: "Error",
+        title: "Ikosa",
         description: error.message,
         variant: "destructive",
       });
