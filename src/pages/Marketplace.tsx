@@ -11,7 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Phone, MapPin, Trash2, Building2, ShoppingBag } from "lucide-react";
+import { Plus, Phone, MapPin, Trash2, Building2, ShoppingBag, Heart, MessageCircle, Share2, Send } from "lucide-react";
+import { ImageUpload } from "@/components/ImageUpload";
 
 interface Listing {
   id: string;
@@ -45,7 +46,18 @@ interface Product {
   category: string;
   location: string;
   contact_phone: string | null;
+  image_url: string | null;
   status: string;
+  created_at: string;
+  likes_count?: number;
+  comments_count?: number;
+  user_has_liked?: boolean;
+}
+
+interface Comment {
+  id: string;
+  user_id: string;
+  content: string;
   created_at: string;
 }
 
@@ -59,6 +71,11 @@ const Marketplace = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isCreatingListing, setIsCreatingListing] = useState(false);
   const [isCreatingProduct, setIsCreatingProduct] = useState(false);
+  const [selectedProductComments, setSelectedProductComments] = useState<string | null>(null);
+  const [comments, setComments] = useState<Record<string, Comment[]>>({});
+  const [newComment, setNewComment] = useState("");
+  const [productImage, setProductImage] = useState<string | null>(null);
+  
   const [newListing, setNewListing] = useState({
     service_name: '',
     provider_name: '',
@@ -99,14 +116,142 @@ const Marketplace = () => {
 
     if (industriesData) setIndustries(industriesData);
 
-    // Load products
+    // Load products with likes and comments count
     const { data: productsData } = await supabase
       .from('marketplace_listings')
       .select('*')
       .eq('status', 'active')
       .order('created_at', { ascending: false });
 
-    if (productsData) setProducts(productsData);
+    if (productsData && user) {
+      // Get likes and comments counts for each product
+      const productsWithCounts = await Promise.all(
+        productsData.map(async (product) => {
+          const { count: likesCount } = await supabase
+            .from('marketplace_likes')
+            .select('*', { count: 'exact', head: true })
+            .eq('listing_id', product.id);
+
+          const { count: commentsCount } = await supabase
+            .from('marketplace_comments')
+            .select('*', { count: 'exact', head: true })
+            .eq('listing_id', product.id);
+
+          const { data: userLike } = await supabase
+            .from('marketplace_likes')
+            .select('id')
+            .eq('listing_id', product.id)
+            .eq('user_id', user.id)
+            .single();
+
+          return {
+            ...product,
+            likes_count: likesCount || 0,
+            comments_count: commentsCount || 0,
+            user_has_liked: !!userLike
+          };
+        })
+      );
+      setProducts(productsWithCounts);
+    } else if (productsData) {
+      setProducts(productsData);
+    }
+  };
+
+  const handleLike = async (productId: string) => {
+    if (!user) {
+      toast({ title: "Injira mbere", variant: "destructive" });
+      return;
+    }
+
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    try {
+      if (product.user_has_liked) {
+        // Unlike
+        await supabase
+          .from('marketplace_likes')
+          .delete()
+          .eq('listing_id', productId)
+          .eq('user_id', user.id);
+      } else {
+        // Like
+        await supabase
+          .from('marketplace_likes')
+          .insert({ listing_id: productId, user_id: user.id });
+      }
+      loadData();
+    } catch (error) {
+      console.error('Error toggling like:', error);
+      toast({ title: "Ikosa", variant: 'destructive' });
+    }
+  };
+
+  const handleShare = async (product: Product) => {
+    const shareText = `${product.title} - ${product.price.toLocaleString()} RWF/${product.unit}\n${product.location}`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: product.title,
+          text: shareText,
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(shareText);
+      toast({ title: "Byakoporowe!" });
+    }
+  };
+
+  const loadComments = async (productId: string) => {
+    const { data } = await supabase
+      .from('marketplace_comments')
+      .select('*')
+      .eq('listing_id', productId)
+      .order('created_at', { ascending: true });
+
+    if (data) {
+      setComments(prev => ({ ...prev, [productId]: data }));
+    }
+  };
+
+  const handleAddComment = async (productId: string) => {
+    if (!user || !newComment.trim()) return;
+
+    try {
+      await supabase
+        .from('marketplace_comments')
+        .insert({
+          listing_id: productId,
+          user_id: user.id,
+          content: newComment.trim()
+        });
+
+      setNewComment("");
+      loadComments(productId);
+      loadData();
+      toast({ title: "Icyiyumviro cyashyizwe!" });
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      toast({ title: "Ikosa", variant: 'destructive' });
+    }
+  };
+
+  const handleShowComments = (productId: string) => {
+    if (selectedProductComments === productId) {
+      setSelectedProductComments(null);
+    } else {
+      setSelectedProductComments(productId);
+      loadComments(productId);
+    }
+  };
+
+  const handleImageUploaded = (imageUrl: string) => {
+    setProductImage(imageUrl);
   };
 
   const handleCreateListing = async () => {
@@ -191,6 +336,7 @@ const Marketplace = () => {
         category: newProduct.category,
         location: newProduct.location,
         contact_phone: newProduct.contact_phone,
+        image_url: productImage,
         status: 'active'
       });
 
@@ -208,7 +354,6 @@ const Marketplace = () => {
         });
       } catch (smsError) {
         console.error('Error sending SMS alert:', smsError);
-        // Don't block product creation if SMS fails
       }
 
       toast({ title: "Icyicuruzwa cyashyizwe!" });
@@ -222,6 +367,7 @@ const Marketplace = () => {
         location: '',
         contact_phone: ''
       });
+      setProductImage(null);
       setIsCreatingProduct(false);
       loadData();
     } catch (error) {
@@ -279,6 +425,14 @@ const Marketplace = () => {
                 
                 {isCreatingProduct && (
                   <CardContent className="space-y-4">
+                    <div>
+                      <Label>Ifoto y'Icyicuruzwa (Optional)</Label>
+                      <ImageUpload 
+                        onImageAnalyzed={(_, imageUrl) => handleImageUploaded(imageUrl)}
+                        skipAnalysis={true}
+                      />
+                    </div>
+
                     <div>
                       <Label>Izina ry'Icyicuruzwa</Label>
                       <Input
@@ -386,6 +540,15 @@ const Marketplace = () => {
               ) : (
                 products.map((product) => (
                   <Card key={product.id} className="hover-scale">
+                    {product.image_url && (
+                      <div className="w-full h-48 overflow-hidden rounded-t-lg">
+                        <img 
+                          src={product.image_url} 
+                          alt={product.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
                     <CardHeader>
                       <CardTitle className="flex items-start justify-between">
                         <span>{product.title}</span>
@@ -432,6 +595,74 @@ const Marketplace = () => {
                         <p className="text-sm text-muted-foreground pt-2 border-t">
                           {product.description}
                         </p>
+                      )}
+
+                      {/* Social Actions */}
+                      <div className="flex items-center gap-4 pt-2 border-t">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleLike(product.id)}
+                          className="flex items-center gap-1"
+                        >
+                          <Heart 
+                            className={`w-4 h-4 ${product.user_has_liked ? 'fill-red-500 text-red-500' : ''}`}
+                          />
+                          <span>{product.likes_count || 0}</span>
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleShowComments(product.id)}
+                          className="flex items-center gap-1"
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                          <span>{product.comments_count || 0}</span>
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleShare(product)}
+                          className="flex items-center gap-1"
+                        >
+                          <Share2 className="w-4 h-4" />
+                          <span>Sangira</span>
+                        </Button>
+                      </div>
+
+                      {/* Comments Section */}
+                      {selectedProductComments === product.id && (
+                        <div className="space-y-3 pt-3 border-t">
+                          <div className="space-y-2 max-h-48 overflow-y-auto">
+                            {comments[product.id]?.map((comment) => (
+                              <div key={comment.id} className="bg-muted p-2 rounded text-sm">
+                                <p>{comment.content}</p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {new Date(comment.created_at).toLocaleDateString('rw-RW')}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                          
+                          {user && (
+                            <div className="flex gap-2">
+                              <Input
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                                placeholder="Andika icyiyumviro..."
+                                onKeyPress={(e) => e.key === 'Enter' && handleAddComment(product.id)}
+                              />
+                              <Button 
+                                size="sm"
+                                onClick={() => handleAddComment(product.id)}
+                              >
+                                <Send className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </CardContent>
                   </Card>
@@ -493,7 +724,7 @@ const Marketplace = () => {
                     </div>
 
                     <div>
-                      <Label>Aho Ubarizwa</Label>
+                      <Label>Aho Uhereye</Label>
                       <Input
                         value={newListing.location}
                         onChange={(e) => setNewListing({ ...newListing, location: e.target.value })}
@@ -520,103 +751,86 @@ const Marketplace = () => {
 
             {/* Services List */}
             <div className="grid gap-4 md:grid-cols-2">
-              {listings.length === 0 ? (
-                <Card className="md:col-span-2">
-                  <CardContent className="text-center py-12">
-                    <p className="text-muted-foreground">Nta serivisi ziboneka</p>
+              {listings.map((listing) => (
+                <Card key={listing.id} className="hover-scale">
+                  <CardHeader>
+                    <CardTitle className="flex items-start justify-between">
+                      <span>{listing.service_name}</span>
+                      {user && listing.user_id === user.id && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteListing(listing.id)}
+                          className="text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <p className="font-semibold">{listing.provider_name}</p>
+                    
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Phone className="w-4 h-4" />
+                      <a href={`tel:${listing.phone_number}`} className="hover:text-primary">
+                        {listing.phone_number}
+                      </a>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <MapPin className="w-4 h-4" />
+                      <span>{listing.location}</span>
+                    </div>
+
+                    <div className="bg-primary/10 p-3 rounded-lg">
+                      <p className="text-sm text-muted-foreground">Igiciro:</p>
+                      <p className="font-bold text-primary">{listing.service_cost}</p>
+                    </div>
+
+                    {listing.description && (
+                      <p className="text-sm text-muted-foreground pt-2 border-t">
+                        {listing.description}
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
-              ) : (
-                listings.map((listing) => (
-                  <Card key={listing.id} className="hover-scale">
-                    <CardHeader>
-                      <CardTitle className="flex items-start justify-between">
-                        <span>{listing.service_name}</span>
-                        {user && listing.user_id === user.id && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteListing(listing.id)}
-                            className="text-destructive"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        )}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <p className="font-semibold text-lg">{listing.provider_name}</p>
-                      
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Phone className="w-4 h-4" />
-                        <a href={`tel:${listing.phone_number}`} className="hover:text-primary">
-                          {listing.phone_number}
-                        </a>
-                      </div>
-
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <MapPin className="w-4 h-4" />
-                        <span>{listing.location}</span>
-                      </div>
-
-                      <div className="pt-2 border-t">
-                        <p className="text-sm font-semibold text-primary">
-                          Igiciro: {listing.service_cost}
-                        </p>
-                      </div>
-
-                      {listing.description && (
-                        <p className="text-sm text-muted-foreground pt-2">
-                          {listing.description}
-                        </p>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))
-              )}
+              ))}
             </div>
           </TabsContent>
 
           {/* Industries Tab */}
           <TabsContent value="industries" className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
-              {industries.length === 0 ? (
-                <Card className="md:col-span-2">
-                  <CardContent className="text-center py-12">
-                    <p className="text-muted-foreground">Nta nganda ziboneka</p>
+              {industries.map((industry) => (
+                <Card key={industry.id} className="hover-scale">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Building2 className="w-5 h-5 text-primary" />
+                      {industry.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Phone className="w-4 h-4" />
+                      <a href={`tel:${industry.phone_number}`} className="hover:text-primary">
+                        {industry.phone_number}
+                      </a>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <MapPin className="w-4 h-4" />
+                      <span>{industry.location}</span>
+                    </div>
+
+                    {industry.description && (
+                      <p className="text-sm text-muted-foreground pt-2 border-t">
+                        {industry.description}
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
-              ) : (
-                industries.map((industry) => (
-                  <Card key={industry.id} className="hover-scale">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Building2 className="w-5 h-5 text-primary" />
-                        {industry.name}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Phone className="w-4 h-4" />
-                        <a href={`tel:${industry.phone_number}`} className="hover:text-primary">
-                          {industry.phone_number}
-                        </a>
-                      </div>
-
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <MapPin className="w-4 h-4" />
-                        <span>{industry.location}</span>
-                      </div>
-
-                      {industry.description && (
-                        <p className="text-sm text-muted-foreground pt-2 border-t">
-                          {industry.description}
-                        </p>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))
-              )}
+              ))}
             </div>
           </TabsContent>
         </Tabs>

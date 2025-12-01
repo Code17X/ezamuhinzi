@@ -30,14 +30,14 @@ const Navigation = () => {
             <div className="relative">
               <img 
                 src={wheatLogo} 
-                alt="Eza Muhizi" 
+                alt="Eza Muhinzi" 
                 className="w-10 h-10 drop-shadow-lg object-contain"
               />
               <div className="absolute inset-0 blur-sm rounded-full scale-110 -z-10" 
                    style={{ background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent)' }} />
             </div>
             <span className="font-bold text-xl text-foreground" style={{ fontFamily: "'Righteous', cursive" }}>
-              Eza Muhizi
+              Eza Muhinzi
             </span>
           </div>
           

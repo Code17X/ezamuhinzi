@@ -22,9 +22,7 @@ const Assistant = () => {
     {
       id: "1",
       role: "assistant",
-      content: i18n.language === 'rw' 
-        ? "Muraho! Ndi umujyanama wawe w'ubuhinzi ukoresha AI. Ndashobora kugufasha mu bibazo by'ubuzima bw'amatungo cyangwa gusesengura amafoto y'ibihingwa kugira ngo namenye indwara. Nshobora kubafasha gute uyu munsi?"
-        : "Hello! I'm your AI agricultural assistant. I can help with livestock health questions or analyze crop images for diseases. How can I assist you today?"
+      content: "Muraho! Ndi umujyanama wawe w'ubuhinzi ukoresha AI. Ndashobora kugufasha mu bibazo by'ubuzima bw'amatungo cyangwa gusesengura amafoto y'ibihingwa kugira ngo namenye indwara. Nshobora kubafasha gute uyu munsi?"
     }
   ]);
   const [input, setInput] = useState("");
@@ -174,10 +172,10 @@ const Assistant = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-6">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              AI Agricultural Assistant
+              Umujyanama w'AI mu Buhinzi
             </h1>
             <p className="text-muted-foreground">
-              Get livestock health advice or analyze crop diseases
+              Bonana inama ku buzima bw'amatungo cyangwa sesengura indwara z'ibihingwa
             </p>
           </div>
 
@@ -185,17 +183,17 @@ const Assistant = () => {
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
                 <Bot className="w-5 h-5 text-primary" />
-                AI Assistant
+                Umujyanama w'AI
               </CardTitle>
               <CardDescription>
-                Chat with our AI or upload crop images for analysis
+                Ganira na AI cyangwa ohereza amafoto y'ibihingwa kugirango usesengure
               </CardDescription>
             </CardHeader>
             
             <Tabs defaultValue="chat" className="flex-1 flex flex-col">
               <TabsList className="mx-4 mt-4">
-                <TabsTrigger value="chat" className="flex-1">Chat</TabsTrigger>
-                <TabsTrigger value="analyze" className="flex-1">Analyze Crop</TabsTrigger>
+                <TabsTrigger value="chat" className="flex-1">Ganira</TabsTrigger>
+                <TabsTrigger value="analyze" className="flex-1">Sesengura Ibihingwa</TabsTrigger>
               </TabsList>
 
               <TabsContent value="chat" className="flex-1 flex flex-col m-0">
@@ -253,7 +251,7 @@ const Assistant = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="Ask about animal health, nutrition, breeding..."
+                  placeholder="Baza ibibazo ku buzima bw'amatungo, imirire, ubworozi..."
                   className="flex-1"
                 />
                 <Button onClick={handleSend} disabled={isLoading || !input.trim()}>
@@ -266,7 +264,7 @@ const Assistant = () => {
           <TabsContent value="analyze" className="flex-1 flex flex-col m-0 p-4">
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Upload or take a photo of your crop to get instant disease analysis and treatment recommendations.
+                Ohereza cyangwa ufate ifoto y'igihingwa cyawe kugirango ubone isesengura ry'indwara n'inama zo gukira byihuse.
               </p>
               <ImageUpload onImageAnalyzed={handleImageAnalyzed} />
             </div>
