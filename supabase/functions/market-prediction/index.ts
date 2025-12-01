@@ -11,7 +11,14 @@ serve(async (req) => {
   }
 
   try {
-    const { cropName, currentPrice, weather, location } = await req.json();
+    const body = await req.json();
+    const cropName = body.cropName || body.item;
+    const currentPrice = body.currentPrice;
+    const weather = body.weather || {};
+    const location = body.location || 'Rwanda';
+    
+    console.log('Market prediction request:', { cropName, currentPrice, location });
+    
     const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
 
     if (!lovableApiKey) {
