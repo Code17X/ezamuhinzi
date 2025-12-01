@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Cloud, DollarSign, Newspaper, Bot, User, LogOut, Settings, Users, ShoppingBag } from "lucide-react";
+import { Home, Cloud, DollarSign, Newspaper, Bot, User, LogOut, Settings, Users, ShoppingBag, Wheat } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -26,11 +26,7 @@ const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between md:justify-start md:gap-8 h-16">
           <div className="hidden md:flex items-center gap-3">
-            <img 
-              src="/rwanda-coat-of-arms.png" 
-              alt="Rwanda Coat of Arms" 
-              className="w-10 h-10 object-contain"
-            />
+            <Wheat className="w-10 h-10 text-primary" />
             <span className="font-bold text-xl text-foreground" style={{ fontFamily: "'Righteous', cursive" }}>
               Eza Muhizi
             </span>
