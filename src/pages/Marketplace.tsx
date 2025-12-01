@@ -54,6 +54,17 @@ interface Product {
   user_has_liked?: boolean;
 }
 
+interface Post {
+  id: string;
+  user_id: string;
+  content: string;
+  image_urls: string[] | null;
+  created_at: string;
+  likes_count?: number;
+  comments_count?: number;
+  user_has_liked?: boolean;
+}
+
 interface Comment {
   id: string;
   user_id: string;
@@ -69,12 +80,21 @@ const Marketplace = () => {
   const [listings, setListings] = useState<Listing[]>([]);
   const [industries, setIndustries] = useState<Industry[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [isCreatingListing, setIsCreatingListing] = useState(false);
   const [isCreatingProduct, setIsCreatingProduct] = useState(false);
+  const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [selectedProductComments, setSelectedProductComments] = useState<string | null>(null);
+  const [selectedPostComments, setSelectedPostComments] = useState<string | null>(null);
   const [comments, setComments] = useState<Record<string, Comment[]>>({});
+  const [postComments, setPostComments] = useState<Record<string, Comment[]>>({});
   const [newComment, setNewComment] = useState("");
+  const [newPostComment, setNewPostComment] = useState("");
   const [productImage, setProductImage] = useState<string | null>(null);
+  const [postImages, setPostImages] = useState<string[]>([]);
+  const [newPost, setNewPost] = useState({
+    content: ''
+  });
   
   const [newListing, setNewListing] = useState({
     service_name: '',
@@ -155,6 +175,45 @@ const Marketplace = () => {
       setProducts(productsWithCounts);
     } else if (productsData) {
       setProducts(productsData);
+    }
+
+    // Load posts with likes and comments count
+    const { data: postsData } = await supabase
+      .from('posts')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (postsData && user) {
+      const postsWithCounts = await Promise.all(
+        postsData.map(async (post) => {
+          const { count: likesCount } = await supabase
+            .from('post_likes')
+            .select('*', { count: 'exact', head: true })
+            .eq('post_id', post.id);
+
+          const { count: commentsCount } = await supabase
+            .from('post_comments')
+            .select('*', { count: 'exact', head: true })
+            .eq('post_id', post.id);
+
+          const { data: userLike } = await supabase
+            .from('post_likes')
+            .select('id')
+            .eq('post_id', post.id)
+            .eq('user_id', user.id)
+            .single();
+
+          return {
+            ...post,
+            likes_count: likesCount || 0,
+            comments_count: commentsCount || 0,
+            user_has_liked: !!userLike
+          };
+        })
+      );
+      setPosts(postsWithCounts);
+    } else if (postsData) {
+      setPosts(postsData);
     }
   };
 
@@ -396,18 +455,332 @@ const Marketplace = () => {
     }
   };
 
+  // Post handlers
+  const handlePostImageUploaded = (imageUrl: string) => {
+    setPostImages(prev => [...prev, imageUrl]);
+  };
+
+  const handleCreatePost = async () => {
+    if (!user || !newPost.content.trim()) {
+      toast({
+        title: "Uzuza byose",
+        description: "Andika icyerekezo cyawe",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase.from('posts').insert({
+        user_id: user.id,
+        content: newPost.content,
+        image_urls: postImages.length > 0 ? postImages : null,
+        post_type: 'general'
+      });
+
+      if (error) throw error;
+
+      toast({ title: "Positi yashyizwe!" });
+      setNewPost({ content: '' });
+      setPostImages([]);
+      setIsCreatingPost(false);
+      loadData();
+    } catch (error) {
+      console.error('Error creating post:', error);
+      toast({ title: "Ikosa", variant: 'destructive' });
+    }
+  };
+
+  const handleLikePost = async (postId: string) => {
+    if (!user) {
+      toast({ title: "Injira mbere", variant: "destructive" });
+      return;
+    }
+
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    try {
+      if (post.user_has_liked) {
+        await supabase
+          .from('post_likes')
+          .delete()
+          .eq('post_id', postId)
+          .eq('user_id', user.id);
+      } else {
+        await supabase
+          .from('post_likes')
+          .insert({ post_id: postId, user_id: user.id });
+      }
+      loadData();
+    } catch (error) {
+      console.error('Error toggling post like:', error);
+      toast({ title: "Ikosa", variant: 'destructive' });
+    }
+  };
+
+  const handleSharePost = async (post: Post) => {
+    const shareText = `${post.content}`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          text: shareText,
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    } else {
+      navigator.clipboard.writeText(shareText);
+      toast({ title: "Byakoporowe!" });
+    }
+  };
+
+  const loadPostComments = async (postId: string) => {
+    const { data } = await supabase
+      .from('post_comments')
+      .select('*')
+      .eq('post_id', postId)
+      .order('created_at', { ascending: true });
+
+    if (data) {
+      setPostComments(prev => ({ ...prev, [postId]: data }));
+    }
+  };
+
+  const handleAddPostComment = async (postId: string) => {
+    if (!user || !newPostComment.trim()) return;
+
+    try {
+      await supabase
+        .from('post_comments')
+        .insert({
+          post_id: postId,
+          user_id: user.id,
+          content: newPostComment.trim()
+        });
+
+      setNewPostComment("");
+      loadPostComments(postId);
+      loadData();
+      toast({ title: "Icyiyumviro cyashyizwe!" });
+    } catch (error) {
+      console.error('Error adding post comment:', error);
+      toast({ title: "Ikosa", variant: 'destructive' });
+    }
+  };
+
+  const handleShowPostComments = (postId: string) => {
+    if (selectedPostComments === postId) {
+      setSelectedPostComments(null);
+    } else {
+      setSelectedPostComments(postId);
+      loadPostComments(postId);
+    }
+  };
+
+  const handleDeletePost = async (id: string) => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('posts')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      
+      toast({ title: "Byasibwe!" });
+      loadData();
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      toast({ title: "Ikosa", variant: 'destructive' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 md:pt-20">
       <Navigation />
       <main className="container mx-auto px-4 py-8 animate-fade-in">
         <h1 className="text-3xl font-bold mb-6 text-foreground">Tanga Akazi</h1>
 
-        <Tabs defaultValue="products" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+        <Tabs defaultValue="posts" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="posts">Positi</TabsTrigger>
             <TabsTrigger value="products">Ibicuruzwa</TabsTrigger>
             <TabsTrigger value="services">Serivisi</TabsTrigger>
             <TabsTrigger value="industries">Inganda</TabsTrigger>
           </TabsList>
+
+          {/* Posts Tab */}
+          <TabsContent value="posts" className="space-y-4">
+            {user && (
+              <Card>
+                <CardHeader>
+                  <Button 
+                    onClick={() => setIsCreatingPost(!isCreatingPost)}
+                    className="w-full"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Tanga Positi Yawe
+                  </Button>
+                </CardHeader>
+                
+                {isCreatingPost && (
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label>Ifoto (Optional)</Label>
+                      <ImageUpload 
+                        onImageAnalyzed={(_, imageUrl) => handlePostImageUploaded(imageUrl)}
+                        skipAnalysis={true}
+                      />
+                      {postImages.length > 0 && (
+                        <div className="mt-2 flex gap-2 flex-wrap">
+                          {postImages.map((img, idx) => (
+                            <div key={idx} className="relative w-20 h-20">
+                              <img src={img} alt="" className="w-full h-full object-cover rounded" />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <Label>Icyerekezo Cyawe</Label>
+                      <Textarea
+                        value={newPost.content}
+                        onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+                        placeholder="Andika icyo ushaka gusangira..."
+                        rows={4}
+                      />
+                    </div>
+
+                    <Button onClick={handleCreatePost} className="w-full">
+                      Ohereza
+                    </Button>
+                  </CardContent>
+                )}
+              </Card>
+            )}
+
+            {/* Posts List */}
+            <div className="space-y-4">
+              {posts.length === 0 ? (
+                <Card>
+                  <CardContent className="text-center py-12">
+                    <MessageCircle className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">Nta positi ziboneka</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                posts.map((post) => (
+                  <Card key={post.id} className="hover-scale">
+                    <CardContent className="space-y-3 pt-6">
+                      <div className="flex justify-between items-start">
+                        <p className="text-sm text-muted-foreground">
+                          {new Date(post.created_at).toLocaleDateString('rw-RW')}
+                        </p>
+                        {user && post.user_id === user.id && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeletePost(post.id)}
+                            className="text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
+
+                      <p className="text-foreground whitespace-pre-wrap">{post.content}</p>
+
+                      {post.image_urls && post.image_urls.length > 0 && (
+                        <div className="grid grid-cols-2 gap-2">
+                          {post.image_urls.map((url, idx) => (
+                            <img 
+                              key={idx}
+                              src={url} 
+                              alt=""
+                              className="w-full h-48 object-cover rounded-lg"
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Social Actions */}
+                      <div className="flex items-center gap-4 pt-2 border-t">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleLikePost(post.id)}
+                          className="flex items-center gap-1"
+                        >
+                          <Heart 
+                            className={`w-4 h-4 ${post.user_has_liked ? 'fill-red-500 text-red-500' : ''}`}
+                          />
+                          <span>{post.likes_count || 0}</span>
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleShowPostComments(post.id)}
+                          className="flex items-center gap-1"
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                          <span>{post.comments_count || 0}</span>
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleSharePost(post)}
+                          className="flex items-center gap-1"
+                        >
+                          <Share2 className="w-4 h-4" />
+                          <span>Sangira</span>
+                        </Button>
+                      </div>
+
+                      {/* Comments Section */}
+                      {selectedPostComments === post.id && (
+                        <div className="space-y-3 pt-3 border-t">
+                          <div className="space-y-2 max-h-48 overflow-y-auto">
+                            {postComments[post.id]?.map((comment) => (
+                              <div key={comment.id} className="bg-muted p-2 rounded text-sm">
+                                <p>{comment.content}</p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {new Date(comment.created_at).toLocaleDateString('rw-RW')}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                          
+                          {user && (
+                            <div className="flex gap-2">
+                              <Input
+                                value={newPostComment}
+                                onChange={(e) => setNewPostComment(e.target.value)}
+                                placeholder="Andika icyiyumviro..."
+                                onKeyPress={(e) => e.key === 'Enter' && handleAddPostComment(post.id)}
+                              />
+                              <Button 
+                                size="sm"
+                                onClick={() => handleAddPostComment(post.id)}
+                              >
+                                <Send className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </TabsContent>
 
           {/* Products Tab */}
           <TabsContent value="products" className="space-y-4">
