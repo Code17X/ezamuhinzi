@@ -33,7 +33,7 @@ serve(async (req) => {
             content: [
               {
                 type: "text",
-                text: "You are an expert agricultural specialist in Rwanda. Analyze this crop/fruit/vegetable image and identify any diseases, pests, or health issues. Provide:\n\n1. **Crop Type**: Identify the crop (coffee, tea, banana, beans, cassava, maize, potato, tomato, etc.)\n2. **Disease/Pest Identification**: What is affecting the crop?\n3. **Severity**: Rate as Low/Medium/High\n4. **Treatment**: Specific actionable steps to treat the problem\n5. **Prevention**: Tips to prevent this issue in the future\n\nKeep your response clear, practical, and in simple language that a farmer can understand."
+                text: "Uri umuhanga mu buhinzi mu Rwanda. Suzuma iyi shusho y'igihingwa/imbuto/imboga kandi umenye indwara, udukoko, cyangwa ibibazo by'ubuzima. Tanga ibisubizo mu Kinyarwanda gusa:\n\n1. **Ubwoko bw'igihingwa**: Menya igihingwa (ikawa, icyayi, umuneke, ibishyimbo, imyumbati, ibigori, ibirayi, inyanya, nibindi)\n2. **Indwara cyangwa udukoko**: Ni iki kibangamiye igihingwa?\n3. **Urwego rw'akaga**: Andika ko ari gito/rwo hagati/rukomeye\n4. **Ubuvuzi**: Intambwe zigezweho zo gukiza ikibazo\n5. **Kwirinda**: Inama zo kwirinda iki kibazo mu gihe kizaza\n\nTanga igisubizo cyoroshye, gifite akamaro, mu Kinyarwanda gusa nta cyongereza."
               },
               {
                 type: "image_url",

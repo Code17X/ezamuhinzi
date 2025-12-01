@@ -25,17 +25,23 @@ serve(async (req) => {
       throw new Error('Lovable API key not configured');
     }
 
-    const prompt = `Tanga isesengura rigufi mu Kinyarwanda ku biciro bya ${cropName} i ${location}, mu Rwanda.
-    Igiciro kiriho: ${currentPrice} RWF
-    Ikirere kiriho: ${JSON.stringify(weather)}
-    
-    Tanga raporo ngufi y'amagambo 50-80 gusa arimo:
-    1. Icyerekezo cy'igiciro mu byumweru 2 biri imbere (kiziyongera/kizamanuka/kizahora)
-    2. Ijanisha ry'impinduka (%)
-    3. Impamvu 2-3 z'ingenzi ziterwa n'igiciro
-    4. Inama imwe ku bahinzi
-    
-    NTUGIRE UBUREBURE - amagambo 50-80 gusa mu Kinyarwanda!`;
+    const prompt = `Uri umushakashatsi w'isoko ry'ubuhinzi mu Rwanda. Suzuma ibiciro bya ${cropName} i ${location} ugereranije n'ibibera muri iki gihe.
+
+Igiciro kiriho: ${currentPrice} RWF
+Ikirere: ${JSON.stringify(weather)}
+Amatariki y'isoko: Ibihe by'umwaka, ibiciro bya peteroli, ingurane, ibikomoka mu mahanga
+
+Tanga isesengura ry'ibiciro mu Kinyarwanda gusa (amagambo 80-120):
+
+1. **Icyerekezo cy'ibiciro mu byumweru 2-3 biri imbere**: Kiziyongera, kizamanuka, cyangwa kizahora - sobanura neza impamvu (ikirere, ibihe, ingurane, ibindi)
+
+2. **Ijanisha ry'impinduka**: Tanga ijanisha ry'impinduka mu kijana (%) ukurikije ibisobanuro bifite ishingiro
+
+3. **Impamvu nyamukuru 3-4**: Sobanura ibintu bikomeye bigira ingaruka ku giciro (ikirere, ibicuruzwa bivuye mu mahanga, ibihe by'umwaka, ingurane)
+
+4. **Inama z'akamaro ku bahinzi**: Tanga inama 2 z'ingenzi zo kugurisha cyangwa kubika ibicuruzwa
+
+Tanga raporo nzima, ifite akamaro, mu Kinyarwanda gusa. Kora isesengura rishingiye ku bikoresho byose bifite ishingiro.`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -48,7 +54,7 @@ serve(async (req) => {
         messages: [
           { 
             role: 'system', 
-            content: 'Uri umushakashatsi w\'isoko ry\'ubuhinzi mu Rwanda. Tanga raporo ngufi cyane (amagambo 50-80 gusa) mu Kinyarwanda y\'isesengura ry\'ibiciro. Ntugire uburebure - kora raporo ngufi kandi ifite akamaro.' 
+            content: 'Uri umushakashatsi w\'isoko ry\'ubuhinzi mu Rwanda. Tanga raporo nzima (amagambo 80-120) mu Kinyarwanda y\'isesengura ry\'ibiciro rishingiye ku bikoresho bifite ishingiro. Kora isesengura ry\'ibiciro ukurikije ikirere, amatariki y\'isoko, ingurane, n\'ibindi bigize isoko. Sobanura neza icyerekezo cy\'ibiciro n\'impamvu nyamukuru.' 
           },
           { role: 'user', content: prompt }
         ],

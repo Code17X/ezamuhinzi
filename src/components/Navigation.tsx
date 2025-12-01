@@ -26,7 +26,10 @@ const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between md:justify-start md:gap-8 h-16">
           <div className="hidden md:flex items-center gap-3">
-            <Wheat className="w-10 h-10 text-primary" />
+            <div className="relative">
+              <Wheat className="w-10 h-10 text-primary drop-shadow-lg" strokeWidth={2.5} />
+              <div className="absolute inset-0 blur-sm bg-primary/20 rounded-full scale-110 -z-10" />
+            </div>
             <span className="font-bold text-xl text-foreground" style={{ fontFamily: "'Righteous', cursive" }}>
               Eza Muhizi
             </span>
