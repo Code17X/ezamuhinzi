@@ -24,3 +24,9 @@ verify_jwt = false
 [functions.market-prediction]
 verify_jwt = false
 
+[functions.auto-weather-alerts]
+verify_jwt = false
+
+[functions.auto-price-alerts]
+verify_jwt = false
+
