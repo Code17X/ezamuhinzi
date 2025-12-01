@@ -99,9 +99,17 @@ const Profile = () => {
 
     setSendingTestSMS(true);
     try {
-      const { error } = await supabase.functions.invoke('send-sms', {
+      // Normalize phone number to E.164 format
+      let normalizedPhone = profileData.phone_number.trim();
+      if (normalizedPhone.startsWith('0')) {
+        normalizedPhone = '+250' + normalizedPhone.substring(1);
+      } else if (!normalizedPhone.startsWith('+')) {
+        normalizedPhone = '+250' + normalizedPhone;
+      }
+
+      const { data, error } = await supabase.functions.invoke('send-sms', {
         body: {
-          phoneNumber: profileData.phone_number,
+          phoneNumber: normalizedPhone,
           message: "Muraho! Uyu ni ubutumwa bwo kugerageza kuva kuri Eza Muhizi. Ubutumwa bw'amakuru buzatangira kuboneka vuba.",
           userId: user?.id
         }
@@ -113,13 +121,24 @@ const Profile = () => {
         title: "Byakunze!",
         description: "Ubutumwa bwoherejwe kuri nimero yawe",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending test SMS:', error);
-      toast({
-        title: "Ikosa",
-        description: "Habaye ikosa mu kohereza ubutumwa. Reba niba nimero yawe ari yo.",
-        variant: "destructive",
-      });
+      
+      // Check for specific Twilio error about same To/From numbers
+      const errorMessage = error?.message || '';
+      if (errorMessage.includes('same') || errorMessage.includes('21266')) {
+        toast({
+          title: "Ikosa rya Configuration",
+          description: "Nimero ya Twilio sender ntabwo ishobora kuba ari yo nka nimero yawe. Gura nimero ya Twilio.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Ikosa",
+          description: "Habaye ikosa mu kohereza ubutumwa. Reba niba nimero yawe ari yo kandi configuration ya Twilio ari nziza.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setSendingTestSMS(false);
     }
