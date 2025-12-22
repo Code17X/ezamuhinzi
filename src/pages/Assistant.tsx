@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
+import HomeButton from "@/components/HomeButton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -164,40 +165,47 @@ const Assistant = () => {
     setMessages((prev) => [...prev, imageMessage, analysisMessage]);
   };
 
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-y-auto">
       <Navigation />
+      <HomeButton />
       
       <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-6">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              Umujyanama w'AI mu Buhinzi
+              {t('assistant.title')}
             </h1>
             <p className="text-muted-foreground">
-              Bonana inama ku buzima bw'amatungo cyangwa sesengura indwara z'ibihingwa
+              {t('assistant.description')}
             </p>
           </div>
 
-          <Card className="min-h-[500px] max-h-[80vh] md:h-[700px] flex flex-col">
+          <Card className="flex flex-col">
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
                 <Bot className="w-5 h-5 text-primary" />
-                Umujyanama w'AI
+                {t('assistant.title')}
               </CardTitle>
               <CardDescription>
-                Ganira na AI cyangwa ohereza amafoto y'ibihingwa kugirango usesengure
+                {t('assistant.chatDescription')}
               </CardDescription>
             </CardHeader>
             
             <Tabs defaultValue="chat" className="flex-1 flex flex-col">
               <TabsList className="mx-4 mt-4">
-                <TabsTrigger value="chat" className="flex-1">Ganira</TabsTrigger>
-                <TabsTrigger value="analyze" className="flex-1">Sesengura Ibihingwa</TabsTrigger>
+                <TabsTrigger value="chat" className="flex-1">{t('assistant.chat')}</TabsTrigger>
+                <TabsTrigger value="analyze" className="flex-1">{t('assistant.analyzeCrop')}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="chat" className="flex-1 flex flex-col m-0">
-                <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
+                <CardContent className="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -243,6 +251,7 @@ const Assistant = () => {
                   </div>
                 </div>
               )}
+              <div ref={messagesEndRef} />
             </CardContent>
 
             <div className="border-t p-4">
@@ -251,7 +260,7 @@ const Assistant = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="Baza ibibazo ku buzima bw'amatungo, imirire, ubworozi..."
+                  placeholder={t('assistant.askQuestion')}
                   className="flex-1"
                 />
                 <Button onClick={handleSend} disabled={isLoading || !input.trim()}>
@@ -264,7 +273,7 @@ const Assistant = () => {
           <TabsContent value="analyze" className="flex-1 flex flex-col m-0 p-4">
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Ohereza cyangwa ufate ifoto y'igihingwa cyawe kugirango ubone isesengura ry'indwara n'inama zo gukira byihuse.
+                {t('assistant.analyzeDescription')}
               </p>
               <ImageUpload onImageAnalyzed={handleImageAnalyzed} />
             </div>

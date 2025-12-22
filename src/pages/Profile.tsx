@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
+import HomeButton from "@/components/HomeButton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -147,6 +149,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
+      <HomeButton />
       
       <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24">
         <div className="max-w-4xl mx-auto">
