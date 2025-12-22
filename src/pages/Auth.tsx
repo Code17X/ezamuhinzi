@@ -19,7 +19,10 @@ const loginSchema = z.object({
 const signupSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
   phoneNumber: z.string().regex(/^(\+?250|0)?7[238]\d{7}$/, "Invalid Rwanda phone number"),
-  email: z.string().email("Invalid email address").min(1, "Email is required"),
+  email: z.string()
+    .min(1, "Email is required")
+    .email("Invalid email address")
+    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Please enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -259,7 +262,7 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Imeri *</Label>
+                  <Label htmlFor="signup-email">Imeri * <span className="text-xs text-muted-foreground">(imeri ikora gusa)</span></Label>
                   <Input
                     id="signup-email"
                     type="email"
