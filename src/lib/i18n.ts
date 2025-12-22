@@ -148,9 +148,12 @@ const resources = {
       
       // Assistant
       "assistant.title": "Umufasha wa AI",
-      "assistant.chat": "Kuganira",
-      "assistant.analyzeCrop": "Gusesengura Igihingwa",
-      "assistant.askQuestion": "Baza ikibazo...",
+      "assistant.description": "Bonana inama ku buzima bw'amatungo cyangwa sesengura indwara z'ibihingwa",
+      "assistant.chat": "Ganira",
+      "assistant.analyzeCrop": "Sesengura Ibihingwa",
+      "assistant.askQuestion": "Baza ibibazo ku buzima bw'amatungo, imirire, ubworozi...",
+      "assistant.chatDescription": "Ganira na AI cyangwa ohereza amafoto y'ibihingwa kugirango usesengure",
+      "assistant.analyzeDescription": "Ohereza cyangwa ufate ifoto y'igihingwa cyawe kugirango ubone isesengura ry'indwara n'inama zo gukira byihuse.",
       
       // Weather
       "weather.title": "Ikirere",
@@ -368,9 +371,12 @@ const resources = {
       
       // Assistant
       "assistant.title": "AI Assistant",
+      "assistant.description": "Get advice on livestock health or analyze crop diseases",
       "assistant.chat": "Chat",
       "assistant.analyzeCrop": "Analyze Crop",
-      "assistant.askQuestion": "Ask a question...",
+      "assistant.askQuestion": "Ask questions about livestock health, nutrition, breeding...",
+      "assistant.chatDescription": "Chat with AI or upload crop images for analysis",
+      "assistant.analyzeDescription": "Upload or take a photo of your crop to get disease diagnosis and quick recovery tips.",
       
       // Weather
       "weather.title": "Weather",

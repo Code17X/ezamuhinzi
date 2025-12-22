@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
+import HomeButton from "@/components/HomeButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -622,6 +623,7 @@ const Marketplace = () => {
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 md:pt-20">
       <Navigation />
+      <HomeButton />
       <main className="container mx-auto px-4 py-8 animate-fade-in">
         <h1 className="text-3xl font-bold mb-6 text-foreground">Tanga Akazi</h1>
 
