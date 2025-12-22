@@ -41,7 +41,7 @@ const Navigation = () => {
             </span>
           </div>
           
-          <div className="flex items-center justify-around w-full md:w-auto md:gap-2">
+          <div className="flex items-center overflow-x-auto scrollbar-hide gap-1 w-full md:w-auto md:gap-2 md:overflow-visible">
             {links.map((link) => {
               const Icon = link.icon;
               const isActive = location.pathname === link.to;
@@ -51,14 +51,14 @@ const Navigation = () => {
                   key={link.to}
                   to={link.to}
                   className={cn(
-                    "flex flex-col md:flex-row items-center gap-1 md:gap-2 px-3 py-2 rounded-lg transition-all duration-300 ease-out transform hover:scale-105",
+                    "flex flex-col md:flex-row items-center gap-1 md:gap-2 px-2 sm:px-3 py-2 rounded-lg transition-all duration-300 ease-out transform hover:scale-105 flex-shrink-0",
                     isActive
                       ? "text-primary bg-primary/10 shadow-sm"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   )}
                 >
                   <Icon className="w-5 h-5" />
-                  <span className="text-xs md:text-sm font-medium">{link.label}</span>
+                  <span className="text-[10px] sm:text-xs md:text-sm font-medium whitespace-nowrap">{link.label}</span>
                 </Link>
               );
             })}

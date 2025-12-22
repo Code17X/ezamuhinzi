@@ -179,7 +179,7 @@ const Assistant = () => {
             </p>
           </div>
 
-          <Card className="h-[700px] flex flex-col">
+          <Card className="min-h-[500px] max-h-[80vh] md:h-[700px] flex flex-col">
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
                 <Bot className="w-5 h-5 text-primary" />
