@@ -24,9 +24,9 @@ const Navigation = () => {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border md:top-0 md:bottom-auto z-50 transition-all duration-500 ease-out shadow-sm">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-2 md:px-4">
         <div className="flex items-center justify-between md:justify-start md:gap-8 h-16">
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3 flex-shrink-0">
             <div className="relative">
               <img 
                 src={wheatLogo} 
@@ -41,7 +41,7 @@ const Navigation = () => {
             </span>
           </div>
           
-          <div className="flex items-center overflow-x-auto scrollbar-hide gap-1 w-full md:w-auto md:gap-2 md:overflow-visible">
+          <div className="flex items-center overflow-x-auto scrollbar-hide gap-0.5 sm:gap-1 w-full md:w-auto md:gap-2 md:overflow-visible pb-1 md:pb-0 -mx-1 px-1" style={{ WebkitOverflowScrolling: 'touch' }}>
             {links.map((link) => {
               const Icon = link.icon;
               const isActive = location.pathname === link.to;
@@ -51,14 +51,14 @@ const Navigation = () => {
                   key={link.to}
                   to={link.to}
                   className={cn(
-                    "flex flex-col md:flex-row items-center gap-1 md:gap-2 px-2 sm:px-3 py-2 rounded-lg transition-all duration-300 ease-out transform hover:scale-105 flex-shrink-0",
+                    "flex flex-col md:flex-row items-center gap-0.5 md:gap-2 px-2 py-1.5 md:py-2 rounded-lg transition-all duration-300 ease-out transform hover:scale-105 flex-shrink-0 min-w-[48px]",
                     isActive
                       ? "text-primary bg-primary/10 shadow-sm"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   )}
                 >
-                  <Icon className="w-5 h-5" />
-                  <span className="text-[10px] sm:text-xs md:text-sm font-medium whitespace-nowrap">{link.label}</span>
+                  <Icon className="w-4 h-4 md:w-5 md:h-5" />
+                  <span className="text-[9px] sm:text-[10px] md:text-sm font-medium whitespace-nowrap max-w-[50px] md:max-w-none truncate">{link.label}</span>
                 </Link>
               );
             })}
