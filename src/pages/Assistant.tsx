@@ -205,7 +205,7 @@ const Assistant = () => {
               </TabsList>
 
               <TabsContent value="chat" className="flex-1 flex flex-col m-0">
-                <CardContent className="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
+                <CardContent className="p-4 space-y-4 flex-1 overflow-y-auto" style={{ minHeight: '200px', maxHeight: 'calc(100vh - 400px)' }}>
               {messages.map((message) => (
                 <div
                   key={message.id}

@@ -96,6 +96,12 @@ const resources = {
       "home.welcome": "Murakaza neza",
       "home.latestNews": "Amakuru Agezweho",
       "home.features": "Ibikorwa",
+      "home.explore": "Reba",
+      "home.sponsored": "Ibyatanzwe",
+      "home.ad": "Kwamamaza",
+      "home.adTitle": "Imbuto Nziza z'Ibigori - 30% Kugabanuka!",
+      "home.adDescription": "Gura imbuto z'ibigori zashyizweho imbaraga zishobora guhangana n'amapfa. Zitanga umusaruro mwiza kandi zikumira indwara. Ahagana mu maduka yose y'ubuhinzi.",
+      "home.learnMore": "Menya Byinshi",
       
       // Settings Page
       "settings.title": "Igenamiterere",
@@ -321,6 +327,12 @@ const resources = {
       "home.welcome": "Welcome",
       "home.latestNews": "Latest News",
       "home.features": "Features",
+      "home.explore": "Explore",
+      "home.sponsored": "Sponsored",
+      "home.ad": "Ad",
+      "home.adTitle": "Premium Maize Seeds - 30% Off!",
+      "home.adDescription": "Get high-quality drought-resistant maize seeds with enhanced yield. Disease-resistant and perfect for all farming conditions. Available at agricultural stores nationwide.",
+      "home.learnMore": "Learn More",
       
       // Settings Page
       "settings.title": "Settings",
@@ -497,6 +509,71 @@ const resources = {
       "subscription.title": "Abonnement",
       "subscription.upgrade": "Améliorer",
       "subscription.price": "1,000 RWF / Mois",
+      
+      // Home Page
+      "home.welcome": "Bienvenue",
+      "home.latestNews": "Dernières Nouvelles",
+      "home.features": "Fonctionnalités",
+      "home.explore": "Explorer",
+      "home.sponsored": "Sponsorisé",
+      "home.ad": "Pub",
+      "home.adTitle": "Semences de Maïs Premium - 30% de Réduction!",
+      "home.adDescription": "Obtenez des semences de maïs résistantes à la sécheresse de haute qualité. Résistantes aux maladies et parfaites pour toutes les conditions agricoles.",
+      "home.learnMore": "En Savoir Plus",
+      
+      // Common
+      "common.loading": "Chargement...",
+      "common.error": "Une erreur s'est produite",
+      "common.success": "Succès!",
+      "common.cancel": "Annuler",
+      "common.save": "Enregistrer",
+      "common.delete": "Supprimer",
+      "common.edit": "Modifier",
+      "common.viewAll": "Voir Tout",
+      
+      // Assistant
+      "assistant.title": "Assistant IA",
+      "assistant.description": "Obtenez des conseils sur la santé du bétail ou analysez les maladies des cultures",
+      "assistant.chat": "Discuter",
+      "assistant.analyzeCrop": "Analyser Culture",
+      "assistant.askQuestion": "Posez des questions sur la santé du bétail, nutrition, élevage...",
+      "assistant.chatDescription": "Discutez avec l'IA ou téléchargez des images de cultures pour analyse",
+      "assistant.analyzeDescription": "Téléchargez ou prenez une photo de votre culture pour obtenir un diagnostic et des conseils.",
+      
+      // Weather
+      "weather.title": "Météo",
+      "weather.currentWeather": "Météo Actuelle",
+      "weather.localConditions": "Conditions locales actuelles",
+      "weather.forecast": "Prévisions 5 Jours",
+      "weather.weekOutlook": "Perspectives météo pour la semaine",
+      "weather.humidity": "Humidité",
+      "weather.wind": "Vent",
+      "weather.visibility": "Visibilité",
+      "weather.rain": "Pluie",
+      "weather.farmingRecommendations": "Recommandations Agricoles",
+      "weather.basedOnConditions": "Basé sur les conditions météorologiques actuelles",
+      
+      // Prices
+      "prices.title": "Prix des Cultures",
+      "prices.marketPrices": "Prix du Marché",
+      "prices.realTimePricing": "Informations sur les prix en temps réel",
+      "prices.cropPrices": "Prix des Cultures",
+      "prices.livestockProduce": "Bétail & Produits",
+      "prices.currentRates": "Tarifs Actuels",
+      
+      // News
+      "news.title": "Actualités",
+      "news.latestNews": "Dernières Nouvelles",
+      "news.agricultureUpdates": "Actualités agricoles",
+      "news.featured": "Article Vedette",
+      "news.allArticles": "Tous les Articles",
+      "news.readMore": "Lire Plus",
+      
+      // Profile
+      "profile.title": "Profil",
+      "profile.personalInfo": "Informations Personnelles",
+      "profile.chatHistory": "Historique des Discussions",
+      "profile.savedDiagnoses": "Diagnostics Sauvegardés",
     }
   }
 };
