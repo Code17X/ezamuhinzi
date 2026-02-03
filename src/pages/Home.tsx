@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
-import { Bot, Cloud, DollarSign, Newspaper, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Bot, Cloud, DollarSign, Newspaper, ArrowRight, ChevronLeft, ChevronRight, Megaphone, ExternalLink } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -145,6 +145,38 @@ const Home = () => {
           </Card>
         </section>
 
+        {/* Fake Ad Section */}
+        <section className="mb-12 animate-fade-in-up">
+          <Card className="max-w-5xl mx-auto bg-gradient-to-r from-yellow-500/20 via-orange-500/20 to-red-500/20 border-2 border-orange-400/50 card-hover overflow-hidden">
+            <CardContent className="p-0">
+              <div className="flex flex-col md:flex-row">
+                <div className="md:w-1/3 bg-gradient-to-br from-orange-500 to-red-500 p-6 flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <Megaphone className="w-16 h-16 mx-auto mb-2" />
+                    <span className="text-sm font-medium uppercase tracking-wider">{t('home.sponsored')}</span>
+                  </div>
+                </div>
+                <div className="md:w-2/3 p-6">
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="text-xl font-bold text-foreground">{t('home.adTitle')}</h3>
+                    <span className="text-xs bg-orange-500/20 text-orange-600 px-2 py-1 rounded">{t('home.ad')}</span>
+                  </div>
+                  <p className="text-muted-foreground mb-4">
+                    {t('home.adDescription')}
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                      {t('home.learnMore')}
+                      <ExternalLink className="w-4 h-4 ml-2" />
+                    </Button>
+                    <span className="text-sm text-muted-foreground">🌱 Agri-Seeds Rwanda</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
         <section>
           <h2 className="text-3xl font-bold mb-6 text-foreground">{t('home.features')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
@@ -164,7 +196,7 @@ const Home = () => {
                     </CardHeader>
                     <CardContent>
                       <Button variant="ghost" className="w-full justify-between group transition-smooth">
-                        Explore
+                        {t('home.explore')}
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-300" />
                       </Button>
                     </CardContent>
