@@ -625,14 +625,14 @@ const Marketplace = () => {
       <Navigation />
       <HomeButton />
       <main className="container mx-auto px-4 py-8 animate-fade-in">
-        <h1 className="text-3xl font-bold mb-6 text-foreground">Tanga Akazi</h1>
+        <h1 className="text-3xl font-bold mb-6 text-foreground">{t('marketplace.title')}</h1>
 
         <Tabs defaultValue="posts" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="posts">Positi</TabsTrigger>
-            <TabsTrigger value="products">Ibicuruzwa</TabsTrigger>
-            <TabsTrigger value="services">Serivisi</TabsTrigger>
-            <TabsTrigger value="industries">Inganda</TabsTrigger>
+            <TabsTrigger value="posts">{t('marketplace.posts')}</TabsTrigger>
+            <TabsTrigger value="products">{t('marketplace.products')}</TabsTrigger>
+            <TabsTrigger value="services">{t('marketplace.services')}</TabsTrigger>
+            <TabsTrigger value="industries">{t('marketplace.industries')}</TabsTrigger>
           </TabsList>
 
           {/* Posts Tab */}
@@ -645,14 +645,14 @@ const Marketplace = () => {
                     className="w-full"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Tanga Positi Yawe
+                    {t('marketplace.createPost')}
                   </Button>
                 </CardHeader>
                 
                 {isCreatingPost && (
                   <CardContent className="space-y-4">
                     <div>
-                      <Label>Ifoto (Optional)</Label>
+                      <Label>{t('marketplace.photo')} ({t('marketplace.optional')})</Label>
                       <ImageUpload 
                         onImageAnalyzed={(_, imageUrl) => handlePostImageUploaded(imageUrl)}
                         skipAnalysis={true}
@@ -669,17 +669,17 @@ const Marketplace = () => {
                     </div>
 
                     <div>
-                      <Label>Icyerekezo Cyawe</Label>
+                      <Label>{t('marketplace.yourThoughts')}</Label>
                       <Textarea
                         value={newPost.content}
                         onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-                        placeholder="Andika icyo ushaka gusangira..."
+                        placeholder={t('marketplace.sharePlaceholder')}
                         rows={4}
                       />
                     </div>
 
                     <Button onClick={handleCreatePost} className="w-full">
-                      Ohereza
+                      {t('marketplace.submit')}
                     </Button>
                   </CardContent>
                 )}
@@ -692,7 +692,7 @@ const Marketplace = () => {
                 <Card>
                   <CardContent className="text-center py-12">
                     <MessageCircle className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">Nta positi ziboneka</p>
+                    <p className="text-muted-foreground">{t('marketplace.noPosts')}</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -761,7 +761,7 @@ const Marketplace = () => {
                           className="flex items-center gap-1"
                         >
                           <Share2 className="w-4 h-4" />
-                          <span>Sangira</span>
+                          <span>{t('marketplace.share')}</span>
                         </Button>
                       </div>
 
@@ -784,7 +784,7 @@ const Marketplace = () => {
                               <Input
                                 value={newPostComment}
                                 onChange={(e) => setNewPostComment(e.target.value)}
-                                placeholder="Andika icyiyumviro..."
+                                placeholder={t('marketplace.writeComment')}
                                 onKeyPress={(e) => e.key === 'Enter' && handleAddPostComment(post.id)}
                               />
                               <Button 
@@ -814,14 +814,14 @@ const Marketplace = () => {
                     className="w-full"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Tanga Icyicuruzwa Cyawe
+                    {t('marketplace.createProduct')}
                   </Button>
                 </CardHeader>
                 
                 {isCreatingProduct && (
                   <CardContent className="space-y-4">
                     <div>
-                      <Label>Ifoto y'Icyicuruzwa (Optional)</Label>
+                      <Label>{t('marketplace.productImage')} ({t('marketplace.optional')})</Label>
                       <ImageUpload 
                         onImageAnalyzed={(_, imageUrl) => handleImageUploaded(imageUrl)}
                         skipAnalysis={true}
@@ -829,32 +829,32 @@ const Marketplace = () => {
                     </div>
 
                     <div>
-                      <Label>Izina ry'Icyicuruzwa</Label>
+                      <Label>{t('marketplace.productName')}</Label>
                       <Input
                         value={newProduct.title}
                         onChange={(e) => setNewProduct({ ...newProduct, title: e.target.value })}
-                        placeholder="Urugero: Ibigori byiza"
+                        placeholder={t('marketplace.productNamePlaceholder')}
                       />
                     </div>
 
                     <div>
-                      <Label>Icyiciro</Label>
+                      <Label>{t('marketplace.category')}</Label>
                       <Select value={newProduct.category} onValueChange={(val) => setNewProduct({ ...newProduct, category: val })}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="crop">Ibihingwa</SelectItem>
-                          <SelectItem value="livestock">Amatungo</SelectItem>
-                          <SelectItem value="equipment">Ibikoresho</SelectItem>
-                          <SelectItem value="other">Ibindi</SelectItem>
+                          <SelectItem value="crop">{t('marketplace.categoryCrop')}</SelectItem>
+                          <SelectItem value="livestock">{t('marketplace.categoryLivestock')}</SelectItem>
+                          <SelectItem value="equipment">{t('marketplace.categoryEquipment')}</SelectItem>
+                          <SelectItem value="other">{t('marketplace.categoryOther')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label>Igiciro</Label>
+                        <Label>{t('marketplace.price')}</Label>
                         <Input
                           type="number"
                           value={newProduct.price}
@@ -863,7 +863,7 @@ const Marketplace = () => {
                         />
                       </div>
                       <div>
-                        <Label>Igipimo</Label>
+                        <Label>{t('marketplace.unit')}</Label>
                         <Select value={newProduct.unit} onValueChange={(val) => setNewProduct({ ...newProduct, unit: val })}>
                           <SelectTrigger>
                             <SelectValue />
@@ -879,25 +879,25 @@ const Marketplace = () => {
                     </div>
 
                     <div>
-                      <Label>Ingano (Optional)</Label>
+                      <Label>{t('marketplace.quantity')} ({t('marketplace.optional')})</Label>
                       <Input
                         value={newProduct.quantity}
                         onChange={(e) => setNewProduct({ ...newProduct, quantity: e.target.value })}
-                        placeholder="Urugero: 100kg"
+                        placeholder={t('marketplace.quantityPlaceholder')}
                       />
                     </div>
 
                     <div>
-                      <Label>Aho Uhereye</Label>
+                      <Label>{t('marketplace.location')}</Label>
                       <Input
                         value={newProduct.location}
                         onChange={(e) => setNewProduct({ ...newProduct, location: e.target.value })}
-                        placeholder="Urugero: Kigali, Gasabo"
+                        placeholder={t('marketplace.locationPlaceholder')}
                       />
                     </div>
 
                     <div>
-                      <Label>Numero ya Telefone</Label>
+                      <Label>{t('marketplace.phone')}</Label>
                       <Input
                         type="tel"
                         value={newProduct.contact_phone}
@@ -907,16 +907,16 @@ const Marketplace = () => {
                     </div>
 
                     <div>
-                      <Label>Ibisobanuro (Optional)</Label>
+                      <Label>{t('marketplace.description')} ({t('marketplace.optional')})</Label>
                       <Textarea
                         value={newProduct.description}
                         onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-                        placeholder="Sobanura icyicuruzwa cyawe..."
+                        placeholder={t('marketplace.describeProduct')}
                       />
                     </div>
 
                     <Button onClick={handleCreateProduct} className="w-full">
-                      Ohereza
+                      {t('marketplace.submit')}
                     </Button>
                   </CardContent>
                 )}
@@ -929,7 +929,7 @@ const Marketplace = () => {
                 <Card className="md:col-span-2">
                   <CardContent className="text-center py-12">
                     <ShoppingBag className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">Nta bicuruzwa biboneka</p>
+                    <p className="text-muted-foreground">{t('marketplace.noProducts')}</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -944,7 +944,7 @@ const Marketplace = () => {
                         />
                         {product.status === 'sold' && (
                           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                            <span className="text-white text-2xl font-bold">BYAGURISHIJWE</span>
+                            <span className="text-white text-2xl font-bold">{t('marketplace.sold').toUpperCase()}</span>
                           </div>
                         )}
                       </div>
@@ -954,7 +954,7 @@ const Marketplace = () => {
                         <div className="flex items-center gap-2">
                           <span>{product.title}</span>
                           {product.status === 'sold' && (
-                            <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">Byagurishijwe</span>
+                            <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">{t('marketplace.sold')}</span>
                           )}
                         </div>
                         {user && product.user_id === user.id && (
@@ -965,7 +965,7 @@ const Marketplace = () => {
                                 size="sm"
                                 onClick={() => handleMarkAsSold(product.id)}
                                 className="text-green-600"
-                                title="Emeza ko byagurishijwe"
+                                title={t('marketplace.markAsSold')}
                               >
                                 ✓
                               </Button>
@@ -990,7 +990,7 @@ const Marketplace = () => {
                         </p>
                         {product.quantity && (
                           <p className="text-sm text-muted-foreground mt-1">
-                            Ingano: {product.quantity}
+                            {t('marketplace.quantity')}: {product.quantity}
                           </p>
                         )}
                       </div>
@@ -1046,7 +1046,7 @@ const Marketplace = () => {
                           className="flex items-center gap-1"
                         >
                           <Share2 className="w-4 h-4" />
-                          <span>Sangira</span>
+                          <span>{t('marketplace.share')}</span>
                         </Button>
                       </div>
 
@@ -1069,7 +1069,7 @@ const Marketplace = () => {
                               <Input
                                 value={newComment}
                                 onChange={(e) => setNewComment(e.target.value)}
-                                placeholder="Andika icyiyumviro..."
+                                placeholder={t('marketplace.writeComment')}
                                 onKeyPress={(e) => e.key === 'Enter' && handleAddComment(product.id)}
                               />
                               <Button 
@@ -1099,32 +1099,32 @@ const Marketplace = () => {
                     className="w-full"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Tanga Serivisi Yawe
+                    {t('marketplace.createService')}
                   </Button>
                 </CardHeader>
                 
                 {isCreatingListing && (
                   <CardContent className="space-y-4">
                     <div>
-                      <Label>Izina rya Serivisi</Label>
+                      <Label>{t('marketplace.serviceName')}</Label>
                       <Input
                         value={newListing.service_name}
                         onChange={(e) => setNewListing({ ...newListing, service_name: e.target.value })}
-                        placeholder="Urugero: Umuganga w'amatungo"
+                        placeholder={t('marketplace.serviceNamePlaceholder')}
                       />
                     </div>
 
                     <div>
-                      <Label>Amazina Yawe</Label>
+                      <Label>{t('marketplace.yourName')}</Label>
                       <Input
                         value={newListing.provider_name}
                         onChange={(e) => setNewListing({ ...newListing, provider_name: e.target.value })}
-                        placeholder="Izina ryawe ryuzuye"
+                        placeholder={t('marketplace.yourNamePlaceholder')}
                       />
                     </div>
 
                     <div>
-                      <Label>Numero ya Telefone</Label>
+                      <Label>{t('marketplace.phone')}</Label>
                       <Input
                         value={newListing.phone_number}
                         onChange={(e) => setNewListing({ ...newListing, phone_number: e.target.value })}
@@ -1133,34 +1133,34 @@ const Marketplace = () => {
                     </div>
 
                     <div>
-                      <Label>Igiciro cya Serivisi</Label>
+                      <Label>{t('marketplace.serviceCost')}</Label>
                       <Input
                         value={newListing.service_cost}
                         onChange={(e) => setNewListing({ ...newListing, service_cost: e.target.value })}
-                        placeholder="Urugero: 5,000 RWF - 20,000 RWF"
+                        placeholder={t('marketplace.serviceCostPlaceholder')}
                       />
                     </div>
 
                     <div>
-                      <Label>Aho Uhereye</Label>
+                      <Label>{t('marketplace.location')}</Label>
                       <Input
                         value={newListing.location}
                         onChange={(e) => setNewListing({ ...newListing, location: e.target.value })}
-                        placeholder="Urugero: Kigali, Gasabo"
+                        placeholder={t('marketplace.locationPlaceholder')}
                       />
                     </div>
 
                     <div>
-                      <Label>Ibisobanuro (Optional)</Label>
+                      <Label>{t('marketplace.description')} ({t('marketplace.optional')})</Label>
                       <Textarea
                         value={newListing.description}
                         onChange={(e) => setNewListing({ ...newListing, description: e.target.value })}
-                        placeholder="Sobanura serivisi yawe..."
+                        placeholder={t('marketplace.describeService')}
                       />
                     </div>
 
                     <Button onClick={handleCreateListing} className="w-full">
-                      Ohereza
+                      {t('marketplace.submit')}
                     </Button>
                   </CardContent>
                 )}
