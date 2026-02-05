@@ -80,6 +80,9 @@ const resources = {
       "landing.cta.title": "Injira mu Muryango w'Abahinzi Benshi Bakoresha Iyi Porogaramu",
       "landing.cta.subtitle": "Niba utangiye cyangwa ufite uburambe, ibikoresho bya AI bizagufasha gutsinda",
       "landing.cta.button": "Fungura Konti Yawe Kubuntu",
+      "landing.subtitle": "Ibikoresho bya AI bigufasha gufata ibyemezo byiza mu buhinzi",
+      "landing.aiAssistantDesc": "Bonana inama ku buzima bw'amatungo cyangwa sesengura indwara z'ibihingwa ukoresheje AI",
+      "landing.agriNewsDesc": "Amakuru agezweho mu buhinzi n'ubworozi",
       
       // Auth Page
       "auth.login": "Kwinjira",
@@ -358,6 +361,9 @@ const resources = {
       "landing.cta.title": "Join Thousands of Farmers Using This Platform",
       "landing.cta.subtitle": "Whether you're starting out or experienced, our AI tools will help you succeed",
       "landing.cta.button": "Create Your Free Account",
+      "landing.subtitle": "AI tools to help you make smart farming decisions",
+      "landing.aiAssistantDesc": "Get advice on livestock health or analyze crop diseases using AI",
+      "landing.agriNewsDesc": "Latest agricultural news and updates",
       
       // Auth Page
       "auth.login": "Login",
@@ -584,6 +590,8 @@ const resources = {
       "landing.cta.button": "Créez Votre Compte Gratuit",
       "landing.agriNews": "Actualités Agricoles",
       "landing.agriNewsDesc": "Recevez les dernières nouvelles agricoles",
+      "landing.subtitle": "Outils IA pour vous aider à prendre des décisions agricoles intelligentes",
+      "landing.aiAssistantDesc": "Obtenez des conseils sur la santé du bétail ou analysez les maladies des cultures via IA",
       
       // Add more French translations as needed...
       "auth.login": "Connexion",
