@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, Cloud, DollarSign, Newspaper, Bot, User, LogOut, Settings, Users, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -10,6 +11,34 @@ const Navigation = () => {
   const location = useLocation();
   const { signOut } = useAuth();
   const { t } = useTranslation();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showLeftFade, setShowLeftFade] = useState(false);
+  const [showRightFade, setShowRightFade] = useState(false);
+
+  useEffect(() => {
+    const checkScroll = () => {
+      const container = scrollContainerRef.current;
+      if (container) {
+        const { scrollLeft, scrollWidth, clientWidth } = container;
+        setShowLeftFade(scrollLeft > 10);
+        setShowRightFade(scrollLeft < scrollWidth - clientWidth - 10);
+      }
+    };
+
+    const container = scrollContainerRef.current;
+    if (container) {
+      checkScroll();
+      container.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', checkScroll);
+      }
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, []);
 
   const links = [
     { to: "/", icon: Home, label: t('home') },
@@ -41,7 +70,28 @@ const Navigation = () => {
             </span>
           </div>
           
-          <div className="flex items-center overflow-x-auto scrollbar-hide gap-0.5 sm:gap-1 w-full md:w-auto md:gap-2 md:overflow-visible pb-1 md:pb-0 -mx-1 px-1" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="relative flex-1 md:flex-initial">
+            {/* Left fade indicator */}
+            <div 
+              className={cn(
+                "absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-card/95 to-transparent z-10 pointer-events-none transition-opacity duration-300 md:hidden",
+                showLeftFade ? "opacity-100" : "opacity-0"
+              )}
+            />
+            
+            {/* Right fade indicator */}
+            <div 
+              className={cn(
+                "absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-card/95 to-transparent z-10 pointer-events-none transition-opacity duration-300 md:hidden",
+                showRightFade ? "opacity-100" : "opacity-0"
+              )}
+            />
+            
+            <div 
+              ref={scrollContainerRef}
+              className="flex items-center overflow-x-auto scrollbar-hide gap-0.5 sm:gap-1 w-full md:w-auto md:gap-2 md:overflow-visible pb-1 md:pb-0 px-1" 
+              style={{ WebkitOverflowScrolling: 'touch' }}
+            >
             {links.map((link) => {
               const Icon = link.icon;
               const isActive = location.pathname === link.to;
@@ -71,6 +121,7 @@ const Navigation = () => {
               <LogOut className="w-4 h-4" />
               <span className="text-sm">{t('logout')}</span>
             </Button>
+            </div>
           </div>
         </div>
       </div>

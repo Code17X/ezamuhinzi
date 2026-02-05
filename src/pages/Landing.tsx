@@ -2,11 +2,22 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Camera, CloudSun, TrendingUp, Newspaper, Stethoscope, CheckCircle2 } from "lucide-react";
+import { Camera, CloudSun, TrendingUp, Newspaper, Stethoscope, CheckCircle2, Globe } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import heroImage from "@/assets/hero-farmers.jpg";
 
 const Landing = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const languages = [
+    { code: 'rw', label: 'Kinyarwanda' },
+    { code: 'en', label: 'English' },
+    { code: 'fr', label: 'Français' }
+  ];
+
+  const handleLanguageChange = (langCode: string) => {
+    i18n.changeLanguage(langCode);
+  };
   
   const features = [
     {
@@ -42,6 +53,23 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Language Selector - Fixed Top Right */}
+      <div className="absolute top-4 right-4 z-20">
+        <Select value={i18n.language} onValueChange={handleLanguageChange}>
+          <SelectTrigger className="w-[140px] bg-white/90 backdrop-blur-sm border-white/20 text-foreground">
+            <Globe className="w-4 h-4 mr-2" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {languages.map((lang) => (
+              <SelectItem key={lang.code} value={lang.code}>
+                {lang.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
       {/* Hero Section */}
       <section className="relative h-[600px] flex items-center justify-center overflow-hidden animate-fade-in">
         <div 
