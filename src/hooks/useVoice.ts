@@ -98,42 +98,63 @@ export function useVoiceInput(language: string) {
 
 export function useVoiceSpeech(language: string) {
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const getLangCode = useCallback((lang: string) => {
-    switch (lang) {
-      case "rw": return "rw-RW";
-      case "fr": return "fr-FR";
-      default: return "en-US";
+  const speak = useCallback(async (text: string) => {
+    // Stop any current playback
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+
+    setIsSpeaking(true);
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-tts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ text }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`TTS failed: ${response.status}`);
+      }
+
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      
+      audio.onended = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+        audioRef.current = null;
+      };
+      audio.onerror = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+        audioRef.current = null;
+      };
+
+      audioRef.current = audio;
+      await audio.play();
+    } catch (error) {
+      console.error("ElevenLabs TTS error:", error);
+      setIsSpeaking(false);
     }
   }, []);
 
-  const speak = useCallback((text: string) => {
-    if (!window.speechSynthesis) return;
-    
-    window.speechSynthesis.cancel();
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = getLangCode(language);
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-
-    // Try to find a voice matching the language
-    const voices = window.speechSynthesis.getVoices();
-    const langCode = getLangCode(language);
-    const matchingVoice = voices.find(v => v.lang.startsWith(langCode.split("-")[0]));
-    if (matchingVoice) utterance.voice = matchingVoice;
-
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-
-    utteranceRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
-  }, [language, getLangCode]);
-
   const stopSpeaking = useCallback(() => {
-    window.speechSynthesis?.cancel();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
     setIsSpeaking(false);
   }, []);
 
