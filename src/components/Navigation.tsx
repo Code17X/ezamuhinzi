@@ -52,10 +52,10 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border md:top-0 md:bottom-auto z-50 transition-all duration-500 ease-out shadow-sm">
-      <div className="container mx-auto px-2 md:px-4">
-        <div className="flex items-center justify-between md:justify-start md:gap-8 h-16">
-          <div className="hidden md:flex items-center gap-3 flex-shrink-0">
+    <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border lg:top-0 lg:bottom-auto z-50 transition-all duration-500 ease-out shadow-sm">
+      <div className="container mx-auto px-2 lg:px-4">
+        <div className="flex items-center justify-between lg:justify-start lg:gap-8 h-16">
+          <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
             <div className="relative">
               <img 
                 src={wheatLogo} 
@@ -74,7 +74,7 @@ const Navigation = () => {
             {/* Left fade indicator */}
             <div 
               className={cn(
-                "absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-card/95 to-transparent z-10 pointer-events-none transition-opacity duration-300 md:hidden",
+                "absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-card/95 to-transparent z-10 pointer-events-none transition-opacity duration-300 lg:hidden",
                 showLeftFade ? "opacity-100" : "opacity-0"
               )}
             />
@@ -82,14 +82,14 @@ const Navigation = () => {
             {/* Right fade indicator */}
             <div 
               className={cn(
-                "absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-card/95 to-transparent z-10 pointer-events-none transition-opacity duration-300 md:hidden",
+                "absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-card/95 to-transparent z-10 pointer-events-none transition-opacity duration-300 lg:hidden",
                 showRightFade ? "opacity-100" : "opacity-0"
               )}
             />
             
             <div 
               ref={scrollContainerRef}
-              className="flex items-center overflow-x-auto scrollbar-hide gap-0.5 sm:gap-1 w-full md:w-auto md:gap-2 md:overflow-visible pb-1 md:pb-0 px-1" 
+              className="flex items-center overflow-x-auto scrollbar-hide gap-0.5 sm:gap-1 w-full lg:w-auto lg:gap-2 lg:overflow-visible pb-1 lg:pb-0 px-1" 
               style={{ WebkitOverflowScrolling: 'touch' }}
             >
             {links.map((link) => {
@@ -101,14 +101,14 @@ const Navigation = () => {
                   key={link.to}
                   to={link.to}
                   className={cn(
-                    "flex flex-col md:flex-row items-center gap-0.5 md:gap-2 px-2 py-1.5 md:py-2 rounded-lg transition-all duration-300 ease-out transform hover:scale-105 flex-shrink-0 min-w-[48px]",
+                    "flex flex-col lg:flex-row items-center gap-0.5 lg:gap-2 px-2 py-1.5 lg:py-2 rounded-lg transition-all duration-300 ease-out transform hover:scale-105 flex-shrink-0 min-w-[48px]",
                     isActive
                       ? "text-primary bg-primary/10 shadow-sm"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   )}
                 >
-                  <Icon className="w-4 h-4 md:w-5 md:h-5" />
-                  <span className="text-[9px] sm:text-[10px] md:text-sm font-medium whitespace-nowrap max-w-[50px] md:max-w-none truncate">{link.label}</span>
+                  <Icon className="w-4 h-4 lg:w-5 lg:h-5" />
+                  <span className="text-[9px] sm:text-[10px] lg:text-sm font-medium whitespace-nowrap max-w-[50px] lg:max-w-none truncate">{link.label}</span>
                 </Link>
               );
             })}
@@ -116,7 +116,7 @@ const Navigation = () => {
               variant="ghost" 
               size="sm"
               onClick={signOut}
-              className="hidden md:flex items-center gap-2 text-muted-foreground hover:text-foreground"
+              className="hidden lg:flex items-center gap-2 text-muted-foreground hover:text-foreground"
             >
               <LogOut className="w-4 h-4" />
               <span className="text-sm">{t('logout')}</span>
