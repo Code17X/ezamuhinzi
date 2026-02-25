@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
+import OnboardingGuide from "@/components/OnboardingGuide";
 import { Bot, Cloud, DollarSign, Newspaper, ArrowRight, ChevronLeft, ChevronRight, Megaphone, ExternalLink } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
@@ -42,28 +43,28 @@ const Home = () => {
     {
       icon: Bot,
       title: t('assistant'),
-      description: t('landing.aiAssistantDesc'),
+      description: t('home.assistantDesc'),
       link: "/assistant",
       color: "bg-primary/10 text-primary"
     },
     {
       icon: Cloud,
       title: t('weather'),
-      description: t('landing.weatherPricesDesc'),
+      description: t('home.weatherDesc'),
       link: "/weather",
       color: "bg-blue-500/10 text-blue-600"
     },
     {
       icon: DollarSign,
       title: t('prices'),
-      description: t('landing.weatherPricesDesc'),
+      description: t('home.pricesDesc'),
       link: "/prices",
       color: "bg-accent/10 text-accent"
     },
     {
       icon: Newspaper,
       title: t('news'),
-      description: t('landing.agriNewsDesc'),
+      description: t('home.newsDesc'),
       link: "/news",
       color: "bg-green-500/10 text-green-600"
     }
@@ -72,7 +73,8 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 md:pt-20 animate-fade-in">
       <Navigation />
-      
+      <OnboardingGuide />
+
       <main className="container mx-auto px-4 py-8">
         {/* Hero Carousel */}
         <section className="mb-12 relative animate-fade-in-up">
