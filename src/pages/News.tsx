@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import HomeButton from "@/components/HomeButton";
+import UserGuides from "@/components/UserGuides";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, ArrowRight, Loader2 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar, ArrowRight, Loader2, BookOpen, Newspaper } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface NewsArticle {
@@ -368,130 +370,149 @@ const News = () => {
             </p>
           </div>
 
-          {/* RAB Resource Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-lg">RAB Urubuga Rukuru</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Button asChild className="w-full">
-                  <a href="https://www.rab.gov.rw/" target="_blank" rel="noopener noreferrer">
-                    Sura Urubuga
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-            
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-lg">Serivisi za RAB</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Button asChild className="w-full">
-                  <a href="https://www.rab.gov.rw/online-services" target="_blank" rel="noopener noreferrer">
-                    Serivisi kuri Enterineti
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-            
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-lg">Amatangazo & Publications</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Button asChild className="w-full">
-                  <a href="https://www.rab.gov.rw/publications" target="_blank" rel="noopener noreferrer">
-                    Reba Amatangazo
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+          <Tabs defaultValue="news" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="news" className="flex items-center gap-2">
+                <Newspaper className="w-4 h-4" />
+                {t('news.title')}
+              </TabsTrigger>
+              <TabsTrigger value="guides" className="flex items-center gap-2">
+                <BookOpen className="w-4 h-4" />
+                {t('guides.title')}
+              </TabsTrigger>
+            </TabsList>
 
-          {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            </div>
-          ) : articles.length === 0 ? (
-            <Card className="p-8 text-center">
-              <p className="text-muted-foreground">No news articles available</p>
-            </Card>
-          ) : (
-            <>
-          {/* Featured Article */}
-          <Link to={`/news/${articles[0].id}`}>
-            <Card className="mb-8 hover:shadow-lg transition-shadow cursor-pointer border-2">
-              <CardHeader>
-                <Badge className={getCategoryColor(articles[0].category)}>
-                  {t('news.featured')}
-                </Badge>
-                <CardTitle className="text-3xl mt-4 hover:text-primary transition-colors">
-                  {articles[0].title}
-                </CardTitle>
-                <CardDescription className="text-lg mt-2">
-                  {articles[0].excerpt}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <span className="text-4xl">{articles[0].image}</span>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Calendar className="w-4 h-4" />
-                      <span>{articles[0].date}</span>
+            <TabsContent value="news">
+              {/* RAB Resource Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="text-lg">RAB Urubuga Rukuru</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Button asChild className="w-full">
+                      <a href="https://www.rab.gov.rw/" target="_blank" rel="noopener noreferrer">
+                        Sura Urubuga
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+                
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Serivisi za RAB</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Button asChild className="w-full">
+                      <a href="https://www.rab.gov.rw/online-services" target="_blank" rel="noopener noreferrer">
+                        Serivisi kuri Enterineti
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+                
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Amatangazo & Publications</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Button asChild className="w-full">
+                      <a href="https://www.rab.gov.rw/publications" target="_blank" rel="noopener noreferrer">
+                        Reba Amatangazo
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {isLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                </div>
+              ) : articles.length === 0 ? (
+                <Card className="p-8 text-center">
+                  <p className="text-muted-foreground">No news articles available</p>
+                </Card>
+              ) : (
+                <>
+                  {/* Featured Article */}
+                  <Link to={`/news/${articles[0].id}`}>
+                    <Card className="mb-8 hover:shadow-lg transition-shadow cursor-pointer border-2">
+                      <CardHeader>
+                        <Badge className={getCategoryColor(articles[0].category)}>
+                          {t('news.featured')}
+                        </Badge>
+                        <CardTitle className="text-3xl mt-4 hover:text-primary transition-colors">
+                          {articles[0].title}
+                        </CardTitle>
+                        <CardDescription className="text-lg mt-2">
+                          {articles[0].excerpt}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <span className="text-4xl">{articles[0].image}</span>
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <Calendar className="w-4 h-4" />
+                              <span>{articles[0].date}</span>
+                            </div>
+                          </div>
+                          <Button variant="ghost">
+                            {t('news.readMore')}
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+
+                  {/* Other Articles */}
+                  <div>
+                    <h2 className="text-2xl font-bold mb-4">{t('news.allArticles')}</h2>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {articles.slice(1).map((article) => (
+                        <Link key={article.id} to={`/news/${article.id}`}>
+                          <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
+                            <CardHeader>
+                              <div className="flex items-start justify-between mb-2">
+                                <Badge className={getCategoryColor(article.category)}>
+                                  {article.category}
+                                </Badge>
+                                <span className="text-3xl">{article.image}</span>
+                              </div>
+                              <CardTitle className="text-xl hover:text-primary transition-colors">
+                                {article.title}
+                              </CardTitle>
+                              <CardDescription className="mt-2">
+                                {article.excerpt}
+                              </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Calendar className="w-4 h-4" />
+                                  <span>{article.date}</span>
+                                </div>
+                                <Button variant="ghost" size="sm">
+                                  {t('news.readArticle')}
+                                  <ArrowRight className="w-4 h-4 ml-2" />
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      ))}
                     </div>
                   </div>
-                  <Button variant="ghost">
-                    {t('news.readMore')}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
+                </>
+              )}
+            </TabsContent>
 
-          {/* Other Articles */}
-          <div>
-            <h2 className="text-2xl font-bold mb-4">{t('news.allArticles')}</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {articles.slice(1).map((article) => (
-                <Link key={article.id} to={`/news/${article.id}`}>
-                  <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardHeader>
-                      <div className="flex items-start justify-between mb-2">
-                        <Badge className={getCategoryColor(article.category)}>
-                          {article.category}
-                        </Badge>
-                        <span className="text-3xl">{article.image}</span>
-                      </div>
-                      <CardTitle className="text-xl hover:text-primary transition-colors">
-                        {article.title}
-                      </CardTitle>
-                      <CardDescription className="mt-2">
-                        {article.excerpt}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Calendar className="w-4 h-4" />
-                          <span>{article.date}</span>
-                        </div>
-                        <Button variant="ghost" size="sm">
-                          {t('news.readArticle')}
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </div>
-            </>
-          )}
+            <TabsContent value="guides">
+              <UserGuides />
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
     </div>
