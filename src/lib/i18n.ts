@@ -105,6 +105,24 @@ const resources = {
       "home.adTitle": "Imbuto Nziza z'Ibigori - 30% Kugabanuka!",
       "home.adDescription": "Gura imbuto z'ibigori zashyizweho imbaraga zishobora guhangana n'amapfa. Zitanga umusaruro mwiza kandi zikumira indwara. Ahagana mu maduka yose y'ubuhinzi.",
       "home.learnMore": "Menya Byinshi",
+      "home.assistantDesc": "Bonana inama ku buzima bw'amatungo cyangwa sesengura indwara z'ibihingwa ukoresheje AI",
+      "home.weatherDesc": "Menya ikirere cy'uyu munsi n'ibizaba mu minsi iri imbere kugira ngo utegure neza",
+      "home.pricesDesc": "Kurikiranira hafi ibiciro by'ibihingwa n'amatungo ku isoko",
+      "home.newsDesc": "Amakuru agezweho mu buhinzi n'ubworozi",
+      
+      // Onboarding
+      "onboarding.welcome": "Murakaza neza kuri EzaUmuhinzi!",
+      "onboarding.welcomeDesc": "Reka tukwereke uko porogaramu ikora kugira ngo utangire vuba. Uzajya ubona ibice bitandukanye by'ibikoresho byacu.",
+      "onboarding.assistantGuide": "Baza ibibazo ku matungo cyangwa ibihingwa, cyangwa ohereza amafoto y'ibihingwa kugira ngo AI igusesengurire indwara no kukugira inama.",
+      "onboarding.weatherGuide": "Menya ikirere cy'aho uri uyu munsi, ibibaniro by'iminsi iri imbere, n'inama zo guhinga hashingiwe ku kirere.",
+      "onboarding.pricesGuide": "Reba ibiciro by'ibihingwa n'amatungo ku masoko atandukanye. Ukurikirana ihinduka ry'ibiciro kugira ngo ugure cyangwa ucuruze mu gihe kiza.",
+      "onboarding.newsGuide": "Soma amakuru agezweho y'ubuhinzi, uburyo bushya bwo guhinga, n'amahirwe mashya mu buhinzi.",
+      "onboarding.marketplaceGuide": "Gurisha ibihingwa, amatungo, n'ibikoresho byawe. Shakisha ibicuruzwa by'abandi bahinzi n'inganda z'ubuhinzi.",
+      "onboarding.mapsGuide": "Shakisha ahantu ha veterineri, amaduka y'ubuhinzi, n'aho kugura ibikoresho hafi yawe ukoresheje ikarita.",
+      "onboarding.next": "Komeza",
+      "onboarding.prev": "Subira inyuma",
+      "onboarding.skip": "Simbuka",
+      "onboarding.done": "Tangira!",
       
       // Settings Page
       "settings.title": "Igenamiterere",
@@ -386,6 +404,24 @@ const resources = {
       "home.adTitle": "Premium Maize Seeds - 30% Off!",
       "home.adDescription": "Get high-quality drought-resistant maize seeds with enhanced yield. Disease-resistant and perfect for all farming conditions. Available at agricultural stores nationwide.",
       "home.learnMore": "Learn More",
+      "home.assistantDesc": "Get advice on livestock health or analyze crop diseases using AI",
+      "home.weatherDesc": "Check today's weather and forecasts to plan your farming activities",
+      "home.pricesDesc": "Track real-time crop and livestock prices on the market",
+      "home.newsDesc": "Latest agricultural news and updates",
+      
+      // Onboarding
+      "onboarding.welcome": "Welcome to EzaUmuhinzi!",
+      "onboarding.welcomeDesc": "Let us show you how the app works so you can get started quickly. We'll walk you through each feature.",
+      "onboarding.assistantGuide": "Ask questions about livestock or crops, or upload photos so AI can diagnose diseases and give you treatment advice.",
+      "onboarding.weatherGuide": "See today's weather, 5-day forecasts, and farming recommendations based on current conditions in your area.",
+      "onboarding.pricesGuide": "Check crop and livestock prices across different markets. Track price trends to buy or sell at the best time.",
+      "onboarding.newsGuide": "Read the latest agricultural news, new farming methods, and opportunities in the farming sector.",
+      "onboarding.marketplaceGuide": "Sell your crops, livestock, and equipment. Browse products from other farmers and agricultural businesses.",
+      "onboarding.mapsGuide": "Find nearby veterinaries, agricultural shops, and equipment stores using the interactive map.",
+      "onboarding.next": "Next",
+      "onboarding.prev": "Back",
+      "onboarding.skip": "Skip",
+      "onboarding.done": "Get Started!",
       
       // Settings Page
       "settings.title": "Settings",
@@ -622,6 +658,24 @@ const resources = {
       "home.adTitle": "Semences de Maïs Premium - 30% de Réduction!",
       "home.adDescription": "Obtenez des semences de maïs résistantes à la sécheresse de haute qualité. Résistantes aux maladies et parfaites pour toutes les conditions agricoles.",
       "home.learnMore": "En Savoir Plus",
+      "home.assistantDesc": "Obtenez des conseils sur la santé du bétail ou analysez les maladies des cultures via IA",
+      "home.weatherDesc": "Consultez la météo du jour et les prévisions pour planifier vos activités agricoles",
+      "home.pricesDesc": "Suivez les prix des cultures et du bétail sur le marché en temps réel",
+      "home.newsDesc": "Dernières actualités et mises à jour agricoles",
+      
+      // Onboarding
+      "onboarding.welcome": "Bienvenue sur EzaUmuhinzi!",
+      "onboarding.welcomeDesc": "Laissez-nous vous montrer comment l'application fonctionne pour commencer rapidement. Nous vous guiderons à travers chaque fonctionnalité.",
+      "onboarding.assistantGuide": "Posez des questions sur le bétail ou les cultures, ou téléchargez des photos pour que l'IA diagnostique les maladies et vous conseille.",
+      "onboarding.weatherGuide": "Voir la météo du jour, les prévisions sur 5 jours et les recommandations agricoles selon les conditions actuelles.",
+      "onboarding.pricesGuide": "Consultez les prix des cultures et du bétail. Suivez les tendances pour acheter ou vendre au meilleur moment.",
+      "onboarding.newsGuide": "Lisez les dernières actualités agricoles, nouvelles méthodes et opportunités dans le secteur agricole.",
+      "onboarding.marketplaceGuide": "Vendez vos cultures, bétail et équipements. Parcourez les produits d'autres agriculteurs et entreprises.",
+      "onboarding.mapsGuide": "Trouvez des vétérinaires, magasins agricoles et fournisseurs d'équipements à proximité sur la carte.",
+      "onboarding.next": "Suivant",
+      "onboarding.prev": "Retour",
+      "onboarding.skip": "Passer",
+      "onboarding.done": "Commencer!",
       
       // Common
       "common.loading": "Chargement...",
