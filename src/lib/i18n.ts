@@ -693,6 +693,10 @@ const resources = {
       "about.team.title": "Our Team",
       "about.team.p1": "Eza Muhinzi is built by a team of Rwandans with expertise in technology and agriculture. We collaborated with agricultural experts, farmers, and development specialists to create a platform that serves Rwandan farmers.",
       "about.team.p2": "We are committed to helping farmers use technology effectively and are dedicated to continuously improving our platform to serve more farmers.",
+
+      // Footer
+      "footer.aboutUs": "About Us",
+      "footer.copyright": "© {{year}} Eza Muhinzi. All rights reserved.",
     }
   },
   fr: {
