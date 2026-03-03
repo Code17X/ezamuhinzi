@@ -330,6 +330,28 @@ const resources = {
       "marketplace.sold": "Byagurishijwe",
       "marketplace.markAsSold": "Emeza ko byagurishijwe",
       "marketplace.productImage": "Ifoto y'Icyicuruzwa",
+
+      // About
+      "about.title": "Kuri Twe",
+      "about.subtitle": "Eza Muhinzi - Dufasha Abahinzi bo mu Rwanda",
+      "about.mission.title": "Intego Yacu",
+      "about.mission.p1": "Eza Muhinzi ni porogaramu yubatswe mu Rwanda kugirango ifashe abahinzi gukoresha ikoranabuhanga mu bikorwa byabo bya buri munsi. Turashaka gufasha abahinzi kubona amakuru y'ingenzi, ibiciro by'isoko, ibihe, n'ubujyanama bw'inzobere mu buhinzi.",
+      "about.mission.p2": "Intego yacu ni ukwongera umusaruro w'abahinzi, kubafasha gufata ibyemezo byiza, no kuba umurongo uhuriza abahinzi n'isoko ry'ibicuruzwa byabo.",
+      "about.vision.title": "Icyerekezo Cyacu",
+      "about.vision.p1": "Turashaka kuba urubuga rw'ibanze rw'abahinzi bose bo mu Rwanda, aho bashobora kubona serivisi zose bakeneye mu gihe cy'iminota mike - kuva ku makuru y'ibihe, ibiciro by'isoko, ubujyanama bw'AI, kugeza ku isoko ry'ibicuruzwa.",
+      "about.vision.p2": "Turateganya gufasha abahinzi miliyoni 1 mu Rwanda mu myaka 5 iri imbere, dufite ikoranabuhanga kandi duhita dufasha abahinzi kuzamura ubuzima bwabo.",
+      "about.values.title": "Indangagaciro Zacu",
+      "about.values.trust": "Kwizera:",
+      "about.values.trustDesc": "Twizera abahinzi kandi turashaka kubaha serivisi nziza zikwiye",
+      "about.values.tech": "Ikoranabuhanga:",
+      "about.values.techDesc": "Tukoresheje tekinolojiya nshya kugirango tufashe abahinzi gukora neza",
+      "about.values.collab": "Ubufatanye:",
+      "about.values.collabDesc": "Turashaka ko abahinzi bafatanya no gusangira ubumenyi",
+      "about.values.growth": "Iterambere:",
+      "about.values.growthDesc": "Turafasha abahinzi kuzamura umusaruro wabo no kongera amafaranga yabo",
+      "about.team.title": "Itsinda Ryacu",
+      "about.team.p1": "Eza Muhinzi yubatswe n'itsinda ry'abanyarwanda bafite ubumenyi mu ikoranabuhanga n'ubuhinzi. Twakoranye n'abahinga b'ubuhinzi, abahinzi, n'inzobere mu iterambere ry'abahinzi kugirango tukore porogaramu ifasha abahinzi mu Rwanda.",
+      "about.team.p2": "Turafite ubwiyunge bwo gufasha abahinzi gukoresha ikoranabuhanga neza kandi tukaba dufite umwanzuro wo gukomeza guteza imbere porogaramu yacu kugirango ifashe abahinzi benshi.",
     }
   },
   en: {
