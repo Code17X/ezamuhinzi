@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useTranslation();
   
   return (
     <footer className="bg-background border-t border-border py-6 mt-auto">
@@ -9,11 +11,11 @@ const Footer = () => {
         <div className="flex flex-col items-center gap-4 text-center text-muted-foreground">
           <div className="flex gap-6">
             <Link to="/about" className="text-sm hover:text-primary transition-colors">
-              Kuri Twe
+              {t("footer.aboutUs")}
             </Link>
           </div>
           <p className="text-sm">
-            © {currentYear} Eza Muhinzi. Uburenganzira bwose burabitswe.
+            {t("footer.copyright", { year: currentYear })}
           </p>
         </div>
       </div>

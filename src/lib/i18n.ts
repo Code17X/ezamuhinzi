@@ -944,6 +944,10 @@ const resources = {
       "about.team.title": "Notre Équipe",
       "about.team.p1": "Eza Muhinzi est créée par une équipe de Rwandais experts en technologie et en agriculture. Nous avons collaboré avec des experts agricoles, des agriculteurs et des spécialistes du développement pour créer une plateforme au service des agriculteurs rwandais.",
       "about.team.p2": "Nous nous engageons à aider les agriculteurs à utiliser efficacement la technologie et nous sommes déterminés à améliorer continuellement notre plateforme pour servir plus d'agriculteurs.",
+
+      // Footer
+      "footer.aboutUs": "À Propos",
+      "footer.copyright": "© {{year}} Eza Muhinzi. Tous droits réservés.",
     }
   }
 };
