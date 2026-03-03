@@ -667,6 +667,28 @@ const resources = {
       "marketplace.sold": "Sold",
       "marketplace.markAsSold": "Mark as sold",
       "marketplace.productImage": "Product Image",
+
+      // About
+      "about.title": "About Us",
+      "about.subtitle": "Eza Muhinzi - Empowering Rwandan Farmers",
+      "about.mission.title": "Our Mission",
+      "about.mission.p1": "Eza Muhinzi is a platform built in Rwanda to help farmers use technology in their daily activities. We aim to help farmers access vital information, market prices, weather updates, and expert agricultural advice.",
+      "about.mission.p2": "Our mission is to increase farmer productivity, help them make better decisions, and serve as a bridge connecting farmers to markets for their products.",
+      "about.vision.title": "Our Vision",
+      "about.vision.p1": "We aim to be the primary platform for all Rwandan farmers, where they can access all the services they need in minutes — from weather updates, market prices, AI advice, to product marketplaces.",
+      "about.vision.p2": "We plan to help 1 million farmers in Rwanda in the next 5 years, using technology to help farmers improve their livelihoods.",
+      "about.values.title": "Our Values",
+      "about.values.trust": "Trust:",
+      "about.values.trustDesc": "We trust farmers and strive to provide them with quality services",
+      "about.values.tech": "Technology:",
+      "about.values.techDesc": "We use modern technology to help farmers work more efficiently",
+      "about.values.collab": "Collaboration:",
+      "about.values.collabDesc": "We encourage farmers to work together and share knowledge",
+      "about.values.growth": "Growth:",
+      "about.values.growthDesc": "We help farmers increase their productivity and income",
+      "about.team.title": "Our Team",
+      "about.team.p1": "Eza Muhinzi is built by a team of Rwandans with expertise in technology and agriculture. We collaborated with agricultural experts, farmers, and development specialists to create a platform that serves Rwandan farmers.",
+      "about.team.p2": "We are committed to helping farmers use technology effectively and are dedicated to continuously improving our platform to serve more farmers.",
     }
   },
   fr: {
