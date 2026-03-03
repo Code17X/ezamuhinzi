@@ -352,6 +352,10 @@ const resources = {
       "about.team.title": "Itsinda Ryacu",
       "about.team.p1": "Eza Muhinzi yubatswe n'itsinda ry'abanyarwanda bafite ubumenyi mu ikoranabuhanga n'ubuhinzi. Twakoranye n'abahinga b'ubuhinzi, abahinzi, n'inzobere mu iterambere ry'abahinzi kugirango tukore porogaramu ifasha abahinzi mu Rwanda.",
       "about.team.p2": "Turafite ubwiyunge bwo gufasha abahinzi gukoresha ikoranabuhanga neza kandi tukaba dufite umwanzuro wo gukomeza guteza imbere porogaramu yacu kugirango ifashe abahinzi benshi.",
+
+      // Footer
+      "footer.aboutUs": "Kuri Twe",
+      "footer.copyright": "© {{year}} Eza Muhinzi. Uburenganzira bwose burabitswe.",
     }
   },
   en: {
