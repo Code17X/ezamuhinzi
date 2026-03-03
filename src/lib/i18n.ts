@@ -352,6 +352,10 @@ const resources = {
       "about.team.title": "Itsinda Ryacu",
       "about.team.p1": "Eza Muhinzi yubatswe n'itsinda ry'abanyarwanda bafite ubumenyi mu ikoranabuhanga n'ubuhinzi. Twakoranye n'abahinga b'ubuhinzi, abahinzi, n'inzobere mu iterambere ry'abahinzi kugirango tukore porogaramu ifasha abahinzi mu Rwanda.",
       "about.team.p2": "Turafite ubwiyunge bwo gufasha abahinzi gukoresha ikoranabuhanga neza kandi tukaba dufite umwanzuro wo gukomeza guteza imbere porogaramu yacu kugirango ifashe abahinzi benshi.",
+
+      // Footer
+      "footer.aboutUs": "Kuri Twe",
+      "footer.copyright": "© {{year}} Eza Muhinzi. Uburenganzira bwose burabitswe.",
     }
   },
   en: {
@@ -689,6 +693,10 @@ const resources = {
       "about.team.title": "Our Team",
       "about.team.p1": "Eza Muhinzi is built by a team of Rwandans with expertise in technology and agriculture. We collaborated with agricultural experts, farmers, and development specialists to create a platform that serves Rwandan farmers.",
       "about.team.p2": "We are committed to helping farmers use technology effectively and are dedicated to continuously improving our platform to serve more farmers.",
+
+      // Footer
+      "footer.aboutUs": "About Us",
+      "footer.copyright": "© {{year}} Eza Muhinzi. All rights reserved.",
     }
   },
   fr: {
@@ -936,6 +944,10 @@ const resources = {
       "about.team.title": "Notre Équipe",
       "about.team.p1": "Eza Muhinzi est créée par une équipe de Rwandais experts en technologie et en agriculture. Nous avons collaboré avec des experts agricoles, des agriculteurs et des spécialistes du développement pour créer une plateforme au service des agriculteurs rwandais.",
       "about.team.p2": "Nous nous engageons à aider les agriculteurs à utiliser efficacement la technologie et nous sommes déterminés à améliorer continuellement notre plateforme pour servir plus d'agriculteurs.",
+
+      // Footer
+      "footer.aboutUs": "À Propos",
+      "footer.copyright": "© {{year}} Eza Muhinzi. Tous droits réservés.",
     }
   }
 };
