@@ -67,6 +67,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         title: "Byagenze neza",
         description: "Konti yawe yarakozwe neza!",
       });
+      sessionStorage.setItem("ezamuhinzi_just_signed_up", "true");
     }
 
     return { error };
