@@ -914,6 +914,28 @@ const resources = {
       "marketplace.sold": "Vendu",
       "marketplace.markAsSold": "Marquer comme vendu",
       "marketplace.productImage": "Image du Produit",
+
+      // About
+      "about.title": "À Propos",
+      "about.subtitle": "Eza Muhinzi - Au Service des Agriculteurs Rwandais",
+      "about.mission.title": "Notre Mission",
+      "about.mission.p1": "Eza Muhinzi est une plateforme conçue au Rwanda pour aider les agriculteurs à utiliser la technologie dans leurs activités quotidiennes. Nous voulons aider les agriculteurs à accéder aux informations essentielles, aux prix du marché, à la météo et aux conseils d'experts agricoles.",
+      "about.mission.p2": "Notre mission est d'augmenter la productivité des agriculteurs, les aider à prendre de meilleures décisions et servir de pont entre les agriculteurs et les marchés pour leurs produits.",
+      "about.vision.title": "Notre Vision",
+      "about.vision.p1": "Nous voulons être la plateforme principale pour tous les agriculteurs rwandais, où ils peuvent accéder à tous les services dont ils ont besoin en quelques minutes — de la météo, aux prix du marché, aux conseils IA, jusqu'au marché des produits.",
+      "about.vision.p2": "Nous prévoyons d'aider 1 million d'agriculteurs au Rwanda dans les 5 prochaines années, en utilisant la technologie pour améliorer leurs conditions de vie.",
+      "about.values.title": "Nos Valeurs",
+      "about.values.trust": "Confiance :",
+      "about.values.trustDesc": "Nous faisons confiance aux agriculteurs et nous nous efforçons de leur fournir des services de qualité",
+      "about.values.tech": "Technologie :",
+      "about.values.techDesc": "Nous utilisons la technologie moderne pour aider les agriculteurs à travailler plus efficacement",
+      "about.values.collab": "Collaboration :",
+      "about.values.collabDesc": "Nous encourageons les agriculteurs à travailler ensemble et à partager leurs connaissances",
+      "about.values.growth": "Croissance :",
+      "about.values.growthDesc": "Nous aidons les agriculteurs à augmenter leur productivité et leurs revenus",
+      "about.team.title": "Notre Équipe",
+      "about.team.p1": "Eza Muhinzi est créée par une équipe de Rwandais experts en technologie et en agriculture. Nous avons collaboré avec des experts agricoles, des agriculteurs et des spécialistes du développement pour créer une plateforme au service des agriculteurs rwandais.",
+      "about.team.p2": "Nous nous engageons à aider les agriculteurs à utiliser efficacement la technologie et nous sommes déterminés à améliorer continuellement notre plateforme pour servir plus d'agriculteurs.",
     }
   }
 };
