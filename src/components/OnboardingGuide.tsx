@@ -62,8 +62,9 @@ const OnboardingGuide = () => {
   useEffect(() => {
     if (user) {
       const done = localStorage.getItem(`${ONBOARDING_KEY}_${user.id}`);
-      if (!done) {
-        // Small delay so the page loads first
+      const justSignedUp = sessionStorage.getItem("ezamuhinzi_just_signed_up");
+      if (!done && justSignedUp) {
+        sessionStorage.removeItem("ezamuhinzi_just_signed_up");
         const timer = setTimeout(() => setVisible(true), 1200);
         return () => clearTimeout(timer);
       }
