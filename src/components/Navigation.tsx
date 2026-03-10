@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Cloud, DollarSign, Newspaper, Bot, User, LogOut, Settings, Users, ShoppingBag } from "lucide-react";
+import { Home, Cloud, DollarSign, Wrench, Bot, User, LogOut, Settings, Users, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -46,7 +46,7 @@ const Navigation = () => {
     { to: "/marketplace", icon: Users, label: "Tanga Akazi" },
     { to: "/weather", icon: Cloud, label: t('weather') },
     { to: "/prices", icon: DollarSign, label: t('prices') },
-    { to: "/news", icon: Newspaper, label: t('news') },
+    { to: "/tools", icon: Wrench, label: t('tools') },
     { to: "/profile", icon: User, label: t('profile') },
     { to: "/settings", icon: Settings, label: t('settings') },
   ];

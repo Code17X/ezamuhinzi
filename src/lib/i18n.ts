@@ -12,6 +12,7 @@ const resources = {
       marketplace: "Isoko",
       maps: "Ikarita",
       news: "Amakuru",
+      tools: "Ibikoresho Byanjye",
       profile: "Umwirondoro",
       settings: "Igenamiterere",
       subscription: "Kwiyandikisha",
@@ -356,6 +357,37 @@ const resources = {
       // Footer
       "footer.aboutUs": "Kuri Twe",
       "footer.copyright": "© {{year}} Eza Muhinzi. Uburenganzira bwose burabitswe.",
+
+      // Tools Page
+      "tools.pageTitle": "Ibikoresho Byanjye",
+      "tools.pageDescription": "Amakuru, ibikoresho bya fagitire, n'inyigisho z'ubuhinzi",
+
+      // Finance Calculator
+      "finance.tabTitle": "Fagitire ya AI",
+      "finance.title": "Ibarura ry'Amafaranga",
+      "finance.description": "Shyiramo ibihingwa wahingiye kugirango ubone uko inyungu zawe ziteye",
+      "finance.investment": "Igishoro",
+      "finance.crop": "Igihingwa",
+      "finance.selectCrop": "Hitamo igihingwa",
+      "finance.quantity": "Ingano",
+      "finance.costPerKg": "Igiciro/kg",
+      "finance.otherCosts": "Ibindi biciro (Gutwara, ifumbire...)",
+      "finance.addMore": "Ongeraho",
+      "finance.analyze": "Sesengura",
+      "finance.analyzing": "Iri gusesengura...",
+      "finance.summary": "Incamake Rusange",
+      "finance.totalInvested": "Byose Byashyizwemo",
+      "finance.totalRevenue": "Amafaranga Yinjira",
+      "finance.totalProfit": "Inyungu Zose",
+      "finance.invested": "Byashyizwemo",
+      "finance.marketPrice": "Igiciro cy'Isoko",
+      "finance.revenue": "Amafaranga yinjira",
+      "finance.profit": "Inyungu",
+      "finance.aiAdvice": "Inama ya AI",
+      "finance.profitAdvice": "Ibiciro by'isoko birenze ibyo wahingishije. Komeza ugurize ku isoko!",
+      "finance.lossAdvice": "Ibiciro by'isoko biri hasi. Tegereza ibiciro bigabanuke cyangwa ushake isoko ryiza.",
+      "finance.error": "Ikosa",
+      "finance.addInvestment": "Shyiramo igihingwa n'ibiciro",
     }
   },
   en: {
@@ -368,6 +400,7 @@ const resources = {
       marketplace: "Marketplace",
       maps: "Maps",
       news: "News",
+      tools: "My Tools",
       profile: "Profile",
       settings: "Settings",
       subscription: "Subscription",
@@ -697,6 +730,37 @@ const resources = {
       // Footer
       "footer.aboutUs": "About Us",
       "footer.copyright": "© {{year}} Eza Muhinzi. All rights reserved.",
+
+      // Tools Page
+      "tools.pageTitle": "My Tools",
+      "tools.pageDescription": "News, AI finance calculator, and farming guides",
+
+      // Finance Calculator
+      "finance.tabTitle": "AI Finance",
+      "finance.title": "Finance Calculator",
+      "finance.description": "Enter your crop investments to see profit predictions",
+      "finance.investment": "Investment",
+      "finance.crop": "Crop",
+      "finance.selectCrop": "Select a crop",
+      "finance.quantity": "Quantity",
+      "finance.costPerKg": "Cost/kg",
+      "finance.otherCosts": "Other costs (Transport, fertilizer...)",
+      "finance.addMore": "Add more",
+      "finance.analyze": "Analyze",
+      "finance.analyzing": "Analyzing...",
+      "finance.summary": "Overall Summary",
+      "finance.totalInvested": "Total Invested",
+      "finance.totalRevenue": "Total Revenue",
+      "finance.totalProfit": "Total Profit",
+      "finance.invested": "Invested",
+      "finance.marketPrice": "Market Price",
+      "finance.revenue": "Revenue",
+      "finance.profit": "Profit",
+      "finance.aiAdvice": "AI Advice",
+      "finance.profitAdvice": "Market prices are higher than your costs. Good time to sell!",
+      "finance.lossAdvice": "Market prices are low. Consider waiting or finding a better market.",
+      "finance.error": "Error",
+      "finance.addInvestment": "Please add a crop and quantities",
     }
   },
   fr: {
@@ -709,6 +773,7 @@ const resources = {
       marketplace: "Marché",
       maps: "Cartes",
       news: "Actualités",
+      tools: "Mes Outils",
       profile: "Profil",
       settings: "Paramètres",
       social: "Réseau Social",
@@ -948,6 +1013,37 @@ const resources = {
       // Footer
       "footer.aboutUs": "À Propos",
       "footer.copyright": "© {{year}} Eza Muhinzi. Tous droits réservés.",
+
+      // Tools Page
+      "tools.pageTitle": "Mes Outils",
+      "tools.pageDescription": "Actualités, calculateur financier IA et guides agricoles",
+
+      // Finance Calculator
+      "finance.tabTitle": "Finance IA",
+      "finance.title": "Calculateur Financier",
+      "finance.description": "Entrez vos investissements pour voir les prévisions de profit",
+      "finance.investment": "Investissement",
+      "finance.crop": "Culture",
+      "finance.selectCrop": "Sélectionnez une culture",
+      "finance.quantity": "Quantité",
+      "finance.costPerKg": "Coût/kg",
+      "finance.otherCosts": "Autres coûts (Transport, engrais...)",
+      "finance.addMore": "Ajouter",
+      "finance.analyze": "Analyser",
+      "finance.analyzing": "Analyse en cours...",
+      "finance.summary": "Résumé Global",
+      "finance.totalInvested": "Total Investi",
+      "finance.totalRevenue": "Revenu Total",
+      "finance.totalProfit": "Profit Total",
+      "finance.invested": "Investi",
+      "finance.marketPrice": "Prix du Marché",
+      "finance.revenue": "Revenu",
+      "finance.profit": "Profit",
+      "finance.aiAdvice": "Conseil IA",
+      "finance.profitAdvice": "Les prix du marché sont supérieurs à vos coûts. Bon moment pour vendre!",
+      "finance.lossAdvice": "Les prix du marché sont bas. Envisagez d'attendre ou de trouver un meilleur marché.",
+      "finance.error": "Erreur",
+      "finance.addInvestment": "Veuillez ajouter une culture et les quantités",
     }
   }
 };

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, MailCheck } from "lucide-react";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -43,6 +43,7 @@ const Auth = () => {
   const [showSignupPassword, setShowSignupPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showVerificationMessage, setShowVerificationMessage] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [formData, setFormData] = useState({
     emailOrPhone: "",
@@ -81,7 +82,7 @@ const Auth = () => {
           validated.phoneNumber
         );
         if (!error) {
-          navigate("/profile?setup=true");
+          setShowVerificationMessage(true);
         }
       }
     } catch (error) {
@@ -147,7 +148,25 @@ const Auth = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="px-4 sm:px-6">
-          {showForgotPassword ? (
+          {showVerificationMessage ? (
+            <div className="text-center space-y-4 py-6">
+              <MailCheck className="w-16 h-16 text-primary mx-auto" />
+              <h3 className="text-lg font-semibold">Reba Imeri Yawe!</h3>
+              <p className="text-muted-foreground text-sm">
+                Twohereje ubutumwa kuri imeri yawe. Kanda kuri link iri muri imeri kugirango wemeze konti yawe mbere yo kwinjira.
+              </p>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setShowVerificationMessage(false);
+                  setMode("login");
+                }}
+                className="w-full"
+              >
+                Subira ku kwinjira
+              </Button>
+            </div>
+          ) : showForgotPassword ? (
             <form onSubmit={handleForgotPassword} className="space-y-4 mt-4">
               <div className="space-y-2">
                 <Label htmlFor="resetEmail">Imeri</Label>
