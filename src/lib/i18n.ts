@@ -12,6 +12,7 @@ const resources = {
       marketplace: "Isoko",
       maps: "Ikarita",
       news: "Amakuru",
+      tools: "Ibikoresho Byanjye",
       profile: "Umwirondoro",
       settings: "Igenamiterere",
       subscription: "Kwiyandikisha",
