@@ -400,6 +400,7 @@ const resources = {
       marketplace: "Marketplace",
       maps: "Maps",
       news: "News",
+      tools: "My Tools",
       profile: "Profile",
       settings: "Settings",
       subscription: "Subscription",
