@@ -1013,6 +1013,37 @@ const resources = {
       // Footer
       "footer.aboutUs": "À Propos",
       "footer.copyright": "© {{year}} Eza Muhinzi. Tous droits réservés.",
+
+      // Tools Page
+      "tools.pageTitle": "Mes Outils",
+      "tools.pageDescription": "Actualités, calculateur financier IA et guides agricoles",
+
+      // Finance Calculator
+      "finance.tabTitle": "Finance IA",
+      "finance.title": "Calculateur Financier",
+      "finance.description": "Entrez vos investissements pour voir les prévisions de profit",
+      "finance.investment": "Investissement",
+      "finance.crop": "Culture",
+      "finance.selectCrop": "Sélectionnez une culture",
+      "finance.quantity": "Quantité",
+      "finance.costPerKg": "Coût/kg",
+      "finance.otherCosts": "Autres coûts (Transport, engrais...)",
+      "finance.addMore": "Ajouter",
+      "finance.analyze": "Analyser",
+      "finance.analyzing": "Analyse en cours...",
+      "finance.summary": "Résumé Global",
+      "finance.totalInvested": "Total Investi",
+      "finance.totalRevenue": "Revenu Total",
+      "finance.totalProfit": "Profit Total",
+      "finance.invested": "Investi",
+      "finance.marketPrice": "Prix du Marché",
+      "finance.revenue": "Revenu",
+      "finance.profit": "Profit",
+      "finance.aiAdvice": "Conseil IA",
+      "finance.profitAdvice": "Les prix du marché sont supérieurs à vos coûts. Bon moment pour vendre!",
+      "finance.lossAdvice": "Les prix du marché sont bas. Envisagez d'attendre ou de trouver un meilleur marché.",
+      "finance.error": "Erreur",
+      "finance.addInvestment": "Veuillez ajouter une culture et les quantités",
     }
   }
 };
