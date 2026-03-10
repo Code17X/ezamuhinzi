@@ -514,6 +514,10 @@ const News = () => {
               )}
             </TabsContent>
 
+            <TabsContent value="finance">
+              <FinanceCalculator />
+            </TabsContent>
+
             <TabsContent value="guides">
               <UserGuides />
             </TabsContent>

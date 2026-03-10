@@ -148,7 +148,25 @@ const Auth = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="px-4 sm:px-6">
-          {showForgotPassword ? (
+          {showVerificationMessage ? (
+            <div className="text-center space-y-4 py-6">
+              <MailCheck className="w-16 h-16 text-primary mx-auto" />
+              <h3 className="text-lg font-semibold">Reba Imeri Yawe!</h3>
+              <p className="text-muted-foreground text-sm">
+                Twohereje ubutumwa kuri imeri yawe. Kanda kuri link iri muri imeri kugirango wemeze konti yawe mbere yo kwinjira.
+              </p>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setShowVerificationMessage(false);
+                  setMode("login");
+                }}
+                className="w-full"
+              >
+                Subira ku kwinjira
+              </Button>
+            </div>
+          ) : showForgotPassword ? (
             <form onSubmit={handleForgotPassword} className="space-y-4 mt-4">
               <div className="space-y-2">
                 <Label htmlFor="resetEmail">Imeri</Label>
