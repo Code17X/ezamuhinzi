@@ -730,6 +730,37 @@ const resources = {
       // Footer
       "footer.aboutUs": "About Us",
       "footer.copyright": "© {{year}} Eza Muhinzi. All rights reserved.",
+
+      // Tools Page
+      "tools.pageTitle": "My Tools",
+      "tools.pageDescription": "News, AI finance calculator, and farming guides",
+
+      // Finance Calculator
+      "finance.tabTitle": "AI Finance",
+      "finance.title": "Finance Calculator",
+      "finance.description": "Enter your crop investments to see profit predictions",
+      "finance.investment": "Investment",
+      "finance.crop": "Crop",
+      "finance.selectCrop": "Select a crop",
+      "finance.quantity": "Quantity",
+      "finance.costPerKg": "Cost/kg",
+      "finance.otherCosts": "Other costs (Transport, fertilizer...)",
+      "finance.addMore": "Add more",
+      "finance.analyze": "Analyze",
+      "finance.analyzing": "Analyzing...",
+      "finance.summary": "Overall Summary",
+      "finance.totalInvested": "Total Invested",
+      "finance.totalRevenue": "Total Revenue",
+      "finance.totalProfit": "Total Profit",
+      "finance.invested": "Invested",
+      "finance.marketPrice": "Market Price",
+      "finance.revenue": "Revenue",
+      "finance.profit": "Profit",
+      "finance.aiAdvice": "AI Advice",
+      "finance.profitAdvice": "Market prices are higher than your costs. Good time to sell!",
+      "finance.lossAdvice": "Market prices are low. Consider waiting or finding a better market.",
+      "finance.error": "Error",
+      "finance.addInvestment": "Please add a crop and quantities",
     }
   },
   fr: {
