@@ -364,18 +364,22 @@ const News = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              {t('news.latestNews')}
+              {t('tools.pageTitle')}
             </h1>
             <p className="text-muted-foreground">
-              {t('news.agricultureUpdates')} - Rwanda Agriculture Board (RAB)
+              {t('tools.pageDescription')}
             </p>
           </div>
 
           <Tabs defaultValue="news" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsList className="grid w-full grid-cols-3 mb-6">
               <TabsTrigger value="news" className="flex items-center gap-2">
                 <Newspaper className="w-4 h-4" />
                 {t('news.title')}
+              </TabsTrigger>
+              <TabsTrigger value="finance" className="flex items-center gap-2">
+                <Calculator className="w-4 h-4" />
+                {t('finance.tabTitle')}
               </TabsTrigger>
               <TabsTrigger value="guides" className="flex items-center gap-2">
                 <BookOpen className="w-4 h-4" />
