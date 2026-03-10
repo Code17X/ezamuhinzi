@@ -81,7 +81,7 @@ const Auth = () => {
           validated.phoneNumber
         );
         if (!error) {
-          navigate("/profile?setup=true");
+          setShowVerificationMessage(true);
         }
       }
     } catch (error) {
