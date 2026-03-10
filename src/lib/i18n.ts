@@ -773,6 +773,7 @@ const resources = {
       marketplace: "Marché",
       maps: "Cartes",
       news: "Actualités",
+      tools: "Mes Outils",
       profile: "Profil",
       settings: "Paramètres",
       social: "Réseau Social",
