@@ -357,6 +357,37 @@ const resources = {
       // Footer
       "footer.aboutUs": "Kuri Twe",
       "footer.copyright": "© {{year}} Eza Muhinzi. Uburenganzira bwose burabitswe.",
+
+      // Tools Page
+      "tools.pageTitle": "Ibikoresho Byanjye",
+      "tools.pageDescription": "Amakuru, ibikoresho bya fagitire, n'inyigisho z'ubuhinzi",
+
+      // Finance Calculator
+      "finance.tabTitle": "Fagitire ya AI",
+      "finance.title": "Ibarura ry'Amafaranga",
+      "finance.description": "Shyiramo ibihingwa wahingiye kugirango ubone uko inyungu zawe ziteye",
+      "finance.investment": "Igishoro",
+      "finance.crop": "Igihingwa",
+      "finance.selectCrop": "Hitamo igihingwa",
+      "finance.quantity": "Ingano",
+      "finance.costPerKg": "Igiciro/kg",
+      "finance.otherCosts": "Ibindi biciro (Gutwara, ifumbire...)",
+      "finance.addMore": "Ongeraho",
+      "finance.analyze": "Sesengura",
+      "finance.analyzing": "Iri gusesengura...",
+      "finance.summary": "Incamake Rusange",
+      "finance.totalInvested": "Byose Byashyizwemo",
+      "finance.totalRevenue": "Amafaranga Yinjira",
+      "finance.totalProfit": "Inyungu Zose",
+      "finance.invested": "Byashyizwemo",
+      "finance.marketPrice": "Igiciro cy'Isoko",
+      "finance.revenue": "Amafaranga yinjira",
+      "finance.profit": "Inyungu",
+      "finance.aiAdvice": "Inama ya AI",
+      "finance.profitAdvice": "Ibiciro by'isoko birenze ibyo wahingishije. Komeza ugurize ku isoko!",
+      "finance.lossAdvice": "Ibiciro by'isoko biri hasi. Tegereza ibiciro bigabanuke cyangwa ushake isoko ryiza.",
+      "finance.error": "Ikosa",
+      "finance.addInvestment": "Shyiramo igihingwa n'ibiciro",
     }
   },
   en: {
