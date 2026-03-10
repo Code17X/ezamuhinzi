@@ -8,8 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, ArrowRight, Loader2, BookOpen, Newspaper } from "lucide-react";
+import { Calendar, ArrowRight, Loader2, BookOpen, Newspaper, Calculator } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import FinanceCalculator from "@/components/FinanceCalculator";
 
 interface NewsArticle {
   id: string;
