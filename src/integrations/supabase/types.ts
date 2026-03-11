@@ -122,6 +122,66 @@ export type Database = {
         }
         Relationships: []
       }
+      farm_activities: {
+        Row: {
+          activity_type: string
+          completed_date: string | null
+          cost: number | null
+          created_at: string
+          crop_name: string | null
+          description: string | null
+          field_name: string | null
+          id: string
+          is_completed: boolean | null
+          notes: string | null
+          quantity: string | null
+          reminder_enabled: boolean | null
+          scheduled_date: string | null
+          title: string
+          unit: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          activity_type?: string
+          completed_date?: string | null
+          cost?: number | null
+          created_at?: string
+          crop_name?: string | null
+          description?: string | null
+          field_name?: string | null
+          id?: string
+          is_completed?: boolean | null
+          notes?: string | null
+          quantity?: string | null
+          reminder_enabled?: boolean | null
+          scheduled_date?: string | null
+          title: string
+          unit?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          activity_type?: string
+          completed_date?: string | null
+          cost?: number | null
+          created_at?: string
+          crop_name?: string | null
+          description?: string | null
+          field_name?: string | null
+          id?: string
+          is_completed?: boolean | null
+          notes?: string | null
+          quantity?: string | null
+          reminder_enabled?: boolean | null
+          scheduled_date?: string | null
+          title?: string
+          unit?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       industries: {
         Row: {
           created_at: string
