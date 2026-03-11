@@ -46,7 +46,7 @@ const Navigation = () => {
     { to: "/marketplace", icon: Users, label: "Tanga Akazi" },
     { to: "/weather", icon: Cloud, label: t('weather') },
     { to: "/prices", icon: DollarSign, label: t('prices') },
-    { to: "/tools", icon: Wrench, label: t('tools') },
+    { to: "/tools", icon: BarChart3, label: t('tools') },
     { to: "/profile", icon: User, label: t('profile') },
     { to: "/settings", icon: Settings, label: t('settings') },
   ];
