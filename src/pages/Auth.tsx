@@ -418,8 +418,8 @@ const Auth = () => {
                     {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword}</p>}
                   </div>
                 
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Urakora konti..." : "Kora Konti"}
+                  <Button type="submit" className="w-full" disabled={loading || emailValidation.status === 'validating'}>
+                    {loading ? (emailValidation.status === 'validating' ? "Kwemeza imeri..." : "Urakora konti...") : "Kora Konti"}
                   </Button>
                 </form>
               </TabsContent>
