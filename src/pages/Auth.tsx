@@ -44,6 +44,11 @@ const Auth = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showVerificationMessage, setShowVerificationMessage] = useState(false);
+  const [emailValidation, setEmailValidation] = useState<{
+    status: 'idle' | 'validating' | 'valid' | 'invalid';
+    message?: string;
+    didYouMean?: string;
+  }>({ status: 'idle' });
   const [resetEmail, setResetEmail] = useState("");
   const [formData, setFormData] = useState({
     emailOrPhone: "",
