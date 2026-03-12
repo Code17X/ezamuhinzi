@@ -1,16 +1,25 @@
 import { useTranslation } from "react-i18next";
-import Navigation from "@/components/Navigation";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Target, Eye, Heart, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Target, Eye, Heart, Users, ArrowLeft } from "lucide-react";
 
 const About = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Navigation />
+      <div className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            {t("common.back", "Subira Inyuma")}
+          </Button>
+        </div>
+      </div>
       
-      <main className="container mx-auto px-4 pt-20 pb-24 md:pt-24 flex-1">
+      <main className="container mx-auto px-4 py-8 flex-1">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
