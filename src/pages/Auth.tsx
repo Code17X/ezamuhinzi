@@ -66,6 +66,42 @@ const Auth = () => {
     }
   }, [user, navigate]);
 
+  const validateEmail = async (email: string) => {
+    setEmailValidation({ status: 'validating' });
+    try {
+      const { data, error } = await supabase.functions.invoke('validate-email', {
+        body: { email },
+      });
+
+      if (error) {
+        console.error('Email validation error:', error);
+        setEmailValidation({ status: 'valid' }); // Allow on error
+        return true;
+      }
+
+      if (data.valid) {
+        setEmailValidation({ status: 'valid', message: 'Imeri yemejwe!' });
+        return true;
+      } else {
+        const msg = data.status === 'invalid' 
+          ? 'Iyi imeri ntabwo ibaho. Nyamuneka shyiramo imeri ikora.'
+          : data.status === 'spamtrap' || data.status === 'abuse'
+          ? 'Iyi imeri ntishobora gukoreshwa.'
+          : 'Imeri ntiyemejwe. Nyamuneka shyiramo imeri ikora.';
+        setEmailValidation({ 
+          status: 'invalid', 
+          message: msg,
+          didYouMean: data.did_you_mean || undefined,
+        });
+        return false;
+      }
+    } catch (err) {
+      console.error('Email validation failed:', err);
+      setEmailValidation({ status: 'valid' }); // Allow on network error
+      return true;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
@@ -80,6 +116,14 @@ const Auth = () => {
         }
       } else {
         const validated = signupSchema.parse(formData);
+        
+        // Validate email with ZeroBounce before signup
+        const isEmailValid = await validateEmail(validated.email);
+        if (!isEmailValid) {
+          setLoading(false);
+          return;
+        }
+
         const { error } = await signUp(
           validated.email || "", 
           validated.password, 
