@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Eye, EyeOff, MailCheck } from "lucide-react";
+import { Eye, EyeOff, MailCheck, Loader2, ShieldCheck, ShieldAlert } from "lucide-react";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -44,6 +44,11 @@ const Auth = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showVerificationMessage, setShowVerificationMessage] = useState(false);
+  const [emailValidation, setEmailValidation] = useState<{
+    status: 'idle' | 'validating' | 'valid' | 'invalid';
+    message?: string;
+    didYouMean?: string;
+  }>({ status: 'idle' });
   const [resetEmail, setResetEmail] = useState("");
   const [formData, setFormData] = useState({
     emailOrPhone: "",
@@ -61,6 +66,42 @@ const Auth = () => {
     }
   }, [user, navigate]);
 
+  const validateEmail = async (email: string) => {
+    setEmailValidation({ status: 'validating' });
+    try {
+      const { data, error } = await supabase.functions.invoke('validate-email', {
+        body: { email },
+      });
+
+      if (error) {
+        console.error('Email validation error:', error);
+        setEmailValidation({ status: 'valid' }); // Allow on error
+        return true;
+      }
+
+      if (data.valid) {
+        setEmailValidation({ status: 'valid', message: 'Imeri yemejwe!' });
+        return true;
+      } else {
+        const msg = data.status === 'invalid' 
+          ? 'Iyi imeri ntabwo ibaho. Nyamuneka shyiramo imeri ikora.'
+          : data.status === 'spamtrap' || data.status === 'abuse'
+          ? 'Iyi imeri ntishobora gukoreshwa.'
+          : 'Imeri ntiyemejwe. Nyamuneka shyiramo imeri ikora.';
+        setEmailValidation({ 
+          status: 'invalid', 
+          message: msg,
+          didYouMean: data.did_you_mean || undefined,
+        });
+        return false;
+      }
+    } catch (err) {
+      console.error('Email validation failed:', err);
+      setEmailValidation({ status: 'valid' }); // Allow on network error
+      return true;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
@@ -75,6 +116,14 @@ const Auth = () => {
         }
       } else {
         const validated = signupSchema.parse(formData);
+        
+        // Validate email with ZeroBounce before signup
+        const isEmailValid = await validateEmail(validated.email);
+        if (!isEmailValid) {
+          setLoading(false);
+          return;
+        }
+
         const { error } = await signUp(
           validated.email || "", 
           validated.password, 
@@ -282,15 +331,45 @@ const Auth = () => {
                 
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Imeri * <span className="text-xs text-muted-foreground">(imeri ikora gusa)</span></Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="imeri@example.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                  />
+                  <div className="relative">
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      placeholder="imeri@example.com"
+                      value={formData.email}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        setEmailValidation({ status: 'idle' });
+                      }}
+                      required
+                      className={`pr-10 ${emailValidation.status === 'valid' ? 'border-green-500' : emailValidation.status === 'invalid' ? 'border-destructive' : ''}`}
+                    />
+                    {emailValidation.status === 'validating' && (
+                      <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+                    )}
+                    {emailValidation.status === 'valid' && (
+                      <ShieldCheck className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-500" />
+                    )}
+                    {emailValidation.status === 'invalid' && (
+                      <ShieldAlert className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-destructive" />
+                    )}
+                  </div>
                   {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                  {emailValidation.status === 'invalid' && emailValidation.message && (
+                    <p className="text-sm text-destructive">{emailValidation.message}</p>
+                  )}
+                  {emailValidation.didYouMean && (
+                    <button
+                      type="button"
+                      className="text-sm text-primary hover:underline"
+                      onClick={() => {
+                        setFormData({ ...formData, email: emailValidation.didYouMean! });
+                        setEmailValidation({ status: 'idle' });
+                      }}
+                    >
+                      Waba ushaka: {emailValidation.didYouMean}?
+                    </button>
+                  )}
                 </div>
                 
                   <div className="space-y-2">
@@ -339,8 +418,8 @@ const Auth = () => {
                     {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword}</p>}
                   </div>
                 
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Urakora konti..." : "Kora Konti"}
+                  <Button type="submit" className="w-full" disabled={loading || emailValidation.status === 'validating'}>
+                    {loading ? (emailValidation.status === 'validating' ? "Kwemeza imeri..." : "Urakora konti...") : "Kora Konti"}
                   </Button>
                 </form>
               </TabsContent>
