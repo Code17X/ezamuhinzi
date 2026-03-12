@@ -331,15 +331,45 @@ const Auth = () => {
                 
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Imeri * <span className="text-xs text-muted-foreground">(imeri ikora gusa)</span></Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="imeri@example.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                  />
+                  <div className="relative">
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      placeholder="imeri@example.com"
+                      value={formData.email}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        setEmailValidation({ status: 'idle' });
+                      }}
+                      required
+                      className={`pr-10 ${emailValidation.status === 'valid' ? 'border-green-500' : emailValidation.status === 'invalid' ? 'border-destructive' : ''}`}
+                    />
+                    {emailValidation.status === 'validating' && (
+                      <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+                    )}
+                    {emailValidation.status === 'valid' && (
+                      <ShieldCheck className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-500" />
+                    )}
+                    {emailValidation.status === 'invalid' && (
+                      <ShieldAlert className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-destructive" />
+                    )}
+                  </div>
                   {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                  {emailValidation.status === 'invalid' && emailValidation.message && (
+                    <p className="text-sm text-destructive">{emailValidation.message}</p>
+                  )}
+                  {emailValidation.didYouMean && (
+                    <button
+                      type="button"
+                      className="text-sm text-primary hover:underline"
+                      onClick={() => {
+                        setFormData({ ...formData, email: emailValidation.didYouMean! });
+                        setEmailValidation({ status: 'idle' });
+                      }}
+                    >
+                      Waba ushaka: {emailValidation.didYouMean}?
+                    </button>
+                  )}
                 </div>
                 
                   <div className="space-y-2">
