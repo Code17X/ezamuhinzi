@@ -430,6 +430,25 @@ const resources = {
       "finance.lossAdvice": "Ibiciro by'isoko biri hasi. Tegereza ibiciro bigabanuke cyangwa ushake isoko ryiza.",
       "finance.error": "Ikosa",
       "finance.addInvestment": "Shyiramo igihingwa n'ibiciro",
+
+      // User Agreement
+      "agreement.title": "Amasezerano y'Umukoresha",
+      "agreement.subtitle": "Nyamuneka soma kandi wemeze amasezerano y'umukoresha mbere yo gukomeza.",
+      "agreement.section1Title": "1. Kwemera Serivisi",
+      "agreement.section1Content": "Mukoresheje Eza Muhinzi, mwemera gukurikiza aya masezerano. Porogaramu yacu itanga ibikoresho bya AI, amakuru y'isoko, ikirere, n'ubufasha ku buhinzi n'ubworozi mu Rwanda.",
+      "agreement.section2Title": "2. Konti y'Umukoresha",
+      "agreement.section2Content": "Musabwa gutanga amakuru y'ukuri mu gihe cyo kwiyandikisha. Muri abashinzwe kurinda ijambo ry'ibanga ryanyu. Ntimukwiye gusangiza konti yanyu undi muntu.",
+      "agreement.section3Title": "3. Gukoresha Porogaramu",
+      "agreement.section3Content": "Mwemerewe gukoresha porogaramu ku nyungu z'ubuhinzi bwanyu gusa. Ntimwemerewe gukoresha porogaramu mu buryo bubi, kubiba amakuru y'ibinyoma, cyangwa gukoresha mu buryo bwangiza abandi.",
+      "agreement.section4Title": "4. Ibanga ry'Amakuru",
+      "agreement.section4Content": "Turinda amakuru yanyu kandi ntituyasangiza urundi ruhande nta mpamvu. Amakuru yanyu akoreshwa gusa kugira ngo tubahe serivisi nziza. Dukurikiza amategeko y'igihugu agenga ibanga ry'amakuru.",
+      "agreement.section5Title": "5. Inama za AI",
+      "agreement.section5Content": "Inama zitangwa na AI ni zo gufasha gusa. Ntizisimbura inama z'inzobere mu buhinzi cyangwa ubuvuzi bw'amatungo. Turabashishikariza gusabira inama inzobere mu gihe bibaye ngombwa.",
+      "agreement.section6Title": "6. Impinduka mu Masezerano",
+      "agreement.section6Content": "Dushobora guhindura aya masezerano igihe icyo ari cyo cyose. Muzamenyeshwa impinduka zikomeye. Gukomeza gukoresha porogaramu nyuma y'impinduka bivuze ko mwemeye amasezerano mashya.",
+      "agreement.checkboxLabel": "Nasomye kandi nemera amasezerano y'umukoresha wa Eza Muhinzi.",
+      "agreement.acceptButton": "Emeza kandi Ukomeze",
+      "agreement.accepted": "Mwemeye amasezerano neza!",
     }
   },
   en: {
