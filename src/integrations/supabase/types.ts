@@ -589,6 +589,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          agreed_to_terms: boolean | null
           created_at: string | null
           crop_types: string[] | null
           experience_level: string | null
@@ -602,6 +603,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          agreed_to_terms?: boolean | null
           created_at?: string | null
           crop_types?: string[] | null
           experience_level?: string | null
@@ -615,6 +617,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          agreed_to_terms?: boolean | null
           created_at?: string | null
           crop_types?: string[] | null
           experience_level?: string | null
