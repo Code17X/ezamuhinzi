@@ -864,6 +864,25 @@ const resources = {
       "finance.lossAdvice": "Market prices are low. Consider waiting or finding a better market.",
       "finance.error": "Error",
       "finance.addInvestment": "Please add a crop and quantities",
+
+      // User Agreement
+      "agreement.title": "User Agreement",
+      "agreement.subtitle": "Please read and accept the user agreement before continuing.",
+      "agreement.section1Title": "1. Acceptance of Service",
+      "agreement.section1Content": "By using Eza Muhinzi, you agree to abide by these terms. Our platform provides AI tools, market data, weather information, and farming and livestock support in Rwanda.",
+      "agreement.section2Title": "2. User Account",
+      "agreement.section2Content": "You must provide accurate information during registration. You are responsible for keeping your password secure. Do not share your account with others.",
+      "agreement.section3Title": "3. Platform Usage",
+      "agreement.section3Content": "You may use the platform for your farming purposes only. You may not misuse the platform, spread false information, or use it in ways that harm others.",
+      "agreement.section4Title": "4. Data Privacy",
+      "agreement.section4Content": "We protect your data and do not share it with third parties without reason. Your data is used only to provide you with quality services. We comply with national data protection regulations.",
+      "agreement.section5Title": "5. AI Advice",
+      "agreement.section5Content": "AI-provided advice is for guidance only. It does not replace professional agricultural or veterinary advice. We encourage you to consult experts when necessary.",
+      "agreement.section6Title": "6. Changes to Agreement",
+      "agreement.section6Content": "We may update these terms at any time. You will be notified of significant changes. Continued use of the platform after changes means you accept the new terms.",
+      "agreement.checkboxLabel": "I have read and agree to the Eza Muhinzi user agreement.",
+      "agreement.acceptButton": "Accept and Continue",
+      "agreement.accepted": "You have accepted the agreement successfully!",
     }
   },
   fr: {
