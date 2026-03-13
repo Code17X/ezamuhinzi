@@ -1208,6 +1208,25 @@ const resources = {
       "finance.lossAdvice": "Les prix du marché sont bas. Envisagez d'attendre ou de trouver un meilleur marché.",
       "finance.error": "Erreur",
       "finance.addInvestment": "Veuillez ajouter une culture et les quantités",
+
+      // User Agreement
+      "agreement.title": "Accord d'Utilisateur",
+      "agreement.subtitle": "Veuillez lire et accepter l'accord d'utilisateur avant de continuer.",
+      "agreement.section1Title": "1. Acceptation du Service",
+      "agreement.section1Content": "En utilisant Eza Muhinzi, vous acceptez de respecter ces conditions. Notre plateforme fournit des outils IA, des données de marché, des informations météorologiques et un soutien agricole et d'élevage au Rwanda.",
+      "agreement.section2Title": "2. Compte Utilisateur",
+      "agreement.section2Content": "Vous devez fournir des informations exactes lors de l'inscription. Vous êtes responsable de la sécurité de votre mot de passe. Ne partagez pas votre compte avec d'autres personnes.",
+      "agreement.section3Title": "3. Utilisation de la Plateforme",
+      "agreement.section3Content": "Vous pouvez utiliser la plateforme uniquement à des fins agricoles. Vous ne pouvez pas abuser de la plateforme, diffuser de fausses informations ou l'utiliser de manière nuisible.",
+      "agreement.section4Title": "4. Confidentialité des Données",
+      "agreement.section4Content": "Nous protégeons vos données et ne les partageons pas avec des tiers sans raison. Vos données sont utilisées uniquement pour vous fournir des services de qualité. Nous respectons les réglementations nationales sur la protection des données.",
+      "agreement.section5Title": "5. Conseils IA",
+      "agreement.section5Content": "Les conseils fournis par l'IA sont à titre indicatif uniquement. Ils ne remplacent pas les conseils professionnels agricoles ou vétérinaires. Nous vous encourageons à consulter des experts si nécessaire.",
+      "agreement.section6Title": "6. Modifications de l'Accord",
+      "agreement.section6Content": "Nous pouvons mettre à jour ces conditions à tout moment. Vous serez informé des changements importants. L'utilisation continue de la plateforme après les modifications signifie que vous acceptez les nouvelles conditions.",
+      "agreement.checkboxLabel": "J'ai lu et j'accepte l'accord d'utilisateur d'Eza Muhinzi.",
+      "agreement.acceptButton": "Accepter et Continuer",
+      "agreement.accepted": "Vous avez accepté l'accord avec succès!",
     }
   }
 };
