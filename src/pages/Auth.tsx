@@ -10,6 +10,7 @@ import { Eye, EyeOff, MailCheck, Loader2, ShieldCheck, ShieldAlert } from "lucid
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 
 const loginSchema = z.object({
   emailOrPhone: z.string().min(1, "Email or phone number required"),
