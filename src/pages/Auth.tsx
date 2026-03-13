@@ -60,6 +60,31 @@ const Auth = () => {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  const handleGoogleSignIn = async () => {
+    setGoogleLoading(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+      });
+      if (result?.error) {
+        toast({
+          title: "Ikosa",
+          description: "Kwinjira na Google ntibyagenze neza. Ongera ugerageze.",
+          variant: "destructive",
+        });
+      }
+    } catch (err) {
+      toast({
+        title: "Ikosa",
+        description: "Kwinjira na Google ntibyagenze neza.",
+        variant: "destructive",
+      });
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (user) {
