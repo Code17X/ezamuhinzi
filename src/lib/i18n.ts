@@ -430,6 +430,25 @@ const resources = {
       "finance.lossAdvice": "Ibiciro by'isoko biri hasi. Tegereza ibiciro bigabanuke cyangwa ushake isoko ryiza.",
       "finance.error": "Ikosa",
       "finance.addInvestment": "Shyiramo igihingwa n'ibiciro",
+
+      // User Agreement
+      "agreement.title": "Amasezerano y'Umukoresha",
+      "agreement.subtitle": "Nyamuneka soma kandi wemeze amasezerano y'umukoresha mbere yo gukomeza.",
+      "agreement.section1Title": "1. Kwemera Serivisi",
+      "agreement.section1Content": "Mukoresheje Eza Muhinzi, mwemera gukurikiza aya masezerano. Porogaramu yacu itanga ibikoresho bya AI, amakuru y'isoko, ikirere, n'ubufasha ku buhinzi n'ubworozi mu Rwanda.",
+      "agreement.section2Title": "2. Konti y'Umukoresha",
+      "agreement.section2Content": "Musabwa gutanga amakuru y'ukuri mu gihe cyo kwiyandikisha. Muri abashinzwe kurinda ijambo ry'ibanga ryanyu. Ntimukwiye gusangiza konti yanyu undi muntu.",
+      "agreement.section3Title": "3. Gukoresha Porogaramu",
+      "agreement.section3Content": "Mwemerewe gukoresha porogaramu ku nyungu z'ubuhinzi bwanyu gusa. Ntimwemerewe gukoresha porogaramu mu buryo bubi, kubiba amakuru y'ibinyoma, cyangwa gukoresha mu buryo bwangiza abandi.",
+      "agreement.section4Title": "4. Ibanga ry'Amakuru",
+      "agreement.section4Content": "Turinda amakuru yanyu kandi ntituyasangiza urundi ruhande nta mpamvu. Amakuru yanyu akoreshwa gusa kugira ngo tubahe serivisi nziza. Dukurikiza amategeko y'igihugu agenga ibanga ry'amakuru.",
+      "agreement.section5Title": "5. Inama za AI",
+      "agreement.section5Content": "Inama zitangwa na AI ni zo gufasha gusa. Ntizisimbura inama z'inzobere mu buhinzi cyangwa ubuvuzi bw'amatungo. Turabashishikariza gusabira inama inzobere mu gihe bibaye ngombwa.",
+      "agreement.section6Title": "6. Impinduka mu Masezerano",
+      "agreement.section6Content": "Dushobora guhindura aya masezerano igihe icyo ari cyo cyose. Muzamenyeshwa impinduka zikomeye. Gukomeza gukoresha porogaramu nyuma y'impinduka bivuze ko mwemeye amasezerano mashya.",
+      "agreement.checkboxLabel": "Nasomye kandi nemera amasezerano y'umukoresha wa Eza Muhinzi.",
+      "agreement.acceptButton": "Emeza kandi Ukomeze",
+      "agreement.accepted": "Mwemeye amasezerano neza!",
     }
   },
   en: {
@@ -845,6 +864,25 @@ const resources = {
       "finance.lossAdvice": "Market prices are low. Consider waiting or finding a better market.",
       "finance.error": "Error",
       "finance.addInvestment": "Please add a crop and quantities",
+
+      // User Agreement
+      "agreement.title": "User Agreement",
+      "agreement.subtitle": "Please read and accept the user agreement before continuing.",
+      "agreement.section1Title": "1. Acceptance of Service",
+      "agreement.section1Content": "By using Eza Muhinzi, you agree to abide by these terms. Our platform provides AI tools, market data, weather information, and farming and livestock support in Rwanda.",
+      "agreement.section2Title": "2. User Account",
+      "agreement.section2Content": "You must provide accurate information during registration. You are responsible for keeping your password secure. Do not share your account with others.",
+      "agreement.section3Title": "3. Platform Usage",
+      "agreement.section3Content": "You may use the platform for your farming purposes only. You may not misuse the platform, spread false information, or use it in ways that harm others.",
+      "agreement.section4Title": "4. Data Privacy",
+      "agreement.section4Content": "We protect your data and do not share it with third parties without reason. Your data is used only to provide you with quality services. We comply with national data protection regulations.",
+      "agreement.section5Title": "5. AI Advice",
+      "agreement.section5Content": "AI-provided advice is for guidance only. It does not replace professional agricultural or veterinary advice. We encourage you to consult experts when necessary.",
+      "agreement.section6Title": "6. Changes to Agreement",
+      "agreement.section6Content": "We may update these terms at any time. You will be notified of significant changes. Continued use of the platform after changes means you accept the new terms.",
+      "agreement.checkboxLabel": "I have read and agree to the Eza Muhinzi user agreement.",
+      "agreement.acceptButton": "Accept and Continue",
+      "agreement.accepted": "You have accepted the agreement successfully!",
     }
   },
   fr: {
@@ -1170,6 +1208,25 @@ const resources = {
       "finance.lossAdvice": "Les prix du marché sont bas. Envisagez d'attendre ou de trouver un meilleur marché.",
       "finance.error": "Erreur",
       "finance.addInvestment": "Veuillez ajouter une culture et les quantités",
+
+      // User Agreement
+      "agreement.title": "Accord d'Utilisateur",
+      "agreement.subtitle": "Veuillez lire et accepter l'accord d'utilisateur avant de continuer.",
+      "agreement.section1Title": "1. Acceptation du Service",
+      "agreement.section1Content": "En utilisant Eza Muhinzi, vous acceptez de respecter ces conditions. Notre plateforme fournit des outils IA, des données de marché, des informations météorologiques et un soutien agricole et d'élevage au Rwanda.",
+      "agreement.section2Title": "2. Compte Utilisateur",
+      "agreement.section2Content": "Vous devez fournir des informations exactes lors de l'inscription. Vous êtes responsable de la sécurité de votre mot de passe. Ne partagez pas votre compte avec d'autres personnes.",
+      "agreement.section3Title": "3. Utilisation de la Plateforme",
+      "agreement.section3Content": "Vous pouvez utiliser la plateforme uniquement à des fins agricoles. Vous ne pouvez pas abuser de la plateforme, diffuser de fausses informations ou l'utiliser de manière nuisible.",
+      "agreement.section4Title": "4. Confidentialité des Données",
+      "agreement.section4Content": "Nous protégeons vos données et ne les partageons pas avec des tiers sans raison. Vos données sont utilisées uniquement pour vous fournir des services de qualité. Nous respectons les réglementations nationales sur la protection des données.",
+      "agreement.section5Title": "5. Conseils IA",
+      "agreement.section5Content": "Les conseils fournis par l'IA sont à titre indicatif uniquement. Ils ne remplacent pas les conseils professionnels agricoles ou vétérinaires. Nous vous encourageons à consulter des experts si nécessaire.",
+      "agreement.section6Title": "6. Modifications de l'Accord",
+      "agreement.section6Content": "Nous pouvons mettre à jour ces conditions à tout moment. Vous serez informé des changements importants. L'utilisation continue de la plateforme après les modifications signifie que vous acceptez les nouvelles conditions.",
+      "agreement.checkboxLabel": "J'ai lu et j'accepte l'accord d'utilisateur d'Eza Muhinzi.",
+      "agreement.acceptButton": "Accepter et Continuer",
+      "agreement.accepted": "Vous avez accepté l'accord avec succès!",
     }
   }
 };
