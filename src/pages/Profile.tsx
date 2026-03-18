@@ -18,7 +18,8 @@ import { Bell, MessageSquare, LogOut } from "lucide-react";
 const Profile = () => {
   const [searchParams] = useSearchParams();
   const isSetup = searchParams.get("setup") === "true";
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [profileData, setProfileData] = useState({
