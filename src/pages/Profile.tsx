@@ -13,7 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Bell, MessageSquare } from "lucide-react";
+import { Bell, MessageSquare, LogOut } from "lucide-react";
 
 const Profile = () => {
   const [searchParams] = useSearchParams();
