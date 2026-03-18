@@ -336,6 +336,16 @@ const Profile = () => {
           >
             {loading ? "Birabika..." : isSetup ? "Soza Gushyiraho" : "Bika Impinduka"}
           </Button>
+
+          <Button 
+            variant="outline"
+            onClick={signOut}
+            className="w-full mt-4 text-destructive border-destructive/30 hover:bg-destructive/10"
+            size="lg"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            {t('logout')}
+          </Button>
         </div>
       </main>
     </div>
