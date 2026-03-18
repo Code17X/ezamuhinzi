@@ -13,12 +13,13 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Bell, MessageSquare } from "lucide-react";
+import { Bell, MessageSquare, LogOut } from "lucide-react";
 
 const Profile = () => {
   const [searchParams] = useSearchParams();
   const isSetup = searchParams.get("setup") === "true";
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [profileData, setProfileData] = useState({
@@ -335,6 +336,16 @@ const Profile = () => {
             size="lg"
           >
             {loading ? "Birabika..." : isSetup ? "Soza Gushyiraho" : "Bika Impinduka"}
+          </Button>
+
+          <Button 
+            variant="outline"
+            onClick={signOut}
+            className="w-full mt-4 text-destructive border-destructive/30 hover:bg-destructive/10"
+            size="lg"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            {t('logout')}
           </Button>
         </div>
       </main>

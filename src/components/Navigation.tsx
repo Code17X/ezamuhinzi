@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Cloud, DollarSign, BarChart3, Bot, User, LogOut, Settings, Users, ShoppingBag } from "lucide-react";
+import { Home, Cloud, DollarSign, BarChart3, Bot, User, Settings, Users, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -112,15 +112,6 @@ const Navigation = () => {
                 </Link>
               );
             })}
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={signOut}
-              className="hidden lg:flex items-center gap-2 text-muted-foreground hover:text-foreground"
-            >
-              <LogOut className="w-4 h-4" />
-              <span className="text-sm">{t('logout')}</span>
-            </Button>
             </div>
           </div>
         </div>

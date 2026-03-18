@@ -56,7 +56,7 @@ const Landing = () => {
       {/* Language Selector - Fixed Top Right */}
       <div className="absolute top-4 right-4 z-20">
         <Select value={i18n.language} onValueChange={handleLanguageChange}>
-          <SelectTrigger className="w-[140px] bg-white/90 backdrop-blur-sm border-white/20 text-foreground">
+          <SelectTrigger className="w-[140px] bg-card/90 backdrop-blur-sm border-border text-foreground">
             <Globe className="w-4 h-4 mr-2" />
             <SelectValue />
           </SelectTrigger>
